@@ -1,0 +1,59 @@
+﻿post request na vytvorenie testu
+
+co je zapisane v [], su vysvetlene premenlive hodnoty
+co je zapisane v array(), je subarray	
+
+
+url: api/testy/novy-test.php
+
+
+štruktúra:
+
+{
+	nazov: [string názov testu],
+	casovy_limit: [int časový limit v minútach],
+	aktivny: [true/false, či je aktívny alebo nie]
+	otazky: [zoznam otázok, číslovaný od 1]
+}
+
+
+Zoznam otázok, štruktúra:
+Každá otázka je objekt (v {}) a podľa toho, akého je typu, má takýto tvar (kľúče sú čísla otázok, a číslované od 1):
+
+- otázky s krátkou odpoveďou:
+{
+	nazov: [string názov, tj. text otázky],
+	typ: 1,
+	spravne_odpovede: [array stringov správnych odpovedí]
+}
+
+
+- otázky s viacerými odpoveďami:
+{
+	nazov: [string názov, tj. text otázky],
+	typ: 2,
+	odpovede: [
+		array odpovedí, každá odpoveď je v tvare
+		array(
+			text: [text odpovede]
+			je_spravna: [true/false, či je odpoveď správna alebo nie]
+		)
+	]
+	vie_student_pocet_spravnych: [true / false, či sa pri vypracovaní testu má zobraziť počet správnych odpovedí alebo iba všeobecná hláška, že test má bližie neurčený počet správnych odpovedí]
+}
+
+
+- párovacie otázky:
+{
+	nazov: [string názov, tj. text otázky],
+	typ: 3,
+	odpovede_lave: [array stringov odpovedí zobrazovaných na ľavej strane, číslovaných od 1],
+	odpovede_prave: [array stringov odpovedí zobrazovaných na pravej strane, číslovaných od 1],
+	pary: [
+		array párov, každý pár je v tvare
+		array(
+			lava: [id lavej odpovede zo zoznamu odpovede_lave],
+			prava: [id pravej odpovede zo zoznamu odpovede_prave]
+		)
+	]
+}
