@@ -1,0 +1,5 @@
+﻿<?php
+// API ENDPOINT NA VYTVORENIE NOVEHO TESTU
+
+
+?>
