@@ -1,4 +1,4 @@
-﻿{
+﻿let novyTestSablona = {
 	nazov: "Ukážkový test č. 1",
 	casovy_limit: 60,
 	aktivny: true,
@@ -80,4 +80,4 @@
 			]
 		}
 	}
-}
+};
