@@ -37,13 +37,41 @@
     <div id="test" style="margin: auto">
 
     </div>
-    <div style="width: 100px; height: 100px;border: black 1px solid" id="bin">
-        bin
-    </div>
+
 
 </div>
-
+<button id="send" style="margin: auto">send</button>
 <script>
+//odosielanie
+
+document.getElementById('send').onclick=function (){
+    let test={};
+    test.nazov="ukazkovy test";
+    test.casovy_limit=60;
+    test.aktivny=true;
+    let otazky= {};
+    const q=document.getElementsByClassName('question');
+
+    for(let i=0;i<q.length;i++){
+        let q1Id=q[i].id;
+        if(q[i].classList.contains("type-1")){
+
+            otazky[i+1]={}
+            otazky[i+1].typ=1;
+        }
+        otazky[i+1].nazov=q[i].value;
+        const qOpt=document.getElementsByClassName(q1Id+"-option");
+        let spravne_odpovede=[];
+        for (let j=0;j<qOpt.length;j++){
+            spravne_odpovede[j]= qOpt[j].value;
+        }
+
+        otazky[i+1].spravne_odpovede=spravne_odpovede;
+
+    }
+    test.otazky=otazky
+    console.log(JSON.stringify(test));
+}
 
 </script>
 </body>

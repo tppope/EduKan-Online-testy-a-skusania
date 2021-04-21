@@ -52,8 +52,9 @@ function createQuestion(typ,number){
 
     button.innerText='PRIDAJ MOZNOST';
 
-    questionNum.innerText=qId.toString()+'.';
-
+    questionNum.innerText='Otazka';
+    questionNum.setAttribute('id',`number-${qId}`);
+    qDiv.appendChild(removeBtn());
     qDiv.appendChild(questionNum);
     qDiv.appendChild(question);
 
@@ -71,9 +72,16 @@ function createQuestion(typ,number){
     qDiv.appendChild(button);
     qDiv.appendChild(moznostDiv);
 
+
     qId=qId+1;
 
 
+}
+function removeBtn(){
+    const button=document.createElement('button');
+    button.setAttribute('onclick',`this.parentElement.remove();`);
+    button.innerText='remove';
+    return button;
 }
 function addChoice(id){
     const moznostDiv=document.getElementById(`moznostDiv-${id}`)
@@ -84,8 +92,9 @@ function addChoice(id){
 
     const x=document.createElement('div');
     x.setAttribute('class','remove-opt');
-    x.setAttribute("draggable","true");
-    x.setAttribute('ondrag','thrash(this)');
+    x.appendChild(removeBtn());
+
+
 
     const moznost=document.createElement('input');
 
@@ -97,9 +106,9 @@ function addChoice(id){
 
 
 }
-function thrash(node){
-    document.getElementById('bin').ondragover(node.remove());
-}
+
+
+
 //TODO
 // 1.vytvorit divka
 // 2 vyriest posielanie ajax cez kontrolu div
