@@ -21,6 +21,10 @@
                 <span aria-hidden="true" >&times;</span>
             </button>
         </div>
+        <div>
+            <input type="text" id="meno-testu" placeholder="Meno testu">
+            <input type="range" max="120" min="45" id="cas">
+        </div>
         <div class="modal-body" id="modal-body">
             <button class='selectQ' onclick="createQuestion(1,qNum++)">Otazka na dopisovanie</button>
             <button class='selectQ' onclick="createQuestion(2,qNum++)" disabled>Otazka na spajanie</button>
@@ -46,8 +50,8 @@
 
 document.getElementById('send').onclick=function (){
     let test={};
-    test.nazov="ukazkovy test";
-    test.casovy_limit=60;
+    test.nazov=document.getElementById('meno-testu').value;
+    test.casovy_limit=document.getElementById('cas').value;
     test.aktivny=true;
     let otazky= {};
     const q=document.getElementsByClassName('question');
