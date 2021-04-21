@@ -19,7 +19,7 @@
 				{text: "Maďarsko", je_spravna: true},
 				{text: "Ukrajina", je_spravna: true},
 				{text: "Nový Zéland", je_spravna: false}
-			]
+			],
 			vie_student_pocet_spravnych: false
 		},
 		3: {
@@ -30,7 +30,7 @@
 				{text: "jesť", je_spravna: true},
 				{text: "vňať", je_spravna: false},
 				{text: "inovať", je_spravna: false}
-			]
+			],
 			vie_student_pocet_spravnych: true
 		},
 		4: {
