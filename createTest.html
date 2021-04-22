@@ -25,10 +25,10 @@
             <input type="text" id="meno-testu" placeholder="Meno testu">
             <input type="range" max="120" min="45" id="cas">
         </div>
-        <div class="modal-body" id="modal-body">
+        <div class="modal-body" id="modal-body" style="display: flex">
             <button class='selectQ' onclick="createQuestion(1,qNum++)">Otazka na dopisovanie</button>
             <button class='selectQ' onclick="createQuestion(2,qNum++)" disabled>Otazka na spajanie</button>
-            <button class='selectQ' onclick="createQuestion(3,qNum++)" disabled>Otazka na moznosti</button>
+            <button class='selectQ' onclick="createQuestion(3,qNum++)" >Otazka na moznosti</button>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
@@ -58,20 +58,39 @@ document.getElementById('send').onclick=function (){
 
     for(let i=0;i<q.length;i++){
         let q1Id=q[i].id;
+        otazky[i+1]={}
         if(q[i].classList.contains("type-1")){
-
-            otazky[i+1]={}
             otazky[i+1].typ=1;
+        }
+        if(q[i].classList.contains("type-2")){
+            otazky[i+1].typ=2;
+        }
+        if(q[i].classList.contains("type-3")){
+            otazky[i+1].typ=3;
         }
         otazky[i+1].nazov=q[i].value;
         const qOpt=document.getElementsByClassName(q1Id+"-option");
-        let spravne_odpovede=[];
-        for (let j=0;j<qOpt.length;j++){
-            spravne_odpovede[j]= qOpt[j].value;
+        if(q[i].classList.contains("type-1")===true) {
+
+            let spravne_odpovede = [];
+            for (let j = 0; j < qOpt.length; j++) {
+                spravne_odpovede[j] = qOpt[j].value;
+            }
+
+            otazky[i + 1].spravne_odpovede = spravne_odpovede;
         }
-
-        otazky[i+1].spravne_odpovede=spravne_odpovede;
-
+        else if(q[i].classList.contains("type-3")===true) {
+            let odpovede=[];
+            for (let j = 0; j < qOpt.length; j++) {
+                let spravnost=false;
+                if(qOpt[j].parentElement.classList.contains('spravna')===true){
+                    spravnost=true;
+                }
+                odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
+            }
+            otazky[i + 1].odpovede = odpovede;
+            otazky[i + 1].vie_student_pocet_spravnych=false;
+        }
     }
     test.otazky=otazky
     console.log(JSON.stringify(test));

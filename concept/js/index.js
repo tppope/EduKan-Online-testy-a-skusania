@@ -68,7 +68,12 @@ function createQuestion(typ,number){
     question.setAttribute('class',`question type-${typ}`);
     question.setAttribute('id',qId.toString());
     question.setAttribute('onblur',`store(this.value,${qId})`);
-    button.setAttribute('onclick',`addChoice(${number})`)
+
+    button.setAttribute('onclick',`addChoice(${number},${typ})`)
+
+
+
+
     qDiv.appendChild(button);
     qDiv.appendChild(moznostDiv);
 
@@ -83,7 +88,7 @@ function removeBtn(){
     button.innerText='remove';
     return button;
 }
-function addChoice(id){
+function addChoice(id,typ){
     const moznostDiv=document.getElementById(`moznostDiv-${id}`)
     moznostDiv.setAttribute('class',`${id}-options`)
     moznostDiv.setAttribute('style',`display:grid`)
@@ -91,9 +96,8 @@ function addChoice(id){
     moznostInternyDiv.setAttribute('style','display:flex');
 
     const x=document.createElement('div');
-    x.setAttribute('class','remove-opt');
+    x.setAttribute('class','opt');
     x.appendChild(removeBtn());
-
 
 
     const moznost=document.createElement('input');
@@ -101,14 +105,27 @@ function addChoice(id){
     moznost.setAttribute('type','text');
     moznost.setAttribute('class',`${id}-option`);
     x.appendChild(moznost);
+    if(typ===3){
+        x.setAttribute('class','opt nespravna');
+        const checkbox=document.createElement('input');
+        checkbox.setAttribute('type','checkbox');
+        checkbox.setAttribute('onclick','addTrue(this)');
+        x.appendChild(checkbox);
+    }
     moznostInternyDiv.appendChild(x);
     moznostDiv.appendChild(moznostInternyDiv);
 
 
 }
+function  addTrue(node){
+    if(node.parentElement.classList.contains('nespravna')===true){
+        node.parentElement.setAttribute('class','opt spravna');
+    }
+    else if(node.parentElement.classList.contains('spravna')===true){
+        node.parentElement.setAttribute('class','opt nespravna');
+    }
+
+}
 
 
 
-//TODO
-// 1.vytvorit divka
-// 2 vyriest posielanie ajax cez kontrolu div
