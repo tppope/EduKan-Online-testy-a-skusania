@@ -57,7 +57,7 @@ class ApiTesty_API_frontend_ucitel {
 			} while ($mysqli->next_result());
 
 
-			if ($novy_test_id != 0 || $check_tabulky_existuju_naplnene != 0) {
+			if ($novy_test_id != 0 && $check_tabulky_existuju_naplnene != 0) {
 				// test bol uspesne vlozeny
 				return array(
 					"sprava" => "Nový test bol úspešne vytvorený.",
