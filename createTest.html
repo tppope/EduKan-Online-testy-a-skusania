@@ -8,93 +8,68 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="concept/js/index.js"></script>
+    <link rel="stylesheet" href="concept/index.css" type="text/css">
 
 </head>
-<body>
+<body style="font-family: 'Century Gothic',serif">
 
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="position: absolute;top: 35%">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="position: absolute;top: 15%;">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="modalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title" id="modalLabel">Vytvorit</h5>
+            <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" >&times;</span>
             </button>
         </div>
-        <div>
-            <input type="text" id="meno-testu" placeholder="Meno testu">
-            <input type="range" max="120" min="45" id="cas">
+        <div style="padding: 1rem;display: flex;justify-content: space-between">
+            <div><input required type="text" id="meno-testu" onchange="document.getElementById('test-name').innerText=`${this.value}`"
+                        placeholder="Meno testu"></div>
+            <div>
+                <label for="cas-num">Dlzka</label>
+                <input required type="number" max="300" min="5"  id="cas-num" onchange="document.getElementById('cas-range').value=this.value" placeholder="45">
+                <label for="cas-range">min</label>
+                <input type="range" max="300" min="5" id="cas-range" onchange="document.getElementById('cas-num').value=this.value" placeholder="45">
+            </div>
         </div>
-        <div class="modal-body" id="modal-body" style="display: flex">
-            <button class='selectQ' onclick="createQuestion(1,qNum++)">Otazka na dopisovanie</button>
-            <button class='selectQ' onclick="createQuestion(2,qNum++)" disabled>Otazka na spajanie</button>
-            <button class='selectQ' onclick="createQuestion(3,qNum++)" >Otazka na moznosti</button>
+        <hr>
+        <div class="modal-body row" id="modal-body" style="display: flex">
+            <button style="display: grid;padding: 1em;margin: 1em" class=' btn btn-light selectQ'  onclick="createQuestion(1,qNum++)"><img src="images/dopisovanie.png" alt="dopisovanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>dopisovanie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(2,qNum++)" disabled><img src="images/spajanie.png" alt="spajanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>spajanie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(3,qNum++)" ><img src="images/rating.png" alt="moznosti" style="margin:auto;max-height: 2rem"><p>Otazka na <br>moznosti</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(4,qNum++)" disabled><img src="images/writing.png" alt="kreslenie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>kreslenie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(5,qNum++)" disabled><img src="images/function.png" alt="matematika" style="margin:auto;max-height: 2rem"><p>Matematicka <br>otazka</p></button>
+
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-dark"  data-dismiss="modal">Close</button>
         </div>
     </div>
 </div>
 </div>
-<div class="card" id="main" style="position: absolute;top: 10%;left: 25%;justify-items: center; width: 50%;height:50rem;margin: auto">
-    <button class="btn-dark" style="position: relative;left:45%;top:15%;width: 5rem" data-toggle="modal" data-target="#modal">create</button>
-    <div id="test" style="margin: auto">
+<header style="display: grid;">
+    <h1 style="margin: 2rem">Test Editor</h1>
+
+</header>
+<button class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;" data-toggle="modal" data-target="#modal">create</button>
+
+<hr style="margin: 2rem">
+<h3 id="test-name" style="margin: 2rem"></h3>
+    <div id="test" style="margin: auto;width: 80%">
 
     </div>
+<div id="test-footer" hidden>
+<hr style="margin: 2rem">
 
+
+<button  id="send" class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;">send</button>
 
 </div>
-<button id="send" style="margin: auto">send</button>
-<script>
+<footer style="margin: 25%">
+</footer>
+
+<script src="concept/js/send.js">
 //odosielanie
-
-document.getElementById('send').onclick=function (){
-    let test={};
-    test.nazov=document.getElementById('meno-testu').value;
-    test.casovy_limit=document.getElementById('cas').value;
-    test.aktivny=true;
-    let otazky= {};
-    const q=document.getElementsByClassName('question');
-
-    for(let i=0;i<q.length;i++){
-        let q1Id=q[i].id;
-        otazky[i+1]={}
-        if(q[i].classList.contains("type-1")){
-            otazky[i+1].typ=1;
-        }
-        if(q[i].classList.contains("type-2")){
-            otazky[i+1].typ=2;
-        }
-        if(q[i].classList.contains("type-3")){
-            otazky[i+1].typ=3;
-        }
-        otazky[i+1].nazov=q[i].value;
-        const qOpt=document.getElementsByClassName(q1Id+"-option");
-        if(q[i].classList.contains("type-1")===true) {
-
-            let spravne_odpovede = [];
-            for (let j = 0; j < qOpt.length; j++) {
-                spravne_odpovede[j] = qOpt[j].value;
-            }
-
-            otazky[i + 1].spravne_odpovede = spravne_odpovede;
-        }
-        else if(q[i].classList.contains("type-3")===true) {
-            let odpovede=[];
-            for (let j = 0; j < qOpt.length; j++) {
-                let spravnost=false;
-                if(qOpt[j].parentElement.classList.contains('spravna')===true){
-                    spravnost=true;
-                }
-                odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
-            }
-            otazky[i + 1].odpovede = odpovede;
-            otazky[i + 1].vie_student_pocet_spravnych=false;
-        }
-    }
-    test.otazky=otazky
-    console.log(JSON.stringify(test));
-}
 
 </script>
 </body>
