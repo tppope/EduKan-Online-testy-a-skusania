@@ -1,0 +1,18 @@
+﻿Úspešné vytvorenie testu:
+
+{
+	sprava: "Nový test bol úspešne vytvorený.",
+	id_testu: [int id testu],
+	typ: "uspech",
+	kod: "API_T__NT_U_1"
+}
+
+
+
+Neúspešné vytvorenie testu:
+
+{
+	sprava: "Nepodarilo sa vložiť dáta.",
+	typ: "chyba",
+	kod: "API_T__NT_C_1"
+}
