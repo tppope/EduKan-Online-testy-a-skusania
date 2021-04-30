@@ -18,7 +18,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-    height: 150px;
+    height: 240px;
 }
 
 #main-h1 {
@@ -83,5 +83,15 @@ body {
     .reg-section-content {
         width: 90%;
         margin: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    #edukan {
+        width: 300px;
+    }
+
+    #main-header {
+        height: 150px;
     }
 }

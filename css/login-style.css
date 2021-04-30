@@ -18,7 +18,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-    height: 150px;
+    height: 240px;
 }
 
 #main-h1 {
@@ -131,10 +131,10 @@ body {
     align-items: center;
     position: absolute;
     font-family: "Roboto", sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     font-style: normal;
-    height: 40px;
+    height: 30px;
     width: 100%;
     top: -100px;
     transition: top 400ms;
@@ -144,12 +144,12 @@ body {
     padding-right: 10px;
 }
 
-.success{
+.success {
     color: #4F8A10;
     background-color: #DFF2BF;
 }
 
-.failed{
+.failed {
     color: #D8000C;
     background-color: #FFD2D2;
 }
@@ -173,6 +173,16 @@ body {
 
     .info {
         font-size: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    #edukan {
+        width: 300px;
+    }
+
+    #main-header {
+        height: 150px;
     }
 }
 

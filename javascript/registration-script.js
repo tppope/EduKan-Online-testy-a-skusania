@@ -10,7 +10,7 @@ function checkSamePasswords() {
         password2.get(0).setCustomValidity("");
 }
 
-function removeIsInvalid(){
+function removeIsInvalid() {
     $("#email").removeClass("is-invalid");
 }
 

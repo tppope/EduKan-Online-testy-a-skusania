@@ -18,7 +18,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-    height: 150px;
+    height: 240px;
 }
 
 #main-h1 {
@@ -36,10 +36,10 @@ body {
     align-items: center;
     position: absolute;
     font-family: "Roboto", sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     font-style: normal;
-    height: 40px;
+    height: 30px;
     width: 100%;
     top: -100px;
     transition: top 400ms;
@@ -68,6 +68,7 @@ body {
     height: 38px;
 }
 
+
 #logout-image {
     transition: height 300ms, width 300ms;
 }
@@ -75,4 +76,14 @@ body {
 #logout-button:hover #logout-image {
     width: 36px;
     height: 36px;
+}
+
+@media (max-width: 576px) {
+    #edukan {
+        width: 300px;
+    }
+
+    #main-header {
+        height: 150px;
+    }
 }

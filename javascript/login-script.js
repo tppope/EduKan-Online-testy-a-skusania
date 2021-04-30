@@ -6,7 +6,7 @@ $(window).on("load", function () {
     checkLogoutStatus()
 })
 
-function checkLogoutStatus(){
+function checkLogoutStatus() {
     let logoutInfo = sessionStorage.getItem("logoutStatus");
     if (logoutInfo != null) {
         if (logoutInfo === 'failed')
@@ -81,7 +81,7 @@ function submitTeacherLoginForm() {
                         email.addClass("is-invalid");
                     else if (!data.passwordVerify)
                         password.addClass("is-invalid");
-                } else{
+                } else {
                     $("#log-failed-info").text("Prihlásenie neprebehlo úspešne. Skúste to prosím znovu.");
                     showLogInfo(data.status);
                 }
