@@ -41,7 +41,7 @@
     <span>Boli ste úspešne odhlásený.</span>
 </div>
 <header id="main-header">
-        <img id="edukan" src="resources/pictures/educan/edukan.png" width="570" alt="tukan">
+    <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
 </header>
 <section>
     <div id="choose-login" class="login-section-content">
@@ -123,7 +123,8 @@
                 <div class="form-group col-md-12">
                     <label for="password">Heslo</label>
                     <input type="password" class="form-control" id="password" name="password"
-                           placeholder="Zadajte heslo" required pattern='^(?!\s*$).+' onfocus="removePasswordIsInvalid()">
+                           placeholder="Zadajte heslo" required pattern='^(?!\s*$).+'
+                           onfocus="removePasswordIsInvalid()">
                     <div class="invalid-tooltip">
                         Zadali ste nesprávne heslo.
                     </div>
