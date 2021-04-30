@@ -1,0 +1,78 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#main-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 150px;
+}
+
+#main-h1 {
+    font-family: "Roboto", sans-serif;
+    font-size: 45px;
+    font-weight: bold;
+    font-style: normal;
+    color: black;
+    text-align: center;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    height: 40px;
+    width: 100%;
+    top: -100px;
+    transition: top 400ms;
+    text-align: center;
+    line-height: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+
+.failed {
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+
+
+#logout-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+}
+
+#logout-image {
+    transition: height 300ms, width 300ms;
+}
+
+#logout-button:hover #logout-image {
+    width: 36px;
+    height: 36px;
+}
