@@ -227,7 +227,7 @@ function poradovnik(id) {
        if(poradie!==otazka.id){
            cisla[poradie-1].innerText=poradie.toString();
 
-           //qId=poradie+1;
+           qId=poradie+1;
 
 
 

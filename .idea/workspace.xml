@@ -2,20 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0513fdad-c5b9-4799-9804-3fd88254ea82" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/concept/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/concept/js/send.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/add.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/add.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/cancel.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/dopisovanie.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/function.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/rating.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/spajanie.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/thrash-active.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/trash.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/valid.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/writing.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_4_2021_23_31_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_4_2021_23_31__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_22_4_2021_12_31_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_22_4_2021_12_31__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/concept/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/concept/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/createTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/createTest.html" afterDir="false" />
@@ -80,7 +70,11 @@
       <option name="presentableId" value="Default" />
       <updated>1619096808028</updated>
       <workItem from="1619096811255" duration="421000" />
-      <workItem from="1619117387847" duration="28199000" />
+      <workItem from="1619117387847" duration="28270000" />
+      <workItem from="1619179488220" duration="151000" />
+      <workItem from="1619180723694" duration="647000" />
+      <workItem from="1619691752253" duration="34000" />
+      <workItem from="1619861838746" duration="324000" />
     </task>
     <servers />
   </component>
