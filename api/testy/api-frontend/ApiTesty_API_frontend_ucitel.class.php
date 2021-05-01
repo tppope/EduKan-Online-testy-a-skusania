@@ -4,6 +4,31 @@
 
 class ApiTesty_API_frontend_ucitel {
 	
+	// Nacita existujuci test.
+	public static function nacitaj_existujuci_test(&$mysqli, $test_id, $ucitel_id) {
+		$test_bez_otazok = ApiTesty_sqlContainer::get_result_test_pre_ucitela($mysqli, $test_id, $ucitel_id);
+		
+		if ($test_bez_otazok == null) {
+			// neexistuje kombinacia test - ucitel
+			return Hlasky__API_T::get_hlaska("API_T__LT_C_1");
+		}
+		
+		$otazky_v_teste = ApiTesty_sqlContainer::get_result_testove_otazky($mysqli, $test_bez_otazok["id"], true); // aj s odpovedami
+		
+		
+		$vystup = Hlasky__API_T::get_hlaska("API_T__LT_U_1");
+		
+		$vystup["data_testu"] = array(
+			"nazov" => $test_bez_otazok["nazov"],
+			"casovy_limit" => $test_bez_otazok["casovy_limit"],
+			"aktivny" => $test_bez_otazok["aktivny"],
+			"otazky" => $otazky_v_teste
+		);
+		
+		return $vystup;
+	}
+	
+	
 	// Vytvori novy test.
 	public static function vytvor_novy_test(&$mysqli, $ucitel_id, $prijate_data) {
 		$bool_test_aktivny = 0;

@@ -1,0 +1,6 @@
+﻿get request na nacitanie existujuceho testu
+
+co je zapisane v [], su vysvetlene premenlive hodnoty
+
+
+url: api/testy/nacitaj-test.php?testid=[id testu]

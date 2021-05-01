@@ -12,21 +12,41 @@ class Hlasky__API_T {
 
 		"API_T__GSC_2" => array(
 			"kod" => "API_T__GSC_2",
-			"sprava" => "Nie je prihlásený žiaden učiteľ."
+			"sprava" => "Nemáte povolenie vykonať túto operáciu."
+		),
+
+		"API_T__GSC_3" => array(
+			"kod" => "API_T__GSC_3",
+			"sprava" => "Dáta požiadavky sú v nesprávnom formáte."
 		),
 		// END --- GSC = generic sanity check (rovnake hlasky z celej API sluzby)
-		
-		
-		
-		// NT = vytvaranie noveho testu, SC = sanity check
-		"API_T__NT_SC_1" => array(
-			"kod" => "API_T__NT_SC_1",
-			"sprava" => "Dáta testu sú v nesprávnom formáte."
+
+
+
+		// LT = nacitanie (load) existujuceho testu, U = uspesna operacia
+		"API_T__LT_U_1" => array(
+			"kod" => "API_T__LT_U_1",
+			"sprava" => "Test bol úspešne načítaný.",
+			"data_testu" => null // data testu, popis pozri v "002 nacitanie testu response.json"
 		),
-		// END --- NT = vytvaranie noveho testu, SC = sanity check
-		
-		
-		
+		// END --- LT = nacitanie (load) existujuceho testu, U = uspesna operacia
+
+
+
+		// LT = nacitanie (load) existujuceho testu, C = chyba, neuspesna operacia
+		"API_T__LT_C_1" => array(
+			"kod" => "API_T__LT_C_1",
+			"sprava" => "Test s týmto ID buď neexistuje, alebo ho vytvoril iný učiteľ."
+		),
+
+		"API_T__LT_C_2" => array(
+			"kod" => "API_T__LT_C_2",
+			"sprava" => "Test s týmto ID buď neexistuje, alebo máte nesprávny kľúč."
+		),
+		// END --- LT = nacitanie (load) existujuceho testu, C = chyba, neuspesna operacia
+
+
+
 		// NT = vytvaranie noveho testu, U = uspesna operacia
 		"API_T__NT_U_1" => array(
 			"kod" => "API_T__NT_U_1",
@@ -34,9 +54,9 @@ class Hlasky__API_T {
 			"id_testu" => null // sem ide ID testu z db
 		),
 		// END --- NT = vytvaranie noveho testu, U = uspesna operacia
-		
-		
-		
+
+
+
 		// NT = vytvaranie noveho testu, C = chyba, neuspesna operacia
 		"API_T__NT_C_1" => array(
 			"kod" => "API_T__NT_C_1",

@@ -8,5 +8,10 @@
 
 {
 	kod: "API_T__GSC_2",
-	sprava: "Nie je prihlásený žiaden učiteľ."
+	sprava: "Nemáte povolenie vykonať túto operáciu."
+}
+
+{
+	kod: "API_T__GSC_3",
+	sprava: "Dáta požiadavky sú v nesprávnom formáte."
 }

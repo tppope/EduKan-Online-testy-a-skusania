@@ -1,15 +1,4 @@
-﻿Kontrola správneho formátu dát pri pred vytvorením testu:
-
-{
-	kod: "API_T__NT_SC_1",
-	sprava: "Dáta testu sú v nesprávnom formáte."
-}
-
-
-
-
-
-Úspešné vytvorenie testu:
+﻿Úspešné vytvorenie testu:
 
 {
 	kod: "API_T__NT_U_1",

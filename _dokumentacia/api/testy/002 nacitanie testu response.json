@@ -1,0 +1,57 @@
+﻿Úspešné načítanie testu:
+
+Pre učiteľa:
+{
+	kod: "API_T__LT_U_1",
+	sprava: "Test bol úspešne načítaný.",
+	data_testu: {
+		nazov: [nazov],
+		casovy_limit: [v minutach],
+		aktivny: [true/false, ci je aktivny],
+		otazky: [rovnaka array ako v subore "001 vytvorenie testu request ukazka.json"]
+	}
+}
+
+
+Pre študenta:
+{
+	kod: "API_T__LT_U_1",
+	sprava: "Test bol úspešne načítaný.",
+	data_testu: {
+		nazov: [nazov],
+		casovy_limit: [v minutach],
+		otazky: [
+			podobna array ako v subore "001 vytvorenie testu request ukazka.json", iba bez odpovedi, tj. kazda otazka vyzera takto:
+
+			nazov: [nazov otazky],
+			typ: [typ otazky]
+			[
+				ak je typ otazky 2, este tu je jeden parameter, a to
+				vie_student_pocet_spravnych: [s hodnotou true/false]
+				odpovede su ciselne indexovany zoznam
+			]
+			[
+				ak je typ otazky 3, su tu hodnoty pre odpovede_lave a odpovede_prave, avsak nie pary
+			]
+		]
+	}
+}
+
+
+
+
+
+Neúspešný pokus načítať test:
+
+Pre učiteľa:
+{
+	kod: "API_T__LT_C_1",
+	sprava: "Test s týmto ID buď neexistuje, alebo ho vytvoril iný učiteľ."
+}
+
+
+Pre študenta:
+{
+	kod: "API_T__LT_C_2",
+	sprava: "Test s týmto ID buď neexistuje, alebo máte nesprávny kľúč."
+}

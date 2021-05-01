@@ -5,6 +5,60 @@
 
 
 class ApiTesty_sanityChecker {
+	
+	// Over, ci vobec boli prijate nejake data.
+	public static function generic_check__prijate_data($data) {
+		if ( $data == "" || is_array($data) && empty($data) ) {
+			echo json_encode( Hlasky__API_T::get_hlaska("API_T__GSC_1") );
+			return false;
+		}
+		return true;
+	}
+
+	// Over, ci je prihlaseny ucitel (pouzivane tam, kde ma byt prihlaseny vylucne ucitel).
+	public static function generic_check__prihlaseny_ucitel() {
+		if ( isset($_SESSION["userId"]) ) {
+			return true;
+		}
+
+		echo json_encode( Hlasky__API_T::get_hlaska("API_T__GSC_2") );
+		return false;
+	}
+
+	// Over, ci je prihlaseny student (pouzivane tam, kde ma byt prihlaseny vylucne student).
+	public static function generic_check__prihlaseny_student() {
+		if ( isset($_SESSION["studentId"]) ) {
+			return true;
+		}
+
+		echo json_encode( Hlasky__API_T::get_hlaska("API_T__GSC_2") );
+		return false;
+	}
+
+	// Over, ci je niekto prihlaseny (pouzivane tam, kde ma byt prihlaseny bud ucitel alebo student).
+	public static function generic_check__prihlaseny_ucitel_alebo_student() {
+		if ( isset($_SESSION["userId"]) || isset($_SESSION["studentId"]) ) {
+			return true;
+		}
+
+		echo json_encode( Hlasky__API_T::get_hlaska("API_T__GSC_2") );
+		return false;
+	}
+
+
+
+
+	// Skontroluje data na nacitanie existujuceho testu.
+	public static function nacitaj_test_ucitel($data) {
+		return isset( $data["testid"] );
+	}
+	
+	public static function nacitaj_test_student($data) {
+		return
+			isset( $data["testid"] ) &&
+			isset( $data["kluc"] );
+	}
+
 
 	// Skontroluje data na vytvorenie noveho testu.
 	public static function novy_test($data) {
