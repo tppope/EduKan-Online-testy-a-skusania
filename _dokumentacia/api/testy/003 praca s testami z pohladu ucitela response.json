@@ -1,0 +1,16 @@
+﻿Načítanie zoznamu testov:
+
+{
+	kod: "API_T__PT_U_1",
+	sprava: "Zoznam testov bol úspešne načítaný.",
+	zoznam_testov: [
+		zoznam testov - ak učiteľ nemá žiadne testy, je to prádzny zoznam
+	
+		každý test je array v tvare
+		{
+			nazov: [string názov testu],
+			casovy_limit: [int časový limit v minútach],
+			aktivny: [true/false, či je aktívny alebo nie]
+		}
+	]
+}

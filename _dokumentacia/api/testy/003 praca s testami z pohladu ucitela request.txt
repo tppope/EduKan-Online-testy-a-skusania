@@ -1,0 +1,11 @@
+﻿requesty na pracu s testami z pohladu ucitela
+
+co je zapisane v [], su vysvetlene premenlive hodnoty
+
+
+API URL: api/testy/praca-s-testami.php
+
+
+
+NACITAJ ZOZNAM VSETKYCH TESTOV
+	url: api/testy/nacitaj-test.php?akcia=zoznam-testov
