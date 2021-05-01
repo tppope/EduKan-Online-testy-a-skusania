@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduKan - online testy a skúšania</title>
+
+    <link rel="icon" href="resources/favicon/edukan-favicon.png" type="image/png" sizes="any">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/teacher-homescreen-style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="javascript/teacher-homescreen-script.js"></script>
+
+</head>
+<body>
+<div id="log-success" class="info success">
+    <span id="log-success-info"></span>
+</div>
+<header id="main-header">
+    <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
+</header>
+<section>
+    <div id="login-div">
+        <span id="login-name"></span>
+        <div id="logout-button" data-toggle="tooltip" title="Odhlásiť sa" onclick="logout()"><img
+                id="logout-image"
+                src="resources/pictures/ucitel/logout.svg"
+                width="20" height="20"
+                alt="login"></div>
+    </div>
+    <header id="section-header" class="section-content">
+        <h2 class="section-h2">
+            Testy
+        </h2>
+        <div id="lottie-hover" data-toggle="tooltip" title="Pridať test" onclick="window.location.href = 'test-info.html'">
+            <lottie-player id="add-lottie" src="resources/pictures/ucitel/lf30_editor_pnvmvsfe.json"  background="transparent"  speed="1"  style="width: 70px; height: 70px;"></lottie-player>
+        </div>
+    </header>
+    <div id="tests" class="section-content table-responsive">
+        <table class="table table-light">
+            <thead class="bg-info text-white">
+            <tr>
+                <th>
+                    Kód
+                </th>
+                <th>
+                    Názov
+                </th>
+                <th>
+                    Trvanie
+                </th>
+                <th>
+                    Počet otázok
+                </th>
+                <th>
+                    Počet študentov
+                </th>
+            </tr>
+            </thead>
+            <tbody id="tests-tbody">
+            <tr>
+                <td>a</td>
+                <td>a</td>
+                <td>a</td>
+                <td>a</td>
+                <td>a</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+</body>
+</html>

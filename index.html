@@ -2,9 +2,149 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <title>Online testovanie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduKan - online testy a skúšania</title>
+
+    <link rel="icon" href="resources/favicon/edukan-favicon.png" type="image/png" sizes="any">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/login-style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="javascript/login-script.js"></script>
+
 </head>
 <body>
+<div id="reg-success" class="info success">
+    <span>Registrácia prebehla úspešne, môžete sa prihlásiť.</span>
+</div>
+<div id="reg-failed" class="info failed">
+    <span>Registrácia neprebehla úspešne. Skúste to prosím znovu.</span>
+</div>
+<div id="log-failed" class="info failed">
+    <span id="log-failed-info"></span>
+</div>
+<div id="log-success" class="info success">
+    <span>Boli ste úspešne odhlásený.</span>
+</div>
+<header id="main-header">
+    <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
+</header>
+<section>
+    <div id="choose-login" class="login-section-content">
+        <div id="student-login" class="choice-button" onclick="changeLoginType(this)">
+            Študent
+        </div>
+        <div id="teacher-login" class="choice-button" onclick="changeLoginType(this)">
+            Učiteľ
+        </div>
+    </div>
+    <header id="section-header" class="login-section-content">
+        <h2 class="section-h2 student-login-content">
+            Vstup do testu
+        </h2>
+        <h2 class="section-h2 teacher-login-content">
+            Prihlásenie
+        </h2>
+        <a id="reg-button" class="teacher-login-content" href="registration.html" data-toggle="tooltip"
+           title="Registrácia"><img id="reg-image" src="resources/pictures/login/registration.svg" width="32"
+                                    height="32" alt="registration"></a>
+    </header>
+    <div id="student-login-form-div" class="login-section-content student-login-content">
+        <form id="student-login-form" onsubmit="return false;">
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label for="key">Kľúč testu</label>
+                    <input type="text" class="form-control" id="key" name="key"
+                           placeholder="Zadajte vstupný kľúč do testu" required pattern='^(?!\s*$).+'>
+                    <div id="key-validation" class="invalid-tooltip">
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="id-number">Identifikačné čislo</label>
+                    <input type="number" class="form-control" id="id-number" name="id-number"
+                           placeholder="Zadajte identifikačné čislo" required pattern='^(?!\s*$).+'
+                    >
+                    <div id="id-number-validation" class="invalid-tooltip">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label for="name">Krstné meno</label>
+                    <input type="text" class="form-control" name="name" placeholder="Zadajte krstné meno" id="name"
+                           required pattern='^(?!\s*$).+'>
+                    <div id="name-validation" class="invalid-tooltip">
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="surname">Priezvisko</label>
+                    <input type="text" class="form-control" name="surname" placeholder="Zadajte priezvisko" id="surname"
+                           required pattern='^(?!\s*$).+'>
+                    <div id="surname-validation" class="invalid-tooltip">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <button type="submit" class="btn btn-outline-dark btn-lg btn-block"
+                            onclick="submitStudentLoginForm()">Vstúpiť
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="teacher-login-form-div" class="login-section-content teacher-login-content">
+        <form id="teacher-login-form" onsubmit="return false;">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" placeholder="Zadajte email" id="email"
+                           required onfocus="removeEmailIsInvalid()">
+                    <div class="invalid-tooltip">
+                        Účet so zadaným emailom neexistuje.
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="password">Heslo</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="Zadajte heslo" required pattern='^(?!\s*$).+'
+                           onfocus="removePasswordIsInvalid()">
+                    <div class="invalid-tooltip">
+                        Zadali ste nesprávne heslo.
+                    </div>
+                    <div id="noreg-info-block" class="form-text text-muted">
+                        <a id="noreg-info" href="registration.html">Ak ešte nemáte účet, prosím zaregistrujte sa.</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <button type="submit" class="btn btn-outline-info btn-lg btn-block"
+                            onclick="submitTeacherLoginForm()">Prihlásiť
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</section>
 
 </body>
 </html>
