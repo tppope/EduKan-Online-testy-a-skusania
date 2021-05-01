@@ -1,0 +1,29 @@
+﻿Kontrola správneho formátu dát pri pred vytvorením testu:
+
+{
+	kod: "API_T__NT_SC_1",
+	sprava: "Dáta testu sú v nesprávnom formáte."
+}
+
+
+
+
+
+Úspešné vytvorenie testu:
+
+{
+	kod: "API_T__NT_U_1",
+	sprava: "Nový test bol úspešne vytvorený.",
+	id_testu: [int id testu]
+}
+
+
+
+
+
+Neúspešné vytvorenie testu:
+
+{
+	kod: "API_T__NT_C_1",
+	sprava: "Nepodarilo sa vložiť dáta."
+}
