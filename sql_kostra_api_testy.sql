@@ -31,7 +31,8 @@ CREATE TABLE `zoznam_testov` (
 CREATE TABLE `zoznam_testov_otvorenych` (
   `kluc` int(11) NOT NULL AUTO_INCREMENT,
   `test_id` int(11) NOT NULL,
-  PRIMARY KEY (`kluc`)
+  PRIMARY KEY (`kluc`),
+  FOREIGN KEY (`test_id`) REFERENCES `zoznam_testov`(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
