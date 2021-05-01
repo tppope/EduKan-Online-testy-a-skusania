@@ -57,6 +57,16 @@ class Hlasky__API_T {
 
 
 
+		// PT = praca s testami z pohladu ucitela, U = uspesna operacia
+		"API_T__PT_U_1" => array(
+			"kod" => "API_T__PT_U_1",
+			"sprava" => "Zoznam testov bol úspešne načítaný.",
+			"zoznam_testov" => array() // sem ide zoznam testov z db
+		),
+		// END --- PT = praca s testami z pohladu ucitela, U = uspesna operacia
+
+
+
 		// NT = vytvaranie noveho testu, C = chyba, neuspesna operacia
 		"API_T__NT_C_1" => array(
 			"kod" => "API_T__NT_C_1",

@@ -259,7 +259,30 @@ class ApiTesty_sqlContainer {
 		return $result->fetch_assoc(); // vzdy max. jeden riadok
 	}
 	
+
+	// Nacita zoznam vsetkych testov (bez otazok), ktore vytvoril dany ucitel.
+	public static function get_result_vsetky_testy_ucitela(&$mysqli, $ucitel_id) {
+		$sql = "SELECT id, nazov, casovy_limit, aktivny FROM zoznam_testov WHERE kto_vytvoril = ?";
+		$stmt = $mysqli->prepare($sql);
+
+		$stmt->bind_param("i", $ucitel_id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		$return = array();
+		while ( $row = $result->fetch_assoc() ) {
+			$return[ $row["id"] ] = array(
+				"nazov" => $row["nazov"],
+				"casovy_limit" => $row["casovy_limit"],
+				"aktivny" => $row["aktivny"]
+			);
+		}
+		
+		return $return;
+	}
 	
+
+
 	// Nacita testove otazky (input parameter je vzdy bezpecny, nikdy nepochadza z uzivatelskeho vstupu).
 	public static function get_result_testove_otazky(&$mysqli, $test_id, $s_odpovedami = false) {
 		$sql_array = array(
