@@ -59,12 +59,10 @@ class ApiTesty_API_frontend_ucitel {
 
 			if ($novy_test_id != 0 && $check_tabulky_existuju_naplnene != 0) {
 				// test bol uspesne vlozeny
-				return array(
-					"sprava" => "Nový test bol úspešne vytvorený.",
-					"id_testu" => $novy_test_id,
-					"typ" => "uspech",
-					"kod" => "API_T__NT_U_1" // API_T = api/testy, NT = vytvaranie noveho testu, U = uspech, 1 = id uspechu
-				);
+				$hlaska = Hlasky__API_T::get_hlaska("API_T__NT_U_1");
+				$hlaska["id_testu"] = $novy_test_id;
+				
+				return $hlaska;
 			}
 
 
@@ -73,11 +71,7 @@ class ApiTesty_API_frontend_ucitel {
 			$mysqli->multi_query($sql_vymaz);
 		}
 		
-		return array(
-			"sprava" => "Nepodarilo sa vložiť dáta.",
-			"typ" => "chyba",
-			"kod" => "API_T__NT_C_1" // API_T = api/testy, NT = vytvaranie noveho testu, C = chyba, 1 = id chyby
-		);
+		return Hlasky__API_T::get_hlaska("API_T__NT_C_1");
 	}
 }
 ?>
