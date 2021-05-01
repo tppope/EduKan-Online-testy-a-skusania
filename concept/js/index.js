@@ -34,12 +34,7 @@ function store(value,id){
     p.innerText=value;
 }
 
-function skutocne(id){
-    //TODO
-    // 1.modal
-    //poradovnik(this.id)
-    //opytat sa ci naozja chce vymazat otazku
-}
+
 
 function createQuestion(typ,number){
 
@@ -55,17 +50,18 @@ function createQuestion(typ,number){
     const rmButton=removeBtn();
     const header=document.createElement('div');
 
-    moznostDiv.setAttribute('id',`moznostDiv-${qId}`);
 
-    button.setAttribute('id',`adder-${qId}`);
-    button.setAttribute('class','btn btn-dark')
+        moznostDiv.setAttribute('id',`moznostDiv-${qId}`);
 
-    button.innerHTML=`<label for=${button.id} style='vertical-align:top;font-size:x-large'>Pridaj moznost</label>`;
+        button.setAttribute('id',`adder-${qId}`);
+        button.setAttribute('class','btn btn-dark')
 
-    button.setAttribute('style',`justify-self:end;max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
-    button.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
-    button.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')");
-   // button.setAttribute('onclick',`skutocne(this.parentElement.parentElement.remove());`);
+        button.innerHTML=`<label for=${button.id} style='vertical-align:top;font-size:x-large'>Pridaj moznost</label>`;
+
+        button.setAttribute('style',`justify-self:end;max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
+        button.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
+        button.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')");
+       // button.setAttribute('onclick',`skutocne(this.parentElement.parentElement.remove());`);
 
     questionNum.innerText=qId.toString();
     questionNum.setAttribute('id',`number-${qId}`);
@@ -93,7 +89,7 @@ function createQuestion(typ,number){
     pDiv.setAttribute('id',`text-${qId}`);
     pDiv.setAttribute('style',`margin-bottom:2rem`);
 
-    question.required=true;
+
     question.setAttribute('class',`question type-${typ}`);
     question.setAttribute('rows',`5`);
     question.setAttribute('style',`margin-bottom: 1rem`);
@@ -102,17 +98,74 @@ function createQuestion(typ,number){
 
     button.setAttribute('onclick',`addChoice(${qId},${typ})`)
 
+    const h3=document.createElement('h3',);
 
 
 
-    qDiv.appendChild(button);
-    qDiv.appendChild(moznostDiv);
+
+    if(typ===1  ){
+        qDiv.appendChild(button);
+        qDiv.appendChild(moznostDiv);
+    }
+    if(typ===3){
+        qDiv.appendChild(button);
+        const vieOtazkyDiv=document.createElement('div');
+        const vieOtazky=document.createElement('img');
+        const popis=document.createElement('p');
+        popis.innerText='student vie pocet spravnych odpovedi';
+        popis.setAttribute('style','padding-top:1.5em;font-size:small');
+        vieOtazky.setAttribute('id',`know-${qId}`);
+        vieOtazky.setAttribute('class',`vie-spravne`);
+        vieOtazky.setAttribute('src','images/knownQknown.png');
+        vieOtazky.setAttribute('style','max-height:2em;margin:0.5em');
+        vieOtazky.setAttribute('onclick','viePocet(this)');
+
+        vieOtazky.setAttribute('alt','vie otazky');
+        vieOtazkyDiv.setAttribute('style','display:flex;margin-top:2rem;');
+
+        vieOtazkyDiv.appendChild(vieOtazky);
+        vieOtazkyDiv.appendChild(popis);
+
+
+        qDiv.appendChild(vieOtazkyDiv);
+        qDiv.appendChild(moznostDiv);
+    }
+
+    if(typ===4){
+
+
+        h3.innerText="Odpovedov na tuto otazku bude obrazok";
+        qDiv.appendChild(h3);
+    }
+    if(typ===5){
+
+
+        h3.innerText="Odpovedov na tuto otazku bude matematicky vzorec";
+        qDiv.appendChild(h3);
+    }
 
 
     qId=qId+1;
 
 
 }
+
+function viePocet(node){
+    if(node.classList.contains('vie-spravne')){
+        node.src='images/knownQ.png';
+        node.alt='nevie spravne';
+        node.setAttribute('class','nevie-spravne');
+        node.parentElement.children[1].innerText='student nevie pocet spravnych odpovedi';
+    }
+
+    else if(node.classList.contains('nevie-spravne')){
+        node.src='images/knownQknown.png';
+        node.alt='vie spravne';
+        node.setAttribute('class','vie-spravne');
+        node.parentElement.children[1].innerText='student vie pocet spravnych odpovedi';
+    }
+}
+
 function removeBtn(){
     const button=document.createElement('img');
     button.setAttribute('src','images/trash.png');
@@ -126,6 +179,7 @@ function removeBtn(){
 
     return button;
 }
+
 function addChoice(id,typ){
     const moznostDiv=document.getElementById(`moznostDiv-${id}`)
     moznostDiv.setAttribute('class',`${id}-options row `)
@@ -145,6 +199,10 @@ function addChoice(id,typ){
     moznost.setAttribute('class',`${id}-option`);
 
     x.appendChild(moznost);
+
+
+
+
     if(typ===3){
         moznost.setAttribute('style','border:  dashed #e24c4b');
         x.setAttribute('class','opt nespravna');
@@ -230,10 +288,7 @@ function poradovnik(id) {
 
            qId=poradie+1;
 
-
-
        }
-
         poradie=poradie+1;
     }
 

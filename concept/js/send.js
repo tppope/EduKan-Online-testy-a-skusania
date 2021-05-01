@@ -41,7 +41,13 @@ document.getElementById('send').onclick=function (){
                 odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
             }
             otazky[i + 1].odpovede = odpovede;
-            otazky[i + 1].vie_student_pocet_spravnych=false;
+            if(document.getElementById(`know-${q1Id}`).classList.contains('vie-spravne')){
+                otazky[i + 1].vie_student_pocet_spravnych=true;
+            }
+            if(document.getElementById(`know-${q1Id}`).classList.contains('nevie-spravne')){
+                otazky[i + 1].vie_student_pocet_spravnych=false;
+            }
+
         }
     }
     test.otazky=otazky
