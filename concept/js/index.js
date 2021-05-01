@@ -182,6 +182,7 @@ function changeIDs(oldID,newID){
     //funkcia sposobuje bugy tak ju nepouzivat
     //jej uloha bola iba urovnat html
     //na konecny stav odosielaneho testu nema vplyv
+
     //disable all removers to prevent missmatch
     document.getElementById(`question-${oldID}`).setAttribute('id',`question-${newID}`);
 

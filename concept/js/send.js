@@ -10,6 +10,7 @@ document.getElementById('send').onclick=function (){
     for(let i=0;i<q.length;i++){
         let q1Id=q[i].id;
         otazky[i+1]={}
+        otazky[i+1].nazov=q[i].value;
         if(q[i].classList.contains("type-1")){
             otazky[i+1].typ=1;
         }
@@ -19,7 +20,7 @@ document.getElementById('send').onclick=function (){
         if(q[i].classList.contains("type-3")){
             otazky[i+1].typ=3;
         }
-        otazky[i+1].nazov=q[i].value;
+
         const qOpt=document.getElementsByClassName(q1Id+"-option");
         if(q[i].classList.contains("type-1")===true) {
 
@@ -45,4 +46,14 @@ document.getElementById('send').onclick=function (){
     }
     test.otazky=otazky
     console.log(JSON.stringify(test));
+
+    fetch("../../../db/api/testy/novy-test.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(test)
+    })
+        .then(response => response.json())
+        .then(data => console.log(data));
 }
