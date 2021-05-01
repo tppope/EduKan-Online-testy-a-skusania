@@ -19,7 +19,7 @@ class ApiTesty_sqlContainer {
 		SELECT @novy_test_id AS novy_test_id;
 
 		COMMIT;
-		UNLOCK TABLES;		
+		UNLOCK TABLES;
 
 
 
@@ -225,6 +225,150 @@ class ApiTesty_sqlContainer {
 		";
 		
 		return $sql;
+	}
+	
+	
+	
+	
+	
+	// Nacita test (bez otazok) pre daneho studenta.
+	public static function get_result_test_pre_studenta(&$mysqli, $test_id, $kluc) {
+		$sql = "
+			SELECT nazov, casovy_limit, zoznam_testov_otvorenych.test_id FROM zoznam_testov
+			INNER JOIN zoznam_testov_otvorenych ON zoznam_testov.id = zoznam_testov_otvorenych.test_id
+			WHERE zoznam_testov_otvorenych.test_id = ? AND zoznam_testov_otvorenych.kluc = ?
+		";
+		$stmt = $mysqli->prepare($sql);
+
+		$stmt->bind_param("ii", $test_id, $kluc);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		return $result->fetch_assoc(); // vzdy max. jeden riadok
+	}
+
+	// Nacita test (bez otazok) pre daneho ucitela.
+	public static function get_result_test_pre_ucitela(&$mysqli, $test_id, $ucitel_id) {
+		$sql = "SELECT * FROM zoznam_testov WHERE id = ? AND kto_vytvoril = ?";
+		$stmt = $mysqli->prepare($sql);
+
+		$stmt->bind_param("ii", $test_id, $ucitel_id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		return $result->fetch_assoc(); // vzdy max. jeden riadok
+	}
+	
+	
+	// Nacita testove otazky (input parameter je vzdy bezpecny, nikdy nepochadza z uzivatelskeho vstupu).
+	public static function get_result_testove_otazky(&$mysqli, $test_id, $s_odpovedami = false) {
+		$sql_array = array(
+			"vsetky_otazky" => "SELECT * FROM test_" . $test_id . "_otazky",
+			"typ_1" => "SELECT * FROM test_" . $test_id . "_otazky_typ_1",
+			"typ_2" => "SELECT * FROM test_" . $test_id . "_otazky_typ_2",
+			"typ_3" => "SELECT * FROM test_" . $test_id . "_otazky_typ_3",
+			"typ_3_pary" => "SELECT * FROM test_" . $test_id . "_otazky_typ_3_pary",
+		);
+		
+		$stmt_array = array();
+		$fetch_all_array = array();
+		
+		foreach ($sql_array as $co => $sql) {
+			$stmt_array[$co] = $mysqli->prepare($sql);
+			$stmt_array[$co]->execute();
+			$fetch_all_array[$co] = $stmt_array[$co]->get_result()->fetch_all(MYSQLI_ASSOC);
+		}
+
+
+
+		$vyskladana_odpoved = array();
+		
+		foreach ($fetch_all_array["vsetky_otazky"] as $otazka) {
+			$jedna_otazka = array(
+				"nazov" => $otazka["nazov"],
+				"typ" => $otazka["typ"]
+			);
+			
+			
+			switch ($otazka["typ"]) {
+				case 2:
+					if ($otazka["znamy_pocet_spravnych"] == 1) {
+						$jedna_otazka["vie_student_pocet_spravnych"] = true; // kvoli JSON, aby bolo true a nie 1
+					}
+					else $jedna_otazka["vie_student_pocet_spravnych"] = false;
+				break;
+
+				case 3:
+					$jedna_otazka["odpovede_lave"] = array();
+					$jedna_otazka["odpovede_prave"] = array();
+				break;
+			}
+			
+			
+			if ($s_odpovedami) { // toto dostava iba ucitel, student nie
+				switch ($otazka["typ"]) {
+					case 1:
+						$jedna_otazka["spravne_odpovede"] = array();
+					break;
+
+					case 2:
+						$jedna_otazka["odpovede"] = array();
+					break;
+
+					case 3:
+						$jedna_otazka["pary"] = array();
+					break;
+				}
+			}
+			
+			$vyskladana_odpoved[ $otazka["id"] ] = $jedna_otazka;
+		}
+		
+		
+		// zoznam moznych odpovedi ide studentovi
+		foreach ($fetch_all_array["typ_2"] as $otazka) {
+			$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $otazka["odpoved"];
+		}
+		
+		
+		// lave a prave odpovede na parovacie otazky idu vzdy, aj studentovi
+		foreach ($fetch_all_array["typ_3"] as $otazka) {
+			if ($otazka["strana"] == "L") {
+				$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede_lave"][ $otazka["odpoved_id"] ] = $otazka["odpoved"];
+			}
+			else {
+				$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede_prave"][ $otazka["odpoved_id"] ] = $otazka["odpoved"];
+			}
+		}
+
+		
+		
+		if ($s_odpovedami) { // vyskladaj odpovede k otazkam
+			foreach ($fetch_all_array["typ_1"] as $otazka) {
+				$vyskladana_odpoved[ $otazka["otazka_id"] ]["spravne_odpovede"][] = $otazka["spravna_odpoved"];
+			}
+			
+			// zoznam vsetkych odpovedi aj s hodnotou spravnosti ide iba ucitelovi
+			foreach ($fetch_all_array["typ_2"] as $otazka) {
+				$array = array(
+					"text" => $otazka["odpoved"]
+				);
+				if ($otazka["je_spravna"] == 1) $array["je_spravna"] = true; // kvoli JSON
+				else $array["je_spravna"] = false;
+				
+				$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $array;
+			}
+
+			foreach ($fetch_all_array["typ_3_pary"] as $otazka) {
+				$vyskladana_odpoved[ $otazka["otazka_id"] ]["pary"][] = array(
+					"lava" => $otazka["odpoved_lava"],
+					"prava" => $otazka["odpoved_prava"]
+				);
+			}
+		}
+
+
+		return $vyskladana_odpoved;
 	}
 }
 ?>

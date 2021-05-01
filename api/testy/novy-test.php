@@ -1,10 +1,19 @@
 <?php
 // API ENDPOINT NA VYTVORENIE NOVEHO TESTU
 
+$surove_prijate_data = file_get_contents('php://input');
+
 include "api-endpoint-include.php";
+include "api-frontend/ApiTesty_API_frontend_ucitel.class.php";
 
 
-if ($general_sanity_check) { // pozri include
+if ($generic_sanity_check) { // na tejto API musi byt prihlaseny vylucne ucitel
+	$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prihlaseny_ucitel();
+}
+
+
+
+if ($generic_sanity_check) {
 	$prijate_data = json_decode($surove_prijate_data, true);
 	$spravny_format_bool = ApiTesty_sanityChecker::novy_test($prijate_data);
 	
@@ -13,7 +22,7 @@ if ($general_sanity_check) { // pozri include
 		echo json_encode($vystup);
 	}
 	else {
-		echo json_encode( Hlasky__API_T::get_hlaska("API_T__NT_SC_1") ); // nespravny format dat
+		echo json_encode( Hlasky__API_T::get_hlaska("API_T__GSC_3") ); // nespravny format dat
 	}
 }
 ?>
