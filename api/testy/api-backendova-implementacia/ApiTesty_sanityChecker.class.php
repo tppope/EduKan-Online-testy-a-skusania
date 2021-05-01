@@ -61,13 +61,13 @@ class ApiTesty_sanityChecker {
 
 
 
+
 	// Skontroluje data na nacitanie zoznamu testov pre ucitela.
 	public static function praca_s_testami_ucitel__nacitaj_vsetky_testy($data) {
 		return
 			isset( $data["akcia"] ) &&
 			$data["akcia"] == "zoznam-testov";
 	}
-
 
 
 

@@ -29,6 +29,7 @@ class ApiTesty_API_frontend_ucitel {
 	}
 
 
+
 	// Nacita zoznam vsetkych testov, ktore vytvoril aktualne prihlaseny ucitel.
 	public static function nacitaj_zoznam_testov_ucitela(&$mysqli, $ucitel_id) {
 		$vystup = Hlasky__API_T::get_hlaska("API_T__PT_U_1");
@@ -36,6 +37,7 @@ class ApiTesty_API_frontend_ucitel {
 		
 		return $vystup;
 	}
+
 	
 	
 	// Vytvori novy test.
