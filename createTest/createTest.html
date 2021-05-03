@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Koncept</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/index.js"></script>
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+
+</head>
+<body style="font-family: 'Century Gothic',serif">
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="position: absolute;top: 15%;">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Vytvorit</h5>
+            <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" >&times;</span>
+            </button>
+        </div>
+        <div style="padding: 1rem;display: flex;justify-content: space-between">
+            <div><input required type="text" id="meno-testu" onchange="document.getElementById('test-name').innerText=`${this.value}`"
+                        placeholder="Meno testu"></div>
+            <div>
+                <label for="cas-num">Dlzka</label>
+                <input required type="number" max="300" min="5"  id="cas-num" onchange="document.getElementById('cas-range').value=this.value" placeholder="45">
+                <label for="cas-range">min</label>
+                <input type="range" max="300" min="5" id="cas-range" onchange="document.getElementById('cas-num').value=this.value" placeholder="45">
+            </div>
+        </div>
+        <hr>
+        <div class="modal-body row" id="modal-body" style="display: flex">
+            <button style="display: grid;padding: 1em;margin: 1em" class=' btn btn-light selectQ'  onclick="createQuestion(1,qNum++)"><img src="images/dopisovanie.png" alt="dopisovanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>dopisovanie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(3,qNum++)" ><img src="images/spajanie.png" alt="spajanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>spajanie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(2,qNum++)" ><img src="images/rating.png" alt="moznosti" style="margin:auto;max-height: 2rem"><p>Otazka na <br>moznosti</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(4,qNum++)" ><img src="images/writing.png" alt="kreslenie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>kreslenie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(5,qNum++)" ><img src="images/function.png" alt="matematika" style="margin:auto;max-height: 2rem"><p>Matematicka <br>otazka</p></button>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-dark"  data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<header style="display: grid;">
+    <h1 style="margin-left: 2rem;margin-top: 2rem">Test Editor</h1>
+
+</header>
+<button class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;" data-toggle="modal" data-target="#modal">create</button>
+
+<hr style="margin: 2rem">
+<h3 id="test-name" style="margin: 2rem"></h3>
+    <div id="test" style="margin: auto;width: 80%">
+
+    </div>
+<div id="test-footer" hidden>
+<hr style="margin: 2rem; ">
+
+    <h1 style="color: red" id="error-msg"></h1>
+
+<button  id="send" class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;">send</button>
+
+</div>
+<footer style="margin: 25%">
+</footer>
+
+<script src="js/send.js">
+//odosielanie
+
+</script>
+</body>
+</html>
