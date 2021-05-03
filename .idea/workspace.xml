@@ -2,13 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0513fdad-c5b9-4799-9804-3fd88254ea82" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/images/active.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/inactive.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/showJSON.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/concept/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/concept/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/concept/js/send.js" beforeDir="false" afterPath="$PROJECT_DIR$/concept/js/send.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/createTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/createTest.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/concept/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/css/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/concept/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/concept/js/send.js" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/js/send.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/createTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/createTest.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/active.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/active.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/add.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/add.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/add.svg" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/add.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/cancel.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/cancel.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/dopisovanie.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/dopisovanie.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/function.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/function.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/inactive.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/inactive.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/knownQ.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/knownQ.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/knownQknown.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/knownQknown.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/question-mark.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/question-mark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/rating.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/rating.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/spajanie.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/spajanie.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/thrash-active.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/thrash-active.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/trash.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/trash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/valid.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/valid.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/writing.png" beforeDir="false" afterPath="$PROJECT_DIR$/createTest/images/writing.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +41,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1rWfXFOCZjWmTShivLlOfsFJNpi" />
@@ -79,7 +98,7 @@
       <workItem from="1619892765095" duration="595000" />
       <workItem from="1619898864937" duration="16000" />
       <workItem from="1620048353473" duration="19000" />
-      <workItem from="1620051014033" duration="5563000" />
+      <workItem from="1620051014033" duration="6226000" />
     </task>
     <servers />
   </component>

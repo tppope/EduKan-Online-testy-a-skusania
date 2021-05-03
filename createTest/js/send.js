@@ -89,7 +89,7 @@ document.getElementById('send').onclick=function (){
     test.otazky=otazky
     console.log(JSON.stringify(test));
 
-    fetch("../db/api/testy/novy-test.php", {
+    fetch("../../../db/api/testy/novy-test.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
