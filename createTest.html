@@ -35,7 +35,7 @@
         <hr>
         <div class="modal-body row" id="modal-body" style="display: flex">
             <button style="display: grid;padding: 1em;margin: 1em" class=' btn btn-light selectQ'  onclick="createQuestion(1,qNum++)"><img src="images/dopisovanie.png" alt="dopisovanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>dopisovanie</p></button>
-            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(2,qNum++)" disabled><img src="images/spajanie.png" alt="spajanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>spajanie</p></button>
+            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(2,qNum++)" ><img src="images/spajanie.png" alt="spajanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>spajanie</p></button>
             <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(3,qNum++)" ><img src="images/rating.png" alt="moznosti" style="margin:auto;max-height: 2rem"><p>Otazka na <br>moznosti</p></button>
             <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(4,qNum++)" ><img src="images/writing.png" alt="kreslenie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>kreslenie</p></button>
             <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(5,qNum++)" ><img src="images/function.png" alt="matematika" style="margin:auto;max-height: 2rem"><p>Matematicka <br>otazka</p></button>
@@ -49,7 +49,7 @@
 </div>
 
 
-<!--colors: rgb(85, 91, 255),rgb(31, 193, 27)  rgb(255, 217, 19) , rgb(255, 156, 85), rgb(255, 85, 85)-->
+
 <header style="display: grid;">
     <h1 style="margin-left: 2rem;margin-top: 2rem">Test Editor</h1>
 
@@ -62,8 +62,9 @@
 
     </div>
 <div id="test-footer" hidden>
-<hr style="margin: 2rem">
+<hr style="margin: 2rem; ">
 
+    <h1 style="color: red" id="error-msg"></h1>
 
 <button  id="send" class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;">send</button>
 

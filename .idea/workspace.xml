@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0513fdad-c5b9-4799-9804-3fd88254ea82" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/images/knownQ.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/knownQknown.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/question-mark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/active.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/inactive.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/showJSON.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/concept/index.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/concept/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/concept/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/concept/js/send.js" beforeDir="false" afterPath="$PROJECT_DIR$/concept/js/send.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/createTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/createTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +75,11 @@
       <workItem from="1619180723694" duration="647000" />
       <workItem from="1619691752253" duration="34000" />
       <workItem from="1619861838746" duration="324000" />
+      <workItem from="1619879862527" duration="9480000" />
+      <workItem from="1619892765095" duration="595000" />
+      <workItem from="1619898864937" duration="16000" />
+      <workItem from="1620048353473" duration="19000" />
+      <workItem from="1620051014033" duration="5563000" />
     </task>
     <servers />
   </component>
