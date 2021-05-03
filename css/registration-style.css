@@ -1,0 +1,97 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#main-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 240px;
+}
+
+#main-h1 {
+    font-family: "Roboto", sans-serif;
+    font-size: 45px;
+    font-weight: bold;
+    font-style: normal;
+    color: black;
+    text-align: center;
+}
+
+.section-h2 {
+    font-family: "Roboto", sans-serif;
+    font-size: 35px;
+    font-weight: bold;
+    font-style: normal;
+    margin: 0;
+}
+
+#section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 15px;
+}
+
+.reg-section-content {
+    width: 40%;
+    margin: auto;
+}
+
+.btn-lg {
+    margin-top: 20px;
+}
+
+#login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+}
+
+#login-image {
+    transition: height 300ms, width 300ms;
+}
+
+#login-button:hover #login-image {
+    width: 36px;
+    height: 36px;
+}
+
+@media (max-width: 1024px) {
+    .reg-section-content {
+        width: 60%;
+        margin: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .reg-section-content {
+        width: 90%;
+        margin: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    #edukan {
+        width: 300px;
+    }
+
+    #main-header {
+        height: 150px;
+    }
+}
