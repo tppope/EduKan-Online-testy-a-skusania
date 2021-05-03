@@ -1,5 +1,6 @@
 let qId=1;
 let qNum=1;
+let spajac=[];
 // document.getElementsByClassName()
 function  clicked(id,pairId){
     const items=document.getElementsByClassName('item');
@@ -45,7 +46,7 @@ function createQuestion(typ,number){
     document.getElementById('test-footer').hidden=false;
 
 
-    console.log(getPos(document.getElementById('test')));
+
 
     const qDiv=document.createElement('div');
     const test= document.getElementById('test');
@@ -116,36 +117,39 @@ function createQuestion(typ,number){
         store(question.value,qId);
     }
 
-    if(typ===2){
+    if(typ===3){
         question.value="Spojte spravne tvrdenia";
         store(question.value,qId);
-        const  canvas=document.createElement('canvas');
-        canvas.setAttribute('class','align-self-stretch');
 
-        canvas.setAttribute('style','margin:0');
-        const lavyDiv=document.createElement('div');
-        const pravyDiv=document.createElement('div');
-        const pravyBtn=document.createElement('button');
-        const lavyBtn=document.createElement('button');
-        lavyBtn.innerText="pridaj moznost";
-        lavyBtn.setAttribute('onclick',`addCard(this,${qId},${typ})`)
-        lavyBtn.setAttribute('class',`lavyBtn`);
-        pravyBtn.setAttribute('onclick',`addCard(this,${qId},${typ})`)
-        pravyBtn.setAttribute('class',`pravyBtn`);
-        pravyBtn.innerText="pridaj moznost";
-        moznostDiv.appendChild(lavyDiv);
-        lavyDiv.appendChild(lavyBtn);
-        moznostDiv.appendChild(canvas)
-        pravyDiv.appendChild(pravyBtn);
-        moznostDiv.appendChild(pravyDiv);
+        const btn=document.createElement('button');
+
+
+        btn.setAttribute('id',`adder-${qId}`);
+        btn.setAttribute('class','btn btn-dark')
+
+        btn.innerHTML=`<label for=${btn.id} style='vertical-align:top;font-size:x-large'>Pridaj moznost</label>`;
+        btn.setAttribute('onclick',`addCard(this.parentElement,${qId},${typ})`)
+
+        btn.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
+        btn.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
+        btn.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')");
+
+        moznostDiv.appendChild(btn);
+
+
+        moznostDiv.setAttribute('style','display:grid');
+
+
+
+
         // moznostDiv.setAttribute('style','display:flex;justify-content:space-around');
-        moznostDiv.setAttribute('class','d-flex justify-content-center');
+
         qDiv.appendChild(moznostDiv);
 
 
     }
 
-    if(typ===3){
+    if(typ===2){
         qDiv.appendChild(button);
         const vieOtazkyDiv=document.createElement('button');
         const vieOtazky=document.createElement('img');
@@ -224,47 +228,41 @@ function removeBtn(){
     return button;
 }
 
-function getPos(el) {
-    // yay readability
-    for (var lx=0, ly=0;
-         el != null;
-         lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
-    return {x: lx,y: ly};
-}
-function spojit(node){
-    ;
-    console.log(getPos(node));
-}
+
+
+
+
+
+
 
 
 function addCard(node,id,typ){
-   const moznostDiv=document.createElement('div');
-    const moznost=document.createElement('input');
-    const vonkajsiDiv=document.createElement('div');
-    const spajac=document.createElement('img');
-    spajac.setAttribute('src','images/inactive.png');
-    spajac.setAttribute('style','max-height:1rem;vertical-align:center;margin:0.5em');
-    spajac.setAttribute('onclick','spojit(this)')
-    moznostDiv.setAttribute('style','margin-top:1rem')
-    vonkajsiDiv.appendChild(moznostDiv);
-    if(node.classList.contains('lavyBtn')){
-        moznostDiv.appendChild(removeBtn());
-        moznostDiv.appendChild(moznost);
-        node.parentElement.setAttribute('style',`;display:grid`);
-        node.setAttribute('style',`justify-self:center;max-height:2em`);
-        moznostDiv.appendChild(spajac);
-    }
-    if(node.classList.contains('pravyBtn')){
-        moznostDiv.appendChild(spajac);
-        moznostDiv.appendChild(moznost);
-        moznostDiv.appendChild(removeBtn());
-        moznostDiv.children[2].setAttribute('style','max-height:1rem;vertical-align:top;margin-left:0.5rem')
-        node.parentElement.setAttribute('style',`display:grid`);
-        node.setAttribute('style',`justify-self:center;max-height:2em`);
-    }
+    const  line=document.createElement('hr');
+    const cover=document.createElement('div');
+    const btn=removeBtn();
+    btn.setAttribute('onclick',`this.parentElement.remove()`);
+     cover.appendChild(btn)
+    const lavyDiv=document.createElement('div');
+    const pravyDiv=document.createElement('div');
+    const moznost1=document.createElement('input');
+    const moznost2=document.createElement('input');
+    moznost1.setAttribute('type','text');
+    moznost1.setAttribute('class',`${id}-option`);
 
-    node.parentElement.appendChild(vonkajsiDiv);
+    moznost2.setAttribute('type','text');
+    moznost2.setAttribute('class',`${id}-option`);
 
+    cover.setAttribute('class','d-flex justify-content-center');
+    cover.setAttribute('style','margin-bottom:1rem');
+    line.setAttribute('style','width:10vw;margin:0;align-self:center; border: none;border-top: 3px double #333;')
+    lavyDiv.setAttribute('class',`lavy-div-${id}`);
+    pravyDiv.setAttribute('class',`pravy-div-${id}`);
+    cover.appendChild(lavyDiv);
+    cover.appendChild(line)
+    cover.appendChild(pravyDiv);
+   lavyDiv.appendChild(moznost1);
+   pravyDiv.appendChild(moznost2);
+   node.appendChild(cover);
 
 }
 
@@ -291,7 +289,7 @@ function addChoice(id,typ){
 
 
 
-    if(typ===3){
+    if(typ===2){
         moznost.setAttribute('style','border:  dashed #e24c4b');
         x.setAttribute('class','opt nespravna');
         const checkbox=document.createElement('img');
