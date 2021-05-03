@@ -3,4 +3,8 @@
 co je zapisane v [], su vysvetlene premenlive hodnoty
 
 
-url: api/testy/nacitaj-test.php?testid=[id testu]
+pre ucitela:
+	url: api/testy/nacitaj-test.php?testid=[id testu]
+
+pre studenta:
+	url: api/testy/nacitaj-test.php?testid=[id testu]&kluc=[kluc]

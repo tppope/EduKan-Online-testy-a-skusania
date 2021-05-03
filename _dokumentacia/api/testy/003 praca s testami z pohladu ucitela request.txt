@@ -8,4 +8,4 @@ API URL: api/testy/praca-s-testami.php
 
 
 NACITAJ ZOZNAM VSETKYCH TESTOV
-	url: api/testy/nacitaj-test.php?akcia=zoznam-testov
+	url: api/testy/praca-s-testami.php?akcia=zoznam-testov
