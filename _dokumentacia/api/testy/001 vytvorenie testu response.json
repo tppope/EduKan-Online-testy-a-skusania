@@ -3,7 +3,7 @@
 {
 	kod: "API_T__NT_U_1",
 	sprava: "Nový test bol úspešne vytvorený.",
-	id_testu: [int id testu]
+	kluc_testu: [string kľúč testu]
 }
 
 

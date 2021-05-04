@@ -5,72 +5,101 @@
 
 class ApiTesty_jsonParser {
 
-	// Spracuje json data na vytvorenie SQL multi-query, ktora vklada novy test do DB, pozri metodu ApiTesty_sqlContainer::get_sql_vytvor_novy_test().
-	public static function spracuj_json_novy_test(&$mysqli, $prijate_data, &$bool_test_aktivny, &$insert_vsetky_otazky, &$insert_otazky_typy, &$insert_pary) {
-		$bool_test_aktivny = $prijate_data["aktivny"] ? 1 : 0;
-		
-		foreach ($prijate_data["otazky"] as $otazka_id => $otazka) {
+	private static function vypocitaj_kluc_testu($ucitel_id, $nazov_testu) {
+		$zaklad = $ucitel_id . "---" . $nazov_testu . "---" . time();
+		return sha1($zaklad);
+	}
+
+
+	// Spracuje json data na vytvorenie noveho testu v DB.
+	public static function spracuj_json_novy_test($ucitel_id, $json_data) {
+		$kluc = self::vypocitaj_kluc_testu($ucitel_id, $json_data["nazov"]);
+
+		$spracovane_data = array(
+			"kluc" => $kluc,
+			"nazov" => $json_data["nazov"],
+			"casovy_limit" => $json_data["casovy_limit"],
+			"zoznam_otazok" => array(),
+			"zoznam_otazok_typy_1_2" => array(),
+			"zoznam_otazok_typ_3" => array()
+		);
+
+
+		foreach ($json_data["otazky"] as $otazka_id => $otazka) {
 			$vie_pocet_spravnych = 0;
 			if ($otazka["typ"] == 2 && $otazka["vie_student_pocet_spravnych"] == 1) {
 				$vie_pocet_spravnych = 1;
 			}
 			
-			$otazka_id = $mysqli->escape_string($otazka_id);
+
+			$spracovane_data["zoznam_otazok"][] = array(
+				"otazka_id" => $otazka_id,
+				"nazov" => $otazka["nazov"],
+				"typ" => $otazka["typ"],
+				"znamy_pocet_spravnych" => $vie_pocet_spravnych
+			);
 
 
-			$insert_vsetky_otazky[] = "(" .
-				$otazka_id . ", \'" .
-				$mysqli->escape_string($otazka["nazov"]) . "\', " .
-				$mysqli->escape_string($otazka["typ"]) . ", " .
-				$vie_pocet_spravnych .
-			")";
-			
 			switch ($otazka["typ"]) {
 				case 1:
-					foreach ($otazka["spravne_odpovede"] as $spravna_odpoved) {
-						$insert_otazky_typy[1][] = "(" .
-							$otazka_id . ", \'" .
-							$mysqli->escape_string($spravna_odpoved) .
-						"\')";
+					foreach ($otazka["spravne_odpovede"] as $odpoved) {
+						$spracovane_data["zoznam_otazok_typy_1_2"][] = array(
+							"otazka_id" => $otazka_id,
+							"odpoved" => $odpoved,
+							"je_spravna" => 1 // vsetky ulozene odpovede otazok typu 1 su spravne
+						);
 					}
 				break;
 
 				case 2:
 					foreach ($otazka["odpovede"] as $odpoved) {
-						$spravna = $odpoved["je_spravna"] ? 1 : 0;
-						$insert_otazky_typy[2][] = "(" .
-							$otazka_id . ", \'" .
-							$mysqli->escape_string($odpoved["text"]) . "\', " .
-							$spravna .
-						")";
+						$je_spravna = $odpoved["je_spravna"] ? 1 : 0;
+						$spracovane_data["zoznam_otazok_typy_1_2"][] = array(
+							"otazka_id" => $otazka_id,
+							"odpoved" => $odpoved["text"],
+							"je_spravna" => $je_spravna
+						);
 					}
 				break;
 
 				case 3:
+					$lave = array();
+					$prave = array();
+
 					foreach ($otazka["odpovede_lave"] as $oid => $odpoved) {
-						$insert_otazky_typy[3][] = "(" .
-							$otazka_id . ", " .
-							$mysqli->escape_string($oid) . ", \'" .
-							$mysqli->escape_string($odpoved) . "\', \'L\')";
+						$lave[$oid] = array(
+							"odpoved_id" => $oid,
+							"odpoved" => $odpoved,
+							"strana" => "L",
+							"sparovana_odpoved_id" => 0 // default tato odpoved nema par (nemusi mat par)
+						);
 					}
 
 					foreach ($otazka["odpovede_prave"] as $oid => $odpoved) {
-						$insert_otazky_typy[3][] = "(" .
-							$otazka_id . ", " .
-							$mysqli->escape_string($oid) . ", \'" .
-							$mysqli->escape_string($odpoved) . "\', \'P\')";
+						$prave[$oid] = array(
+							"odpoved_id" => $oid,
+							"odpoved" => $odpoved,
+							"strana" => "P",
+							"sparovana_odpoved_id" => 0 // default tato odpoved nema par (nemusi mat par)
+						);
 					}
 
+
 					foreach ($otazka["pary"] as $par) {
-						$insert_pary[] = "(" .
-							$otazka_id . ", " .
-							$mysqli->escape_string($par["lava"]) . ", " .
-							$mysqli->escape_string($par["prava"]) .
-						")";
+						$lave[ $par["lava"] ]["sparovana_odpoved_id"] = $par["prava"];
+						$prave[ $par["prava"] ]["sparovana_odpoved_id"] = $par["lava"];
 					}
+
+					$spracovane_data["zoznam_otazok_typ_3"][$otazka_id] = array(
+						"lave" => $lave,
+						"prave" => $prave
+					);
 				break;
 			}
 		}
+		
+		
+		return $spracovane_data;
 	}
 }
 ?>

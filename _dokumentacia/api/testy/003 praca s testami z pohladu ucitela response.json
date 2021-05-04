@@ -4,13 +4,29 @@
 	kod: "API_T__PT_U_1",
 	sprava: "Zoznam testov bol úspešne načítaný.",
 	zoznam_testov: [
-		zoznam testov - ak učiteľ nemá žiadne testy, je to prádzny zoznam
+		zoznam testov - ak učiteľ nemá žiadne testy, je to prázdny zoznam, inak array indexovaná od 0
 	
 		každý test je array v tvare
 		{
+			kluc: [string kľúč testu],
 			nazov: [string názov testu],
 			casovy_limit: [int časový limit v minútach],
 			aktivny: [true/false, či je aktívny alebo nie]
 		}
 	]
+}
+
+
+Zmazanie testu:
+
+Úspech:
+{
+	kod: "API_T__PT_U_2",
+	sprava: "Test bol úspešne zmazaný."
+}
+
+Neúspech:
+{
+	kod: "API_T__PT_C_1",
+	sprava: "Test sa nepodarilo zmazať."
 }
