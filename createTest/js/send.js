@@ -2,7 +2,7 @@
 document.getElementById('send').onclick=function (){
     let test={};
     if(document.getElementById('meno-testu').value===""){
-        document.getElementById('error-msg').innerText="nazov testu nemoze byt prazdny";
+        document.getElementById('error-msg').innerText="názov testu nemôže byť prázdny";
         return null;
     }
     else{
@@ -12,7 +12,6 @@ document.getElementById('send').onclick=function (){
 
     test.nazov=document.getElementById('meno-testu').value;
     test.casovy_limit=Number(document.getElementById('cas-num').value);
-    test.aktivny=false;
     let otazky= {};
     const q=document.getElementsByClassName('question');
 
@@ -20,7 +19,7 @@ document.getElementById('send').onclick=function (){
         let q1Id=q[i].id;
         otazky[Number(i+1)]={}
         if(q[i].value===""){
-            document.getElementById('error-msg').innerText=`nazov otazky cislo ${i+1} nemoze byt prazdny`;
+            document.getElementById('error-msg').innerText=`text otázky číslo ${i+1} nemôže byť prázdny`;
             return null;
         }
         else{
@@ -54,7 +53,7 @@ document.getElementById('send').onclick=function (){
 
             otazky[Number(i+1)].spravne_odpovede = spravne_odpovede;
             if(spravne_odpovede.length===0){
-                document.getElementById('error-msg').innerText=`otazka cislo ${i+1} nema zadanu ziadnu odpoved`;
+                document.getElementById('error-msg').innerText=`otázka číslo ${i+1} nemá zadanú žiadnu odpoveď`;
                 return null;
             }else{
                 document.getElementById('error-msg').innerText="";
@@ -70,7 +69,7 @@ document.getElementById('send').onclick=function (){
                 odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
 
                 if(odpovede.length===0){
-                    document.getElementById('error-msg').innerText=`otazka cislo ${i+1} nema zadanu ziadnu odpoved`;
+                    document.getElementById('error-msg').innerText=`otázka číslo ${i+1} nemá zadanú žiadnu odpoveď`;
                     return null;
                 }else{
                     document.getElementById('error-msg').innerText="";
@@ -92,12 +91,12 @@ document.getElementById('send').onclick=function (){
             let pary=[]
             const moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
 
-            for(let j=1;j<moznostDiv.children.length;j++){
+            for(let j=0;j<moznostDiv.children.length;j++){
 
-                odpovede_lave[Number(j)]=moznostDiv.children[j].children[1].children[0].value;
-                odpovede_prave[Number(j)]=moznostDiv.children[j].children[3].children[0].value;
+                odpovede_lave[Number(j+1)]=moznostDiv.children[j].children[1].children[0].value;
+                odpovede_prave[Number(j+1)]=moznostDiv.children[j].children[3].children[0].value;
                 if(moznostDiv.children[j].children[1].children[0].value!=="" && moznostDiv.children[j].children[3].children[0].value!==""){
-                    pary.push({lava:j,prava:j});
+                    pary.push({lava:j+1,prava:j+1});
 
                 }
 
@@ -117,7 +116,7 @@ document.getElementById('send').onclick=function (){
     test.otazky=otazky
     console.log(JSON.stringify(test));
 
-    fetch("../api/testy/novy-test.php", {
+   fetch("../api/testy/novy-test.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

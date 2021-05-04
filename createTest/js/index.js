@@ -1,6 +1,6 @@
 let qId=1;
 let qNum=1;
-let spajac=[];
+
 // document.getElementsByClassName()
 function  clicked(id,pairId){
     const items=document.getElementsByClassName('item');
@@ -21,7 +21,7 @@ function store(value,id){
     const pId=`q`+id.toString();
     const p=document.createElement('p');
     if(value===""){
-        value="zadajte text otazky"
+        value="ZADAJTE TEXT OTÁZKY"
         p.setAttribute('style',`font-size:large;margin:1rem;color:#e24c4b`);
     }else{
         p.setAttribute('style',`margin:1rem`);
@@ -64,7 +64,7 @@ function createQuestion(typ,number){
     button.setAttribute('id',`adder-${qId}`);
     button.setAttribute('class','btn btn-dark')
 
-    button.innerHTML=`<label for=${button.id} style='vertical-align:top;font-size:x-large'>Pridaj moznost</label>`;
+    button.innerHTML=`<label for=${button.id} style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
 
     button.setAttribute('style',`justify-self:end;max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
     button.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
@@ -118,24 +118,28 @@ function createQuestion(typ,number){
     }
 
     if(typ===3){
-        question.value="Spojte spravne tvrdenia";
+        question.value="Spojte správne tvrdenia";
         store(question.value,qId);
 
         const btn=document.createElement('button');
+        const p=document.createElement('p');
 
+
+        p.setAttribute('style','padding-top:1.5em;font-size:1rem;margin-top:1rem;margin-bottom:3rem');
 
         btn.setAttribute('id',`adder-${qId}`);
         btn.setAttribute('class','btn btn-dark')
 
-        btn.innerHTML=`<label for=${btn.id} style='vertical-align:top;font-size:x-large'>Pridaj moznost</label>`;
+        btn.innerHTML=`<label for=${btn.id} style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
         btn.setAttribute('onclick',`addCard(this.parentElement,${qId},${typ})`)
 
         btn.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
         btn.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
         btn.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')");
 
-        moznostDiv.appendChild(btn);
-
+        qDiv.appendChild(btn);
+        qDiv.appendChild(p);
+        p.innerHTML="<img src='images/info.png' alt='info' style='max-height:1.5rem;margin-right: 0.5em'>Vytvorte dvojice, ak necháte pole prázdne, tak toto pole nebude mať dvojicu v teste";
 
         moznostDiv.setAttribute('style','display:grid');
 
@@ -154,23 +158,27 @@ function createQuestion(typ,number){
         const vieOtazkyDiv=document.createElement('button');
         const vieOtazky=document.createElement('img');
         const popis=document.createElement('p');
-        popis.innerText='student vie pocet spravnych odpovedi';
-        popis.setAttribute('style','padding-top:1.5em;font-size:small');
+
+        popis.innerText='spravné ukázané';
+        popis.setAttribute('style','padding-top:1.5em;font-size:1rem;position:relative;left:43%');
+
         vieOtazky.setAttribute('id',`know-${qId}`);
         vieOtazky.setAttribute('class',`vie-spravne`);
 
         vieOtazky.setAttribute('src','images/knownQknown.png');
-        vieOtazky.setAttribute('style','max-height:4vh;');
+        vieOtazky.setAttribute('style','max-width:2rem;justify-self:center');
         vieOtazkyDiv.setAttribute('onclick','viePocet(this)');
 
         vieOtazky.setAttribute('alt','vie otazky');
-        vieOtazkyDiv.setAttribute('style','display:flex;margin:auto;max-width:13vw;max-height:7vh');
+        vieOtazkyDiv.setAttribute('style','border-radius:15px;display:flex;justify-content:center;position:relative;left:43.5%;margin-top:1rem;width:5rem;border: 1px solid black');
         vieOtazkyDiv.setAttribute('class','btn btn-outline-dark');
+
         vieOtazkyDiv.appendChild(vieOtazky);
-        vieOtazkyDiv.appendChild(popis);
+
 
 
         qDiv.appendChild(vieOtazkyDiv);
+        qDiv.appendChild(popis);
         qDiv.appendChild(moznostDiv);
         store(question.value,qId);
     }
@@ -178,14 +186,14 @@ function createQuestion(typ,number){
     if(typ===4){
 
 
-        h3.innerText="Odpovedov na tuto otazku bude obrazok";
+        h3.innerText="Odpoveďou na túto otázku bude obrázok";
         qDiv.appendChild(h3);
         store(question.value,qId);
     }
     if(typ===5){
 
 
-        h3.innerText="Odpovedov na tuto otazku bude matematicky vzorec";
+        h3.innerText="Odpoveďou na túto otázku bude matematický vzorec";
         qDiv.appendChild(h3);
         store(question.value,qId);
     }
@@ -201,7 +209,7 @@ function viePocet(node){
         node.children[0].src='images/knownQ.png';
         node.children[0].alt='nevie spravne';
         node.children[0].setAttribute('class','nevie-spravne');
-        node.children[1].innerText='student nevie pocet spravnych odpovedi';
+        node.parentElement.children[5].innerText='správne skryté';
 
     }
 
@@ -209,7 +217,7 @@ function viePocet(node){
         node.children[0].src='images/knownQknown.png';
         node.children[0].alt='vie spravne';
         node.children[0].setAttribute('class','vie-spravne');
-        node.children[1].innerText='student vie pocet spravnych odpovedi';
+        node.parentElement.children[5].innerText='správne ukázane';
 
     }
 }
@@ -254,15 +262,16 @@ function addCard(node,id,typ){
 
     cover.setAttribute('class','d-flex justify-content-center');
     cover.setAttribute('style','margin-bottom:1rem');
-    line.setAttribute('style','width:10vw;margin:0;align-self:center; border: none;border-top: 3px double #333;')
+    line.setAttribute('style','width:2rem;margin:0;align-self:center; border: none;border-top: 3px double #333;')
     lavyDiv.setAttribute('class',`lavy-div-${id}`);
     pravyDiv.setAttribute('class',`pravy-div-${id}`);
     cover.appendChild(lavyDiv);
     cover.appendChild(line)
     cover.appendChild(pravyDiv);
+    cover.setAttribute('style','margin-top:3rem');
    lavyDiv.appendChild(moznost1);
    pravyDiv.appendChild(moznost2);
-   node.appendChild(cover);
+   node.children[5].appendChild(cover);
 
 }
 
