@@ -2,9 +2,78 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduKan - online testy a skúšania</title>
+
+    <link rel="icon" href="resources/favicon/edukan-favicon.png" type="image/png" sizes="any">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/test-info-style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="javascript/test-info-script.js"></script>
+
 </head>
 <body>
+<header id="main-header">
+    <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
+</header>
+<section>
+    <div id="login-div">
+        <span id="login-name"></span>
+        <div id="logout-button" data-toggle="tooltip" title="Odhlásiť sa" onclick="logout()"><img
+                id="logout-image"
+                src="resources/pictures/ucitel/logout.svg"
+                width="20" height="20"
+                alt="login"></div>
+    </div>
+    <header id="section-header" class="section-content">
+        <h2 class="section-h2">
+            Test:
+        </h2>
+        <div id="exports">
+            <div class="export-buttons" data-toggle="tooltip" title="Export do PDF" onclick="">
+                <img class="export-image" src="resources/pictures/test/pdf.svg" width="32" height="32" alt="pdf">
+            </div>
+            <div class="export-buttons" data-toggle="tooltip" title="Export do CSV" onclick="">
+                <img class="export-image" src="resources/pictures/test/csv.svg" width="32" height="32" alt="pdf">
+            </div>
+        </div>
 
+    </header>
+    <div id="students" class="section-content table-responsive">
+        <table class="table table-light">
+            <thead class="bg-info text-white">
+            <tr>
+                <th>
+                    Meno
+                </th>
+                <th>
+                    Priezvisko
+                </th>
+                <th>
+                    Trvanie
+                </th>
+            </tr>
+            </thead>
+            <tbody id="students-tbody">
+            </tbody>
+        </table>
+    </div>
+
+</section>
 </body>
 </html>
