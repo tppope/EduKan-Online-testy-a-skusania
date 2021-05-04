@@ -7,5 +7,9 @@ API URL: api/testy/praca-s-testami.php
 
 
 
-NACITAJ ZOZNAM VSETKYCH TESTOV
+NAČÍTAJ ZOZNAM VŠETKÝCH TESTOV
 	url: api/testy/praca-s-testami.php?akcia=zoznam-testov
+
+
+ZMAŽ TEST
+	url: api/testy/praca-s-testami.php?akcia=zmaz-test&kluc=[kľúč testu]

@@ -3,228 +3,109 @@
 // STATICKY KONTAJNER NA TEXTOVE SQL QUERIES, RESP. MULTI-QUERIES
 
 class ApiTesty_sqlContainer {
-
-	// Vrati multiquery, ktora vytvori novy test a zapise vsetky jeho otazky do databazy podla prijatych dat.
-	public static function get_sql_vytvor_novy_test($ucitel_id, $nazov_testu, $casovy_limit, $bool_test_aktivny, $insert_vsetky_otazky, $insert_otazky_typy, $insert_pary) {
-		$sql = "
-		SET autocommit = 0;
+	
+	// Vytvori novy test pre tohto ucitela v DB.
+	public static function vytvor_novy_test(&$mysqli, $ucitel_id, $data) {
+		$sql_novy_test = "INSERT INTO zoznam_testov(kluc_testu, kto_vytvoril, nazov, casovy_limit) VALUES(?, ?, ?, ?)";
+		$stmt_novy_test = $mysqli->prepare($sql_novy_test);
+		if (!$stmt_novy_test) return false;
 		
+		$sql_zoznam_otazok = "INSERT INTO zoznam_testov_otazky(kluc_testu, otazka_id, nazov, typ, znamy_pocet_spravnych) VALUES(?, ?, ?, ?, ?)";
+		$stmt_zoznam_otazok = $mysqli->prepare($sql_zoznam_otazok);
+		if (!$stmt_zoznam_otazok) return false;
 		
-		LOCK TABLES zoznam_testov WRITE;
-		INSERT INTO zoznam_testov (kto_vytvoril, nazov, casovy_limit, aktivny) VALUES($ucitel_id, '$nazov_testu', $casovy_limit, $bool_test_aktivny);
+		$sql_zoznam_otazok_typy_1_2 = "INSERT INTO zoznam_testov_otazky_typy_1_2(kluc_testu, otazka_id, odpoved, je_spravna) VALUES(?, ?, ?, ?)";
+		$stmt_zoznam_otazok_typy_1_2 = $mysqli->prepare($sql_zoznam_otazok_typy_1_2);
+		if (!$stmt_zoznam_otazok_typy_1_2) return false;
 
-		SET @novy_test_id = 1;
-		SELECT MAX(id) INTO @novy_test_id FROM zoznam_testov;
+		$sql_zoznam_otazok_typ_3 =
+			"INSERT INTO zoznam_testov_otazky_typ_3(kluc_testu, otazka_id, odpoved_id, odpoved, strana, sparovana_odpoved_id)
+			VALUES(?, ?, ?, ?, ?, ?)";
+		$stmt_zoznam_otazok_typ_3 = $mysqli->prepare($sql_zoznam_otazok_typ_3);
+		if (!$stmt_zoznam_otazok_typ_3) return false;
+
+
+
+		$mysqli->autocommit(false);
+		$mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+
 		
-		SELECT @novy_test_id AS novy_test_id;
-
-		COMMIT;
-		UNLOCK TABLES;
-
-
-
-		START TRANSACTION;
-
-
-		SET @tabulka_celkova = CONCAT('test_', @novy_test_id, '_otazky');
-		SET @create_celkova = CONCAT(
-			'CREATE TABLE ', @tabulka_celkova, '(
-				id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-				nazov text NOT NULL,
-				typ tinyint(1) NOT NULL DEFAULT 1,
-				znamy_pocet_spravnych tinyint(1) NOT NULL DEFAULT 0 COMMENT \'ci student vie pocet spravnych odpovedi, relevantne iba pre otazky s viacerymi odpovedami\',
-				FOREIGN KEY (typ) REFERENCES typy_otazok(id) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
-		);
-
-
-
-		SET @tabulka_otazok_typ_1 = CONCAT('test_', @novy_test_id, '_otazky_typ_1');
-		SET @tabulka_otazok_typ_2 = CONCAT('test_', @novy_test_id, '_otazky_typ_2');
-		SET @tabulka_otazok_typ_3 = CONCAT('test_', @novy_test_id, '_otazky_typ_3');
-		SET @tabulka_otazok_typ_3_pary = CONCAT('test_', @novy_test_id, '_otazky_typ_3_pary');
-
-		SET @create_typ_1 = CONCAT(
-			'CREATE TABLE ', @tabulka_otazok_typ_1, '(
-				otazka_id int(11) NOT NULL,
-				spravna_odpoved text NOT NULL,
-
-				INDEX (otazka_id),
-				FOREIGN KEY (otazka_id) REFERENCES ', @tabulka_celkova, ' (id) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
-		);
-
-		SET @create_typ_2 = CONCAT(
-			'CREATE TABLE ', @tabulka_otazok_typ_2, '(
-				otazka_id int(11) NOT NULL,
-				odpoved text NOT NULL,
-				je_spravna tinyint(1) NOT NULL,
-
-				INDEX (otazka_id),
-				FOREIGN KEY (otazka_id) REFERENCES ', @tabulka_celkova, ' (id) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
-		);
-
-		SET @create_typ_3 = CONCAT(
-			'CREATE TABLE ', @tabulka_otazok_typ_3, '(
-				otazka_id int(11) NOT NULL,
-				odpoved_id int(11) NOT NULL,
-				odpoved text NOT NULL,
-				strana varchar(1) NOT NULL COMMENT \'\"L\" alebo \"P\"\',
-
-				INDEX (otazka_id),
-				FOREIGN KEY (otazka_id) REFERENCES ', @tabulka_celkova, ' (id) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
-		);
-
-		SET @create_typ_3_pary = CONCAT(
-			'CREATE TABLE ', @tabulka_otazok_typ_3_pary, '(
-				otazka_id int(11) NOT NULL,
-				odpoved_lava int(11) NOT NULL,
-				odpoved_prava int(11) NOT NULL,
-				par_id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-				
-				INDEX (otazka_id),
-				FOREIGN KEY (otazka_id) REFERENCES ', @tabulka_celkova, ' (id) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
-		);
-
-
-
-		PREPARE t_celkova FROM @create_celkova;
-		PREPARE t_otazok_typ_1 FROM @create_typ_1;
-		PREPARE t_otazok_typ_2 FROM @create_typ_2;
-		PREPARE t_otazok_typ_3 FROM @create_typ_3;
-		PREPARE t_otazok_typ_3_pary FROM @create_typ_3_pary;
-
-
-		EXECUTE t_celkova;
-		EXECUTE t_otazok_typ_1;
-		EXECUTE t_otazok_typ_2;
-		EXECUTE t_otazok_typ_3;
-		EXECUTE t_otazok_typ_3_pary;
-
-
-
-		COMMIT;
-
-
-
-		START TRANSACTION;
-
-		SET @insert_celkova = CONCAT(
-			'INSERT INTO ', @tabulka_celkova, ' (id, nazov, typ, znamy_pocet_spravnych) VALUES " . implode(", ", $insert_vsetky_otazky) . ";'
-		);
-
-		PREPARE i_celkova FROM @insert_celkova;
-		EXECUTE i_celkova;
-
-		";
-
-
-		if ( !empty($insert_otazky_typy[1]) ) {
-			$sql .= "
-			SET @insert_typ_1 = CONCAT(
-				'INSERT INTO ', @tabulka_otazok_typ_1, ' (otazka_id, spravna_odpoved) VALUES " . implode(", ", $insert_otazky_typy[1]) . ";'
-			);
-
-			PREPARE i_typ_1 FROM @insert_typ_1;
-			EXECUTE i_typ_1;
-			";
+		$stmt_novy_test->bind_param("sisi", $data["kluc"], $ucitel_id, $data["nazov"], $data["casovy_limit"]);
+		$exec1 = $stmt_novy_test->execute();
+		if (!$exec1) {
+			$mysqli->rollback();
+			return false;
 		}
 
 
-		if ( !empty($insert_otazky_typy[2]) ) {
-			$sql .= "
-			SET @insert_typ_2 = CONCAT(
-				'INSERT INTO ', @tabulka_otazok_typ_2, ' (otazka_id, odpoved, je_spravna) VALUES " . implode(", ", $insert_otazky_typy[2]) . ";'
-			);
-
-			PREPARE i_typ_2 FROM @insert_typ_2;
-			EXECUTE i_typ_2;
-			";
+		foreach ($data["zoznam_otazok"] as $otazka) {
+			$stmt_zoznam_otazok->bind_param("sisii", $data["kluc"], $otazka["otazka_id"], $otazka["nazov"], $otazka["typ"], $otazka["znamy_pocet_spravnych"]);
+			$exec2 = $stmt_zoznam_otazok->execute();
+			if (!$exec2) {
+				$mysqli->rollback();
+				return false;
+			}
 		}
 
 
-		if ( !empty($insert_otazky_typy[3]) ) {
-			$sql .= "
-			SET @insert_typ_3 = CONCAT(
-				'INSERT INTO ', @tabulka_otazok_typ_3, ' (otazka_id, odpoved_id, odpoved, strana) VALUES " . implode(", ", $insert_otazky_typy[3]) . ";'
-			);
-			
-			SET @insert_typ_3_pary = CONCAT(
-				'INSERT INTO ', @tabulka_otazok_typ_3_pary, ' (otazka_id, odpoved_lava, odpoved_prava) VALUES " . implode(", ", $insert_pary) . ";'
-			);
-
-			PREPARE i_typ_3 FROM @insert_typ_3;
-			PREPARE i_typ_3_pary FROM @insert_typ_3_pary;
-			
-			EXECUTE i_typ_3;
-			EXECUTE i_typ_3_pary;
-			";
+		foreach ($data["zoznam_otazok_typy_1_2"] as $otazka) {
+			$stmt_zoznam_otazok_typy_1_2->bind_param("sisi", $data["kluc"], $otazka["otazka_id"], $otazka["odpoved"], $otazka["je_spravna"]);
+			$exec3 = $stmt_zoznam_otazok_typy_1_2->execute();
+			if (!$exec3) {
+				$mysqli->rollback();
+				return false;
+			}
 		}
 
 
+		foreach ($data["zoznam_otazok_typ_3"] as $otazka_id => $otazka) {
+			foreach ($otazka["lave"] as $odpoved) {
+				$stmt_zoznam_otazok_typ_3->bind_param(
+					"siissi", $data["kluc"], $otazka_id,
+					$odpoved["odpoved_id"], $odpoved["odpoved"], $odpoved["strana"], $odpoved["sparovana_odpoved_id"]
+				);
+				$exec4a = $stmt_zoznam_otazok_typ_3->execute();
+
+				if (!$exec4a) {
+					$mysqli->rollback();
+					return false;
+				}
+			}
+
+			foreach ($otazka["prave"] as $odpoved) {
+				$stmt_zoznam_otazok_typ_3->bind_param(
+					"siissi", $data["kluc"], $otazka_id,
+					$odpoved["odpoved_id"], $odpoved["odpoved"], $odpoved["strana"], $odpoved["sparovana_odpoved_id"]
+				);
+				$exec4b = $stmt_zoznam_otazok_typ_3->execute();
+
+				if (!$exec4b) {
+					$mysqli->rollback();
+					return false;
+				}
+			}
+		}
 
 
-
-		$sql .= " COMMIT;
-
-		START TRANSACTION;
-
-
-		SET @c1 = 0;
-		SET @c2 = 0;
-		SET @c3 = 0;
-		SET @pocet_skutocny = 0;
-
-
-		SET @select_1 = CONCAT('SELECT COUNT(DISTINCT otazka_id) INTO @c1 FROM test_', @novy_test_id, '_otazky_typ_1;');
-		SET @select_2 = CONCAT('SELECT COUNT(DISTINCT otazka_id) INTO @c2 FROM test_', @novy_test_id, '_otazky_typ_2;');
-		SET @select_3 = CONCAT('SELECT COUNT(DISTINCT otazka_id) INTO @c3 FROM test_', @novy_test_id, '_otazky_typ_3;');
-		SET @select_pocet_skutocny = CONCAT('SELECT COUNT(id) INTO @pocet_skutocny FROM test_', @novy_test_id, '_otazky;');
-
-		PREPARE s1 FROM @select_1;
-		PREPARE s2 FROM @select_2;
-		PREPARE s3 FROM @select_3;
-		PREPARE s_pocet_skutocny FROM @select_pocet_skutocny;
-
-		EXECUTE s1;
-		EXECUTE s2;
-		EXECUTE s3;
-		EXECUTE s_pocet_skutocny;
-
-
-		SET @pocet_zisteny = @c1 + @c2 + @c3;
-
-
-		SELECT ( @pocet_zisteny = @pocet_skutocny AND @pocet_skutocny != 0 ) AS check_result;
-
-		COMMIT;
-		";
-		
-		return $sql;
+		return $mysqli->commit();
 	}
 	
 	
 	// Vrati multiquery, ktora zmaze test s tymto id.
-	public static function get_sql_zmaz_test($id) {
-		$sql = "
-		SET autocommit = 0;
+	public static function zmaz_test(&$mysqli, $kluc, $ucitel_id) {
+		$sql_zmaz_test = "DELETE FROM zoznam_testov WHERE kluc_testu = ? AND kto_vytvoril = ?";
+		$stmt_zmaz_test = $mysqli->prepare($sql_zmaz_test);
+		if (!$stmt_zmaz_test) return false;
 
-		DROP TABLE IF EXISTS
-			test_" . $id . "_otazky_typ_1,
-			test_" . $id . "_otazky_typ_2,
-			test_" . $id . "_otazky_typ_3,
-			test_" . $id . "_otazky_typ_3_pary,
-			test_" . $id . "_otazky
-		CASCADE;
+		$stmt_zmaz_test->bind_param("si", $kluc, $ucitel_id);
+		$stmt_zmaz_test->execute();
 
-		DELETE FROM zoznam_testov WHERE id = " . $id . ";
-		COMMIT;
-		";
-		
-		return $sql;
+		//$mysqli->query("DELETE FROM zoznam_testov WHERE kluc_testu = '{$kluc}' AND kto_vytvoril = {$ucitel_id}");
+
+		// nefunguje ziadna varianta : TODO: opravit
+
+		return $mysqli->affected_rows; // ci boli zmazane data
 	}
 	
 	
@@ -232,15 +113,15 @@ class ApiTesty_sqlContainer {
 	
 	
 	// Nacita test (bez otazok) pre daneho studenta.
-	public static function get_result_test_pre_studenta(&$mysqli, $test_id, $kluc) {
+	public static function get_result_test_pre_studenta(&$mysqli, $kluc) {
 		$sql = "
-			SELECT nazov, casovy_limit, zoznam_testov_otvorenych.test_id FROM zoznam_testov
-			INNER JOIN zoznam_testov_otvorenych ON zoznam_testov.id = zoznam_testov_otvorenych.test_id
-			WHERE zoznam_testov_otvorenych.test_id = ? AND zoznam_testov_otvorenych.kluc = ?
+			SELECT nazov, casovy_limit, zoznam_testov_otvorenych.kluc_testu FROM zoznam_testov
+			INNER JOIN zoznam_testov_otvorenych ON zoznam_testov.kluc_testu = zoznam_testov_otvorenych.kluc_testu
+			WHERE zoznam_testov_otvorenych.kluc_testu = ?
 		";
 		$stmt = $mysqli->prepare($sql);
 
-		$stmt->bind_param("ii", $test_id, $kluc);
+		$stmt->bind_param("s", $kluc);
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -248,11 +129,11 @@ class ApiTesty_sqlContainer {
 	}
 
 	// Nacita test (bez otazok) pre daneho ucitela.
-	public static function get_result_test_pre_ucitela(&$mysqli, $test_id, $ucitel_id) {
-		$sql = "SELECT * FROM zoznam_testov WHERE id = ? AND kto_vytvoril = ?";
+	public static function get_result_test_pre_ucitela(&$mysqli, $kluc, $ucitel_id) {
+		$sql = "SELECT * FROM zoznam_testov WHERE kluc_testu = ? AND kto_vytvoril = ?";
 		$stmt = $mysqli->prepare($sql);
 
-		$stmt->bind_param("ii", $test_id, $ucitel_id);
+		$stmt->bind_param("si", $kluc, $ucitel_id);
 		$stmt->execute();
 		$result = $stmt->get_result();
 
@@ -262,7 +143,7 @@ class ApiTesty_sqlContainer {
 
 	// Nacita zoznam vsetkych testov (bez otazok), ktore vytvoril dany ucitel.
 	public static function get_result_vsetky_testy_ucitela(&$mysqli, $ucitel_id) {
-		$sql = "SELECT id, nazov, casovy_limit, aktivny FROM zoznam_testov WHERE kto_vytvoril = ?";
+		$sql = "SELECT kluc_testu, nazov, casovy_limit, aktivny FROM zoznam_testov WHERE kto_vytvoril = ?";
 		$stmt = $mysqli->prepare($sql);
 
 		$stmt->bind_param("i", $ucitel_id);
@@ -271,7 +152,8 @@ class ApiTesty_sqlContainer {
 
 		$return = array();
 		while ( $row = $result->fetch_assoc() ) {
-			$return[ $row["id"] ] = array(
+			$return[] = array(
+				"kluc" => $row["kluc_testu"],
 				"nazov" => $row["nazov"],
 				"casovy_limit" => $row["casovy_limit"],
 				"aktivny" => $row["aktivny"]
@@ -284,28 +166,29 @@ class ApiTesty_sqlContainer {
 
 
 	// Nacita testove otazky (input parameter je vzdy bezpecny, nikdy nepochadza z uzivatelskeho vstupu).
-	public static function get_result_testove_otazky(&$mysqli, $test_id, $s_odpovedami = false) {
+	public static function get_result_testove_otazky(&$mysqli, $kluc, $s_odpovedami = false) {
 		$sql_array = array(
-			"vsetky_otazky" => "SELECT * FROM test_" . $test_id . "_otazky",
-			"typ_1" => "SELECT * FROM test_" . $test_id . "_otazky_typ_1",
-			"typ_2" => "SELECT * FROM test_" . $test_id . "_otazky_typ_2",
-			"typ_3" => "SELECT * FROM test_" . $test_id . "_otazky_typ_3",
-			"typ_3_pary" => "SELECT * FROM test_" . $test_id . "_otazky_typ_3_pary",
+			"vsetky_otazky" => "SELECT otazka_id, nazov, typ, znamy_pocet_spravnych FROM zoznam_testov_otazky WHERE kluc_testu = '{$kluc}'",
+			"typy_1_2" => "SELECT otazka_id, odpoved, je_spravna FROM zoznam_testov_otazky_typy_1_2 WHERE kluc_testu = '{$kluc}'",
+			"typ_3_lave" => "SELECT otazka_id, odpoved_id, odpoved, sparovana_odpoved_id FROM zoznam_testov_otazky_typ_3 WHERE kluc_testu = '{$kluc}' AND strana = 'L'",
+			"typ_3_prave" => "SELECT otazka_id, odpoved_id, odpoved, sparovana_odpoved_id FROM zoznam_testov_otazky_typ_3 WHERE kluc_testu = '{$kluc}' AND strana = 'P'"
 		);
-		
-		$stmt_array = array();
+
 		$fetch_all_array = array();
+		$vyskladana_odpoved = array();
 		
 		foreach ($sql_array as $co => $sql) {
-			$stmt_array[$co] = $mysqli->prepare($sql);
-			$stmt_array[$co]->execute();
-			$fetch_all_array[$co] = $stmt_array[$co]->get_result()->fetch_all(MYSQLI_ASSOC);
+			$stmt = $mysqli->prepare($sql);
+			if (!$stmt) return $vyskladana_odpoved;
+
+			$exec = $stmt->execute();
+			if (!$exec) return $vyskladana_odpoved;
+
+			$fetch_all_array[$co] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 		}
 
 
 
-		$vyskladana_odpoved = array();
-		
 		foreach ($fetch_all_array["vsetky_otazky"] as $otazka) {
 			$jedna_otazka = array(
 				"nazov" => $otazka["nazov"],
@@ -315,6 +198,8 @@ class ApiTesty_sqlContainer {
 			
 			switch ($otazka["typ"]) {
 				case 2:
+					$jedna_otazka["odpovede"] = array();
+
 					if ($otazka["znamy_pocet_spravnych"] == 1) {
 						$jedna_otazka["vie_student_pocet_spravnych"] = true; // kvoli JSON, aby bolo true a nie 1
 					}
@@ -324,69 +209,73 @@ class ApiTesty_sqlContainer {
 				case 3:
 					$jedna_otazka["odpovede_lave"] = array();
 					$jedna_otazka["odpovede_prave"] = array();
+
+					$zatial_nesparovane[ $otazka["otazka_id"] ] = array( // pre ucitela vytvor parovanie (toto je pomocna array)
+						"lave" => array(),
+						"prave" => array()
+					);
 				break;
 			}
 			
 			
 			if ($s_odpovedami) { // toto dostava iba ucitel, student nie
-				switch ($otazka["typ"]) {
-					case 1:
-						$jedna_otazka["spravne_odpovede"] = array();
-					break;
-
-					case 2:
-						$jedna_otazka["odpovede"] = array();
-					break;
-
-					case 3:
-						$jedna_otazka["pary"] = array();
-					break;
+				if ( $otazka["typ"] == 1 ) $jedna_otazka["spravne_odpovede"] = array();
+				elseif ( $otazka["typ"] == 3 ) {
+					$jedna_otazka["pary"] = array();
 				}
 			}
 			
-			$vyskladana_odpoved[ $otazka["id"] ] = $jedna_otazka;
+			$vyskladana_odpoved[ $otazka["otazka_id"] ] = $jedna_otazka;
 		}
 		
-		
-		// zoznam moznych odpovedi ide studentovi
-		foreach ($fetch_all_array["typ_2"] as $otazka) {
-			$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $otazka["odpoved"];
-		}
-		
-		
+
+
+
 		// lave a prave odpovede na parovacie otazky idu vzdy, aj studentovi
-		foreach ($fetch_all_array["typ_3"] as $otazka) {
-			if ($otazka["strana"] == "L") {
-				$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede_lave"][ $otazka["odpoved_id"] ] = $otazka["odpoved"];
-			}
-			else {
-				$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede_prave"][ $otazka["odpoved_id"] ] = $otazka["odpoved"];
-			}
+		foreach ($fetch_all_array["typ_3_lave"] as $otazka) {
+			$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede_lave"][ $otazka["odpoved_id"] ] = $otazka["odpoved"];
+		}
+
+		foreach ($fetch_all_array["typ_3_prave"] as $otazka) {
+			$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede_prave"][ $otazka["odpoved_id"] ] = $otazka["odpoved"];
 		}
 
 		
-		
-		if ($s_odpovedami) { // vyskladaj odpovede k otazkam
-			foreach ($fetch_all_array["typ_1"] as $otazka) {
-				$vyskladana_odpoved[ $otazka["otazka_id"] ]["spravne_odpovede"][] = $otazka["spravna_odpoved"];
-			}
-			
-			// zoznam vsetkych odpovedi aj s hodnotou spravnosti ide iba ucitelovi
-			foreach ($fetch_all_array["typ_2"] as $otazka) {
-				$array = array(
-					"text" => $otazka["odpoved"]
-				);
-				if ($otazka["je_spravna"] == 1) $array["je_spravna"] = true; // kvoli JSON
-				else $array["je_spravna"] = false;
-				
-				$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $array;
+
+		if ($s_odpovedami) {
+			foreach ($fetch_all_array["typy_1_2"] as $otazka) {
+				if ( $vyskladana_odpoved[ $otazka["otazka_id"] ]["typ"] == 1 ) {
+					$vyskladana_odpoved[ $otazka["otazka_id"] ]["spravne_odpovede"][] = $otazka["odpoved"];
+				}
+
+				// zoznam moznych odpovedi s pravdivostnymi hodnotami ide iba ucitelovi
+				else if ( $vyskladana_odpoved[ $otazka["otazka_id"] ]["typ"] == 2 ) {
+					$array = array(
+						"text" => $otazka["odpoved"]
+					);
+					if ($otazka["je_spravna"] == 1) $array["je_spravna"] = true; // kvoli JSON
+					else $array["je_spravna"] = false;
+					
+					$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $array;
+				}
 			}
 
-			foreach ($fetch_all_array["typ_3_pary"] as $otazka) {
-				$vyskladana_odpoved[ $otazka["otazka_id"] ]["pary"][] = array(
-					"lava" => $otazka["odpoved_lava"],
-					"prava" => $otazka["odpoved_prava"]
-				);
+
+			// vytvor pary pre otazky z lavej strany (vsetky otazky, ktore maju par, su sparovane z lavej strany)
+			foreach ($fetch_all_array["typ_3_lave"] as $otazka) {
+				if ($otazka["sparovana_odpoved_id"] != 0) { // otazka ma pravy par
+					$vyskladana_odpoved[ $otazka["otazka_id"] ]["pary"][] = array(
+						"lava" => $otazka["odpoved_id"],
+						"prava" => $otazka["sparovana_odpoved_id"]
+					);
+				}
+			}
+		}
+		else { // zoznam moznych odpovedi bez pravdivostnych hodnot ide iba studentovi
+			foreach ($fetch_all_array["typy_1_2"] as $otazka) {
+				if ( $vyskladana_odpoved[ $otazka["otazka_id"] ]["typ"] == 2 ) {
+					$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $otazka["odpoved"];
+				}
 			}
 		}
 
