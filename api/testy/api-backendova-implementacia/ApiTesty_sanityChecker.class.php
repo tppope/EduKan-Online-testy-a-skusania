@@ -50,13 +50,11 @@ class ApiTesty_sanityChecker {
 
 	// Skontroluje data na nacitanie existujuceho testu.
 	public static function nacitaj_test_ucitel($data) {
-		return isset( $data["testid"] );
+		return isset($_SESSION["userId"]) && isset( $data["kluc"] );
 	}
 	
 	public static function nacitaj_test_student($data) {
-		return
-			isset( $data["testid"] ) &&
-			isset( $data["kluc"] );
+		return isset($_SESSION["studentId"]) && isset( $data["kluc"] );
 	}
 
 
@@ -70,6 +68,15 @@ class ApiTesty_sanityChecker {
 	}
 
 
+	// Skontroluje data na zmazanie testu pre ucitelom.
+	public static function praca_s_testami_ucitel__zmaz_test($data) {
+		return
+			isset( $data["akcia"] ) &&
+			$data["akcia"] == "zmaz-test" &&
+			isset( $data["kluc"] );
+	}
+
+
 
 
 	// Skontroluje data na vytvorenie noveho testu.
@@ -77,7 +84,6 @@ class ApiTesty_sanityChecker {
 		$spravny_format_dat =
 			isset( $data["nazov"] ) &&
 			isset( $data["casovy_limit"] ) &&
-			isset( $data["aktivny"] ) &&
 			isset( $data["otazky"] );
 
 		if (!$spravny_format_dat) return false;
@@ -127,11 +133,16 @@ class ApiTesty_sanityChecker {
 					
 					foreach ($otazka["pary"] as $par) {
 						$check_paru =
-						isset( $par["lava"] ) &&
-						isset( $par["prava"] );
+							isset( $par["lava"] ) &&
+							isset( $par["prava"] );
 
 						if (!$check_paru) return false;
 					}
+				break;
+
+				case 4:
+				case 5:
+					return true; // otazky typu 4 a 5 maju iba nazov a typ otazky, co uz bolo overene pred tymto switchom
 				break;
 
 				default: return false; // iny typ nie je pripustny
