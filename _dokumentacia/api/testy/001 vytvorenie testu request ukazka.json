@@ -1,7 +1,6 @@
 ﻿{
 	nazov: "Ukážkový test č. 1",
 	casovy_limit: 60,
-	aktivny: true,
 	otazky: {
 		1: {
 			nazov: "Ako sa volá fakulta, na ktorej študujú členovia realizačného tímu tohto zadania? Uveďťe skratku alebo plný názov.",
@@ -78,6 +77,14 @@
 				{lava: 3, prava: 1},
 				{lava: 4, prava: 2}
 			]
+		},
+		6: {
+			nazov: "Nakreslite, ako vyzerá dom.",
+			typ: 4
+		},
+		7: {
+			nazov: "Vypočítajte rovnicu 2x + 3 = 5.",
+			typ: 5
 		}
 	}
 }

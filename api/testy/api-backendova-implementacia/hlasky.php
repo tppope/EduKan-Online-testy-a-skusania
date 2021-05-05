@@ -36,12 +36,12 @@ class Hlasky__API_T {
 		// LT = nacitanie (load) existujuceho testu, C = chyba, neuspesna operacia
 		"API_T__LT_C_1" => array(
 			"kod" => "API_T__LT_C_1",
-			"sprava" => "Test s týmto ID buď neexistuje, alebo ho vytvoril iný učiteľ."
+			"sprava" => "Test s týmto kľúčom buď neexistuje, alebo ho vytvoril iný učiteľ."
 		),
 
 		"API_T__LT_C_2" => array(
 			"kod" => "API_T__LT_C_2",
-			"sprava" => "Test s týmto ID buď neexistuje, alebo máte nesprávny kľúč."
+			"sprava" => "Test s týmto kľúčom buď neexistuje, alebo máte nesprávny kľúč."
 		),
 		// END --- LT = nacitanie (load) existujuceho testu, C = chyba, neuspesna operacia
 
@@ -51,7 +51,7 @@ class Hlasky__API_T {
 		"API_T__NT_U_1" => array(
 			"kod" => "API_T__NT_U_1",
 			"sprava" => "Nový test bol úspešne vytvorený.",
-			"id_testu" => null // sem ide ID testu z db
+			"kluc_testu" => null // sem ide kluc testu z db
 		),
 		// END --- NT = vytvaranie noveho testu, U = uspesna operacia
 
@@ -63,7 +63,21 @@ class Hlasky__API_T {
 			"sprava" => "Zoznam testov bol úspešne načítaný.",
 			"zoznam_testov" => array() // sem ide zoznam testov z db
 		),
+
+		"API_T__PT_U_2" => array(
+			"kod" => "API_T__PT_U_2",
+			"sprava" => "Test bol úspešne zmazaný."
+		),
 		// END --- PT = praca s testami z pohladu ucitela, U = uspesna operacia
+
+
+
+		// PT = praca s testami z pohladu ucitela, C = chyba, neuspesna operacia
+		"API_T__PT_C_1" => array(
+			"kod" => "API_T__PT_C_1",
+			"sprava" => "Test sa nepodarilo zmazať."
+		),
+		// END --- PT = praca s testami z pohladu ucitela, C = chyba, neuspesna operacia
 
 
 
