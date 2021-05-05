@@ -1,7 +1,8 @@
 let qId=1;
 let qNum=1;
 
-// document.getElementsByClassName()
+
+
 function  clicked(id,pairId){
     const items=document.getElementsByClassName('item');
     for(let i=0;i<items.length;i++){
@@ -42,7 +43,10 @@ function store(value,id){
 
 function createQuestion(typ,number){
 
-    $('#modal').modal('toggle');
+    document.querySelector(".navbar-wrapper")
+                .classList.toggle("change");
+
+
     document.getElementById('test-footer').hidden=false;
 
 
@@ -66,9 +70,9 @@ function createQuestion(typ,number){
 
     button.innerHTML=`<label for=${button.id} style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
 
-    button.setAttribute('style',`justify-self:end;max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
-    button.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
-    button.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')");
+    button.setAttribute('style',`justify-self:end;max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
+    button.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
+    button.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer')");
        // button.setAttribute('onclick',`skutocne(this.parentElement.parentElement.remove());`);
 
     questionNum.innerText=qId.toString();
@@ -76,7 +80,7 @@ function createQuestion(typ,number){
     questionNum.setAttribute('class',`poradovnik`);
     questionNum.setAttribute('style',`font-size: 2.5rem; font-weight: bold`);
 
-    rmButton.setAttribute('style','max-height:2em;margin:0.5em')
+    rmButton.setAttribute('style','max-height:2em;margin:0.5em;cursor:pointer')
     rmButton.setAttribute('id',`remover-${qId}`);
 
     header.appendChild(questionNum);
@@ -133,9 +137,9 @@ function createQuestion(typ,number){
         btn.innerHTML=`<label for=${btn.id} style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
         btn.setAttribute('onclick',`addCard(this.parentElement,${qId},${typ})`)
 
-        btn.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;`);
-        btn.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;')");
-        btn.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')");
+        btn.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
+        btn.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
+        btn.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer')");
 
         qDiv.appendChild(btn);
         qDiv.appendChild(p);
@@ -160,17 +164,17 @@ function createQuestion(typ,number){
         const popis=document.createElement('p');
 
         popis.innerText='spravné ukázané';
-        popis.setAttribute('style','padding-top:1.5em;font-size:1rem;position:relative;left:43%');
+        popis.setAttribute('style','padding-top:1.5em;font-size:1rem;margin:auto');
 
         vieOtazky.setAttribute('id',`know-${qId}`);
         vieOtazky.setAttribute('class',`vie-spravne`);
 
         vieOtazky.setAttribute('src','images/knownQknown.png');
-        vieOtazky.setAttribute('style','max-width:2rem;justify-self:center');
+        vieOtazky.setAttribute('style','max-width:2rem;justify-self:space-around');
         vieOtazkyDiv.setAttribute('onclick','viePocet(this)');
 
         vieOtazky.setAttribute('alt','vie otazky');
-        vieOtazkyDiv.setAttribute('style','border-radius:15px;display:flex;justify-content:center;position:relative;left:43.5%;margin-top:1rem;width:5rem;border: 1px solid black');
+        vieOtazkyDiv.setAttribute('style','border-radius:15px;margin:auto;width:5rem;border: 1px solid black');
         vieOtazkyDiv.setAttribute('class','btn btn-outline-dark');
 
         vieOtazkyDiv.appendChild(vieOtazky);
@@ -209,6 +213,7 @@ function viePocet(node){
         node.children[0].src='images/knownQ.png';
         node.children[0].alt='nevie spravne';
         node.children[0].setAttribute('class','nevie-spravne');
+        node. setAttribute('class','btn btn-dark');
         node.parentElement.children[5].innerText='správne skryté';
 
     }
@@ -217,6 +222,7 @@ function viePocet(node){
         node.children[0].src='images/knownQknown.png';
         node.children[0].alt='vie spravne';
         node.children[0].setAttribute('class','vie-spravne');
+        node. setAttribute('class','btn btn-outline-dark');
         node.parentElement.children[5].innerText='správne ukázane';
 
     }
@@ -228,7 +234,7 @@ function removeBtn(){
     button.setAttribute('onmouseover',"this.src='images/thrash-active.png'");
     button.setAttribute('onmouseout',"this.src='images/trash.png'");
     button.setAttribute('class',"remover");
-    button.setAttribute('style','max-height:1rem;vertical-align:top;margin-right:0.5em;')
+    button.setAttribute('style','max-height:1rem;vertical-align:top;margin-right:0.5em;cursor:pointer')
     button.setAttribute('alt','cancel');
     button.setAttribute('onclick',`this.parentElement.parentElement.remove();poradovnik(this.id)`);
 
