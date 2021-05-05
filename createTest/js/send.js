@@ -125,4 +125,8 @@ document.getElementById('send').onclick=function (){
     })
         .then(response => response.json())
         .then(data => console.log(data));
+    //neviem aku mas path na servery tak len dopln
+   //location.href="http://"+location.hostname+"/teacher-homescreen.html"
+
+
 }
