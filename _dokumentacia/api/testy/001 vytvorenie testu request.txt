@@ -12,9 +12,11 @@ url: api/testy/novy-test.php
 {
 	nazov: [string názov testu],
 	casovy_limit: [int časový limit v minútach],
-	aktivny: [true/false, či je aktívny alebo nie]
 	otazky: [zoznam otázok, číslovaný od 1]
 }
+
+
+Pozor, test je pri vytváraní automaticky neaktívny. Aktivovať ho musí učiteľ manuálne.
 
 
 Zoznam otázok, štruktúra:
@@ -56,4 +58,11 @@ Každá otázka je objekt (v {}) a podľa toho, akého je typu, má takýto tvar
 			prava: [id pravej odpovede zo zoznamu odpovede_prave]
 		)
 	]
+}
+
+
+- otázky s kreslením (typ 4) a matematickým výrazom (typ 5):
+{
+	nazov: [string názov, tj. text otázky],
+	typ: [typ]
 }

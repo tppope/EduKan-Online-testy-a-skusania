@@ -15,19 +15,13 @@ if ($generic_sanity_check) { // na tejto API musi byt prihlaseny bud student ale
 
 
 if ($generic_sanity_check) {
-	if (
-		isset($_SESSION["userId"]) &&
-		ApiTesty_sanityChecker::nacitaj_test_ucitel($surove_prijate_data)
-	) {
-		$vystup = ApiTesty_API_frontend_ucitel::nacitaj_existujuci_test($mysqli_api_testy, $_GET["testid"], $_SESSION["userId"]);
+	if ( ApiTesty_sanityChecker::nacitaj_test_ucitel($surove_prijate_data) ) {
+		$vystup = ApiTesty_API_frontend_ucitel::nacitaj_existujuci_test($mysqli_api_testy, $surove_prijate_data["kluc"], $_SESSION["userId"]);
 		echo json_encode($vystup);
 	}
 
-	elseif (
-		isset($_SESSION["studentId"]) &&
-		ApiTesty_sanityChecker::nacitaj_test_student($surove_prijate_data)
-	) {
-		$vystup = ApiTesty_API_frontend_student::nacitaj_existujuci_test($mysqli_api_testy, $_GET["testid"], $_GET["kluc"]);
+	elseif ( ApiTesty_sanityChecker::nacitaj_test_student($surove_prijate_data) ) {
+		$vystup = ApiTesty_API_frontend_student::nacitaj_existujuci_test($mysqli_api_testy, $surove_prijate_data["kluc"]);
 		echo json_encode($vystup);
 	}
 
