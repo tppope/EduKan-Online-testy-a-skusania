@@ -26,4 +26,26 @@ class ApiTesty_API_frontend_student {
 		
 		return $vystup;
 	}
+
+
+	// Zapise, ze tento student zacal pisat test.
+	public static function zacni_pisat(&$mysqli, $kluc, $student_id) {
+		$zostavajuci_cas = ApiTesty_sqlContainer::zacni_pisat_test($mysqli, $kluc, $student_id);
+
+		// student uz ma tento test rozpisany, vrat mu zostavajuci cas a zoznam doteraz odoslanych odpovedi
+		if (isset($zostavajuci_cas["udalost"]) && $zostavajuci_cas["udalost"] == "rozpisany-test") {
+			$vystup = Hlasky__API_T::get_hlaska("API_T__VT_U_2");
+			$vystup["zostavajuci_cas"] = $zostavajuci_cas["zostavajuci_cas"];
+			$vystup["odoslane_odpovede"] = array(); // TODO: dokoncit
+			return $vystup;
+		}
+
+		// inak to nie je array
+		if ($zostavajuci_cas > 0) {
+			$vystup = Hlasky__API_T::get_hlaska("API_T__VT_U_1");
+			$vystup["zostavajuci_cas"] = $zostavajuci_cas;
+			return $vystup;
+		}
+		return Hlasky__API_T::get_hlaska("API_T__VT_C_1");
+	}
 }

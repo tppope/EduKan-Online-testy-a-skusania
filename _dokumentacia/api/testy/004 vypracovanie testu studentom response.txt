@@ -1,0 +1,39 @@
+Začatie písania testu:
+
+Úspech:
+{
+	kod: "API_T__VT_U_1",
+	sprava: "Úspešne ste začali písať test. Veľa šťastia.",
+    zostavajuci_cas: [int zostávajúci čas v sekundách]
+}
+
+
+-- Táto odpoveď príde v prípade, že študent už tento test má rozpísaný a znovu požiadal o písanie testu.
+{
+	kod: "API_T__VT_U_2",
+	sprava: "Pokračujete v písaní tohto testu.",
+    zostavajuci_cas: [int zostávajúci čas v sekundách],
+	odoslane_odpovede: [array študentom doteraz odoslaných odpovedí]
+}
+
+
+
+Neúspech:
+{
+	kod: "API_T__VT_C_1",
+	sprava: "Tento test buď neexistuje alebo nemáte správny kľúč, preto ho nemôžete začať písať."
+}
+
+
+-- Táto odpoveď príde v prípade, že študent nemá rozpísaný žiaden test a chce s testom bez zadania kľúča vykonať nejakú operáciu
+{
+	kod: "API_T__VT_C_2",
+	sprava: "Nemáte rozpísaný žiaden test."
+}
+
+
+-- Test je rozpísaný, no vznikla nejaká chyba s ukladaním odpovede.
+{
+	kod: "API_T__VT_C_3",
+	sprava: "Odpoveď sa nepodarilo uložiť."
+}

@@ -97,7 +97,9 @@ class ApiTesty_sqlContainer {
 		if (!$stmt) return false;
 
 		$stmt->bind_param("isi", $aktivny, $kluc, $ucitel_id);
-		return $stmt->execute();
+		$stmt->execute();
+
+		return $mysqli->affected_rows;
 	}
 	
 	
@@ -309,6 +311,150 @@ class ApiTesty_sqlContainer {
 		}
 		
 		return $return;
+	}
+
+
+
+	public static function zacni_pisat_test(&$mysqli, $kluc, $student_id) {
+		// over, ci student tento test uz nepise
+		$sql = "SELECT zostavajuci_cas FROM zoznam_pisucich_studentov WHERE kluc_testu = ? AND student_id = ?";
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		$stmt->bind_param("si", $kluc, $student_id);
+		$exec = $stmt->execute();
+		if (!$exec) return false;
+
+		$result = $stmt->get_result();
+
+		$row = $result->fetch_assoc();
+		if ($row != null) {
+			// student tento test uz pise, vrat zostavajuci pocet minut a info o tom, ze tento test uz je rozpisany
+			return array(
+				"udalost" => "rozpisany-test",
+				"zostavajuci_cas" => $row["zostavajuci_cas"]
+			);
+		}
+
+
+		// ak student este tento test nema rozpisany, pokus sa ulozit mu, ze ho zacal pisat
+		
+		$sql = "SELECT casovy_limit FROM zoznam_testov WHERE aktivny = 1 AND kluc_testu = ?";
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		$stmt->bind_param("s", $kluc);
+		$exec = $stmt->execute();
+		if (!$exec) return false;
+
+		$result = $stmt->get_result();
+
+		$row = $result->fetch_assoc();
+		if ($row == null) return false; // neexistuje takyto aktivny test
+
+
+		// zapis studenta do zoznamu pisucich studentov a nastav mu cas v sekundach
+		$zostavajuci_cas = $row["casovy_limit"] * 60;
+		$cas_akt = time();
+		$datum = date("Y-m-d", $cas_akt);
+		$cas = date("H:i:s", $cas_akt);
+
+
+		$sql2 = "INSERT INTO zoznam_pisucich_studentov(kluc_testu, student_id, zostavajuci_cas, datum_zaciatku_pisania, cas_zaciatku_pisania) VALUES(?, ?, ?, ?, ?)";
+		$stmt2 = $mysqli->prepare($sql2);
+		if (!$stmt2) return false;
+
+		$stmt2->bind_param("siiss", $kluc, $student_id, $zostavajuci_cas, $datum, $cas);
+		$exec2 = $stmt2->execute();
+		if (!$exec2) return false;
+
+		if ($mysqli->affected_rows > 0) {
+			return $zostavajuci_cas;
+		}
+	}
+
+
+
+	// Ulozi odpoved, ktora je na kazdu otazku unikatna (otazky typu 1, 4 a 5).
+	public static function uloz_odpoved__typ_1_4_5($mysqli, $kluc, $student_id, $otazka_id, $odpoved_hodnota) {
+		$sql = "INSERT INTO odpovede_studentov_typ_1_4_5(kluc_testu, student_id, otazka_id, zadana_odpoved) VALUES(?, ?, ?, ?)
+		ON DUPLICATE KEY UPDATE zadana_odpoved = ?";
+		
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		$stmt->bind_param("siiss", $kluc, $student_id, $otazka_id, $odpoved_hodnota, $odpoved_hodnota);
+		$exec = $stmt->execute();
+		if (!$exec) return false;
+
+		return $mysqli->affected_rows;
+	}
+
+
+	// Ulozi odpoved na otazku typu 2 (viac moznosti), no predtym zmaze vsetky predosle odpovede.
+	public static function uloz_odpoved__typ_2($mysqli, $kluc, $student_id, $otazka_id, $odpovede_array) {
+		self::zmaz_odpoved("2", $mysqli, $kluc, $student_id, $otazka_id);
+
+		$sql = "INSERT INTO odpovede_studentov_typ_2(kluc_testu, student_id, otazka_id, zadana_odpoved) VALUES(?, ?, ?, ?)";
+
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		// v transakcii sa pokus ulozit vsetky odpovede na tuto otazku
+		$mysqli->autocommit(false);
+		$mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+		foreach ($odpovede_array as $odpoved) {
+			$stmt->bind_param("siis", $kluc, $student_id, $otazka_id, $odpoved);
+			$exec = $stmt->execute();
+			if (!$exec) {
+				$mysqli->rollback();
+				return false;
+			}
+		}
+
+		return $mysqli->commit();
+	}
+
+	public static function uloz_odpoved__typ_3($mysqli, $kluc, $student_id, $otazka_id, $odpovede_array) {
+		self::zmaz_odpoved("3", $mysqli, $kluc, $student_id, $otazka_id);
+
+		$sql = "INSERT INTO odpovede_studentov_typ_3(kluc_testu, student_id, otazka_id, par_lava_strana, par_prava_strana) VALUES(?, ?, ?, ?, ?)";
+
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		// v transakcii sa pokus ulozit vsetky odpovede na tuto otazku
+		$mysqli->autocommit(false);
+		$mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+		foreach ($odpovede_array as $odpoved) {
+			$stmt->bind_param("siiii", $kluc, $student_id, $otazka_id, $odpoved["lava"], $odpoved["prava"]);
+			$exec = $stmt->execute();
+			if (!$exec) {
+				$mysqli->rollback();
+				return false;
+			}
+		}
+
+		return $mysqli->commit();
+	}
+
+
+	// Zmaze vsetky odpovede studenta na tuto otazku.
+	public static function zmaz_odpoved($typ, $mysqli, $kluc, $student_id, $otazka_id) {
+		$tabulka = "odpovede_studentov_typ_" . $typ; // $typ je stale bezpecny, pochadza z kodu a je pevne zadany
+		
+		$sql = "DELETE FROM {$tabulka} WHERE kluc_testu = ? AND student_id = ? AND otazka_id = ?";
+		
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		$stmt->bind_param("sii", $kluc, $student_id, $otazka_id);
+		$exec = $stmt->execute();
+		if (!$exec) return false;
+
+		return $mysqli->affected_rows;
 	}
 }
 ?>
