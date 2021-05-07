@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spajanie</title>
+    <script src="../../resources/modules/node_modules/jsplumb/dist/js/jsplumb.min.js "></script>
+</head>
+<body>
+
+
+
+<div class="wrapper" style="margin:auto;display: flex;justify-content: space-between; width: 80%">
+    <div id="1" style="border: #222222 1px solid;width: 5rem;height:5rem"><h2 style="text-align: center">Par1</h2></div>
+
+
+
+
+
+    <div id="2" style="border: #222222 1px solid;width: 5rem;height:5rem"><h2 style="text-align: center">Par 2</h2></div>
+</div>
+<script>
+    jsPlumb.bind("ready", function() {
+
+        jsPlumb.connect({source:"1", target:"2"});
+    });
+</script>
+
+
+</body>
+</html>
