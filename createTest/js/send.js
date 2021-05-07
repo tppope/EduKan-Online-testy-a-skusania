@@ -124,9 +124,8 @@ document.getElementById('send').onclick=function (){
         body: JSON.stringify(test)
     })
         .then(response => response.json())
-        .then(data => console.log(data));
-    //neviem aku mas path na servery tak len dopln
-   //location.href="http://"+location.hostname+"/teacher-homescreen.html"
-
+        .then(data =>{
+            window.location.replace("../teacher-homescreen.html")
+        });
 
 }
