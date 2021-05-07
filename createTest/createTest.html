@@ -2,73 +2,116 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <title>Koncept</title>
+    <title>Editor testov</title>
+    <link rel="icon" href="../resources/favicon/edukan-favicon.png" type="image/png" sizes="any">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js/index.js"></script>
     <link rel="stylesheet" href="css/index.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="css/button.scss" type="text/css" >
 
 </head>
-<body style="font-family: 'Century Gothic',serif">
+<body >
 
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="position: absolute;top: 15%;">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="position: absolute;top: 5%;">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="modalLabel">Vytvorit</h5>
+            <h5 class="modal-title" id="modalLabel">Test Editor</h5>
             <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" >&times;</span>
             </button>
         </div>
         <div style="padding: 1rem;display: flex;justify-content: space-between">
             <div><input required type="text" id="meno-testu" onchange="document.getElementById('test-name').innerText=`${this.value}`"
-                        placeholder="Meno testu"></div>
+                      value="Nový test" placeholder="Meno testu"></div>
             <div>
-                <label for="cas-num">Dlzka</label>
-                <input required type="number" max="300" min="5"  id="cas-num" onchange="document.getElementById('cas-range').value=this.value" placeholder="45">
+                <label for="cas-num">Dĺžka</label>
+                <input required  value="45" type="number" max="300" min="5"  id="cas-num" onchange="document.getElementById('cas-range').value=this.value" placeholder="45">
                 <label for="cas-range">min</label>
-                <input type="range" max="300" min="5" id="cas-range" onchange="document.getElementById('cas-num').value=this.value" placeholder="45">
+                <input type="range"  value="45" max="300" min="5" id="cas-range" onchange="document.getElementById('cas-num').value=this.value" placeholder="45">
             </div>
         </div>
-        <hr>
-        <div class="modal-body row" id="modal-body" style="display: flex">
-            <button style="display: grid;padding: 1em;margin: 1em" class=' btn btn-light selectQ'  onclick="createQuestion(1,qNum++)"><img src="images/dopisovanie.png" alt="dopisovanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>dopisovanie</p></button>
-            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(3,qNum++)" ><img src="images/spajanie.png" alt="spajanie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>spajanie</p></button>
-            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(2,qNum++)" ><img src="images/rating.png" alt="moznosti" style="margin:auto;max-height: 2rem"><p>Otazka na <br>moznosti</p></button>
-            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(4,qNum++)" ><img src="images/writing.png" alt="kreslenie" style="margin:auto;max-height: 2rem"><p>Otazka na <br>kreslenie</p></button>
-            <button style="display: grid;padding: 1em;margin: 1em" class='btn btn-light selectQ' onclick="createQuestion(5,qNum++)" ><img src="images/function.png" alt="matematika" style="margin:auto;max-height: 2rem"><p>Matematicka <br>otazka</p></button>
 
+        <div class="modal-body row" id="modal-body" style="display: flex;padding: 2rem">
+            <h6>Vítajte v Test Editore</h6>
+            <p>Test Editor slúži na vytvorenie testu, ktorý je možné poskladať z rôzych typov otázok.<br>
+
+            <ul>
+                <li style="margin: 1rem"><img src="images/dopisovanie.png" alt="dopisovanie" style="margin:auto;max-height: 2rem"> Otázka na doplnenie spravnej odpovede, po zadaní znenia
+                otázky, pridajte frázy alebo iné krátké odpovede, ktoré študent bude musieť zapísať ako odpoveď. </li>
+                <li style="margin: 1rem"><img src="images/spajanie.png" alt="spajanie" style="margin:auto;max-height: 2rem"> Otázka na spájanie, vytvorte dvojice odpovedí, ktoré bude mať za úlohu študent
+                spojiť. Ak zapíšete len jedno políčko tak táto otázka nema správnu dvojicu.</li>
+                <li style="margin: 1rem"><img src="images/rating.png" alt="moznosti" style="margin:auto;max-height: 2rem"> Otázka na výber možností, ikonka tlačidla <img src="images/cancel.png" alt="moznosti" style="margin:0;max-height: 1rem;overflow: hidden">
+                znamená že otázka je nesprávna, kliknutím na ikonku, označíte, že odpoveď je správna. Prepínačom <img src="images/knownQ.png" alt="vie" style="margin:0;max-height: 1.5rem"> viete meniť, či študent vie počet správnych odpovedí.</li>
+                <li style="margin: 1rem"><img src="images/writing.png" alt="kreslenie" style="margin:auto;max-height: 2rem"> Otázka na kreslenie, študent bude musieť odpovedať nahraním súboru.</li>
+                <li style="margin: 1rem"><img src="images/function.png" alt="matematika" style="margin:auto;max-height: 2rem"> Otázka s matematickou odpoveďou, študent bude odpovedať na túto otázku matematickým vzorcom.</li>
+            </ul>
+            </p>
+            <p>
+            Kliknutím na <img src="images/trash.png" alt="thrash" style="margin:0;max-height: 1.5rem"> zmažete otázku alebo možnosť. Po vytvorení testu kliknite na tlačidlo <div class="btn btn-info btn-sm">Odoslať</div>
+            nasledné sa test sa zobrazí v zozname testov, kde ho bude možné aktivovať.</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-dark"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info"  data-dismiss="modal">Zatvoriť</button>
         </div>
     </div>
 </div>
 </div>
+<script>addEventListener('onload',$('#modal').modal('toggle'))</script>
 
 
-
-<header style="display: grid;">
-    <h1 style="margin-left: 2rem;margin-top: 2rem">Test Editor</h1>
-
+<header style="padding-left:5rem;padding-right:5rem;padding-top:3rem;display: flex;justify-content: space-between">
+    <h1 style="vertical-align: bottom ">Editor testov</h1>
+    <div >
+        <div  onmouseleave="this.setAttribute('style','box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;border-radius:50%;cursor:pointer')" onmouseover="this.setAttribute('style','background-color: #e8c15f;border-radius:50%;cursor:pointer')" style="box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;border-radius:50%;cursor:pointer" data-toggle="modal" data-target="#modal"><img src="images/question-mark.png" alt="info" style="width: 3rem"></div>
+    </div>
 </header>
-<button class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;" data-toggle="modal" data-target="#modal">create</button>
 
 <hr style="margin: 2rem">
-<h3 id="test-name" style="margin: 2rem"></h3>
+<h3 id="test-name" style="margin: 2rem;padding-left: 3rem"></h3>
     <div id="test" style="margin: auto;width: 80%">
 
     </div>
+
+<div class="navbar-wrapper" id="addQ">
+    <div class="navbar">
+        <a  class="navbar-link">
+            <img src="images/dopisovanie.png" style="cursor: pointer;" alt="dopisovanie" onclick="createQuestion(1,qNum++)">
+        </a>
+        <a  class="navbar-link">
+            <img src="images/rating.png" style="cursor: pointer;" alt="moznost" onclick="createQuestion(2,qNum++)">
+        </a>
+        <a  class="navbar-link">
+            <img src="images/spajanie.png" style="cursor: pointer;" alt="spajanie"  onclick="createQuestion(3,qNum++)">
+        </a>
+        <a class="navbar-link">
+            <img src="images/function.png" style="cursor: pointer;" alt="mat-fun" onclick="createQuestion(5,qNum++)">
+        </a>
+        <a  class="navbar-link">
+            <img src="images/writing.png" style="cursor: pointer;" alt="kreslenie" onclick="createQuestion(4,qNum++)">
+        </a>
+    </div>
+
+    <div class="navbar-btn">
+        <i class="fas  fa-plus"></i>
+    </div>
+</div>
+<script src="js/button.js">
+
+</script>
 <div id="test-footer" hidden>
 <hr style="margin: 2rem; ">
 
-    <h1 style="color: red" id="error-msg"></h1>
-
-<button  id="send" class="btn btn-dark"  onmouseleave="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' position: relative;left:45%;top:15%;width: 5rem;margin:auto;max-height:3rem;')" style="margin:auto;max-height:3rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;position: relative;left:45%;top:15%;width: 5rem;">send</button>
-
+    <p style="color: red;font-size: small;margin: 1rem;position: relative;left: 43%" id="error-msg"></p>
+    <div style="display: flex;justify-content: space-around">
+        <button  id="send" class="btn btn-info btn-lg"  onmouseleave="this.setAttribute('style','margin:auto;max-height:7rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;')" onmouseover="this.setAttribute('style',' ;margin:auto;max-height:7rem;')" style="margin:auto;max-height:7rem;box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;">Odoslať</button>
+    </div>
 </div>
+
 <footer style="margin: 25%">
 </footer>
 
