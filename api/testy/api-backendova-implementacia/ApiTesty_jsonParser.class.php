@@ -6,8 +6,7 @@
 class ApiTesty_jsonParser {
 
 	private static function vypocitaj_kluc_testu($ucitel_id, $nazov_testu) {
-		$zaklad = $ucitel_id . "---" . $nazov_testu . "---" . time();
-		return sha1($zaklad);
+		return "U" . $ucitel_id . "T" . time();
 	}
 
 

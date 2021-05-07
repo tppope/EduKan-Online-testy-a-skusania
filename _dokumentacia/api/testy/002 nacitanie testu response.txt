@@ -28,6 +28,12 @@ Pre študenta:
 			[
 				ak je typ otazky 2, este tu je jeden parameter, a to
 				vie_student_pocet_spravnych: [s hodnotou true/false]
+
+				[
+					ak vie_student_pocet_spravnych = true, existuje tu este jedno pole:
+					pocet_spravnych: [int kolko je spravnych odpovedi]
+				]
+
 				odpovede su ciselne indexovany zoznam
 			]
 			[

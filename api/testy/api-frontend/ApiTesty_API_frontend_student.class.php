@@ -13,7 +13,7 @@ class ApiTesty_API_frontend_student {
 			return Hlasky__API_T::get_hlaska("API_T__LT_C_2");
 		}
 		
-		$otazky_v_teste = ApiTesty_sqlContainer::get_result_testove_otazky($mysqli, $kluc); // bez odpovedi
+		$otazky_v_teste = ApiTesty_sqlContainer::get_result_testove_otazky($mysqli, $test_bez_otazok["kluc_testu"]); // bez odpovedi, kluc testu je SQL bezpecny
 		
 		
 		$vystup = Hlasky__API_T::get_hlaska("API_T__LT_U_1");
