@@ -8,8 +8,8 @@ include "api-frontend/ApiTesty_API_frontend_ucitel.class.php";
 
 /*unset($_SESSION["userId"]);
 $_SESSION["studentId"] = 1;*/
-unset($_SESSION["studentId"]);
-$_SESSION["userId"] = 1;
+/*unset($_SESSION["studentId"]);
+$_SESSION["userId"] = 1;*/
 
 if ($generic_sanity_check) { // na tejto API musi byt prihlaseny vylucne ucitel
 	$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prihlaseny_ucitel();
