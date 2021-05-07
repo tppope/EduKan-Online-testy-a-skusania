@@ -1,0 +1,100 @@
+requesty na pisanie testu z pohladu studenta
+
+co je zapisane v [], su vysvetlene premenlive hodnoty
+
+
+API URL: api/testy/vypracovanie-testu.php
+
+VŠETKY POŽIADAVKY NA TÚTO API URL ADRESU PRICHÁDZAJÚ CEZ POST METÓDU, PRETO SÚ ROZPÍSANÉ AKO JSON ARRAY
+
+
+
+
+ZAČNI PÍSAŤ TEST
+	{
+		akcia: "zacat-pisat",
+		kluc: [kľúč testu]
+	}
+
+
+
+PO ZAČIATKU PÍSANIA TESTU SA ZADANÝ KĽÚČ ZAPÍŠE DO $_SESSION, PRETO OSTATNÉ POŽIADAVKY UŽ KĽÚČ NEPOSIELAJÚ ZNOVA
+
+
+--- ODOSIELANIE ODPOVEDÍ
+
+Otázky s krátkou odpoveďou (typ 1):
+	{
+		akcia: "odoslat-odpoved",
+		otazka_id: [int id otazky],
+		typ_odpovede: "textova",
+
+		[
+			ďalej tu musí byť jedna z týchto troch možností:
+
+				ak študent zvolil nejakú odpoveď, bude tu pole
+				odpoved: [text odpovede]
+
+				ak študent zvolil, že odpoveď neexistuje, bude tu pole
+				volba_odpovede: "neexistuje"
+
+				ak študent zvolil, že odpoveď chce zmazať, bude tu pole
+				volba_odpovede: "zmazat"
+		]
+	}
+
+Otázky s viacerými odpoveďami (typ 2):
+	{
+		akcia: "odoslat-odpoved",
+		otazka_id: [int id otazky],
+		typ_odpovede: "vyberova",
+
+		[
+			ďalej tu musí byť jedna z týchto troch možností:
+
+				ak študent zvolil nejakú odpoveď, bude tu pole
+				odpoved: [array textov odpovedí za celú otázku]
+
+				ak študent zvolil, že odpoveď neexistuje, bude tu pole
+				volba_odpovede: "neexistuje"
+
+				ak študent zvolil, že odpoveď chce zmazať, bude tu pole
+				volba_odpovede: "zmazat"
+
+
+				!!! POZOR !!!
+				V prípadoch, keď študent zvolí, že odpoveď neexistuje, resp. pošle odpoveď na uloženie znova, predošlé odpovede, ak nejaké boli, budú zmazané. Toto je logické správanie, keďže sa uvažuje, že študent chcel prepísať predošlú sadu odpovedí novou.
+		]
+	}
+
+Otázky s párovaním odpovedí (typ 3):
+	{
+		akcia: "odoslat-odpoved",
+		otazka_id: [int id otazky],
+		typ_odpovede: "parovacia",
+
+		[
+			ďalej tu musí byť jedna z týchto troch možností:
+
+				ak študent zvolil nejakú odpoveď, bude tu pole
+				odpoved: [
+					array párov za celú otázku, každý pár je v tvare
+					{
+						lava: [int id odpovede z ľavej strany],
+						prava: [int id odpovede z pravej strany]
+					}
+				]
+
+				ak študent zvolil, že odpoveď neexistuje, bude tu pole
+				volba_odpovede: "neexistuje"
+
+				ak študent zvolil, že odpoveď chce zmazať, bude tu pole
+				volba_odpovede: "zmazat"
+
+
+				!!! POZOR - TO ISTÉ, ČO PRE OTÁZKY TYPU 2 !!!
+				V prípadoch, keď študent zvolí, že odpoveď neexistuje, resp. pošle odpoveď na uloženie znova, predošlé odpovede, ak nejaké boli, budú zmazané. Toto je logické správanie, keďže sa uvažuje, že študent chcel prepísať predošlú sadu odpovedí novou.
+		]
+	}
+
+--- END ODOSIELANIE ODPOVEDÍ

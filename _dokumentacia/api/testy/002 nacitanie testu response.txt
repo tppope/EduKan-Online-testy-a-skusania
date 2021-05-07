@@ -8,7 +8,7 @@ Pre učiteľa:
 		nazov: [nazov],
 		casovy_limit: [v minutach],
 		aktivny: [true/false, ci je aktivny],
-		otazky: [rovnaka array ako v subore "001 vytvorenie testu request ukazka.json"]
+		otazky: [rovnaka array ako v subore "001 vytvorenie testu request ukazka.txt"]
 	}
 }
 
@@ -21,7 +21,7 @@ Pre študenta:
 		nazov: [nazov],
 		casovy_limit: [v minutach],
 		otazky: [
-			podobna array ako v subore "001 vytvorenie testu request ukazka.json", iba bez odpovedi, tj. kazda otazka vyzera takto:
+			podobna array ako v subore "001 vytvorenie testu request ukazka.txt", iba bez odpovedi, tj. kazda otazka vyzera takto:
 
 			nazov: [nazov otazky],
 			typ: [typ otazky]

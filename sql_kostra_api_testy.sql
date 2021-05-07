@@ -67,8 +67,51 @@ CREATE TABLE zoznam_pisucich_studentov (
 	kluc_testu varchar(40) NOT NULL,
 	student_id int NOT NULL,
 	zostavajuci_cas int NOT NULL COMMENT 'v sekundach',
+	datum_zaciatku_pisania date NOT NULL,
+	cas_zaciatku_pisania time NOT NULL,
+	datum_konca_pisania date DEFAULT NULL,
+	cas_konca_pisania time DEFAULT NULL,
 
-	PRIMARY KEY (kluc_testu, student_id),
+	PRIMARY KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania),
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+CREATE TABLE odpovede_studentov_typ_1_4_5 (
+	kluc_testu varchar(40) NOT NULL,
+	otazka_id tinyint NOT NULL,
+	student_id int NOT NULL,
+	zadana_odpoved text DEFAULT NULL COMMENT 'ak hrac potvrdi, ze otazka nema spravnu odpoved, sem sa ulozi null',
+	vyhodnotenie tinyint(1) NOT NULL DEFAULT 2 COMMENT '0 znamena, ze odpoved bola vyhodnotena ako nespravna, 1, ze ako spravna, a 2 ze este nebola vyhodnotena',
+
+	PRIMARY KEY (kluc_testu, otazka_id, student_id),
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE odpovede_studentov_typ_2 (
+	unique_id int NOT NULL AUTO_INCREMENT,
+	kluc_testu varchar(40) NOT NULL,
+	otazka_id tinyint NOT NULL,
+	student_id int NOT NULL,
+	zadana_odpoved text DEFAULT NULL COMMENT 'ak hrac potvrdi, ze otazka nema spravnu odpoved, sem sa ulozi null',
+	vyhodnotenie tinyint(1) NOT NULL DEFAULT 2 COMMENT '0 znamena, ze odpoved bola vyhodnotena ako nespravna, 1, ze ako spravna, a 2 ze este nebola vyhodnotena',
+
+	PRIMARY KEY (unique_id),
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE odpovede_studentov_typ_3 (
+	unique_id int NOT NULL AUTO_INCREMENT,
+	kluc_testu varchar(40) NOT NULL,
+	otazka_id tinyint NOT NULL,
+	student_id int NOT NULL,
+	par_lava_strana tinyint DEFAULT NULL COMMENT 'ak hrac potvrdi, ze otazka nema spravnu odpoved, sem sa ulozi null',
+	par_prava_strana tinyint DEFAULT NULL COMMENT 'a sem tiez',
+	vyhodnotenie tinyint(1) NOT NULL DEFAULT 2 COMMENT '0 znamena, ze odpoved bola vyhodnotena ako nespravna, 1, ze ako spravna, a 2 ze este nebola vyhodnotena',
+
+	PRIMARY KEY (unique_id),
 	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
