@@ -264,9 +264,13 @@ class ApiTesty_sqlContainer {
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return false;
 
-		$sql2 = "SELECT COUNT(student_id) AS pocet FROM zoznam_pisucich_studentov WHERE kluc_testu = ?";
+		$sql2 = "SELECT COUNT(student_id) AS pocet_studentov FROM zoznam_pisucich_studentov WHERE kluc_testu = ?";
 		$stmt2 = $mysqli->prepare($sql2);
 		if (!$stmt2) return false;
+
+		$sql3 = "SELECT COUNT(otazka_id) AS pocet_otazok FROM zoznam_testov_otazky WHERE kluc_testu = ?";
+		$stmt3 = $mysqli->prepare($sql3);
+		if (!$stmt3) return false;
 
 
 		$stmt->bind_param("i", $ucitel_id);
@@ -282,13 +286,23 @@ class ApiTesty_sqlContainer {
 				"aktivny" => $row["aktivny"]
 			);
 
+
+			$stmt3->bind_param("s", $row["kluc_testu"]);
+			$stmt3->execute();
+			$result3 = $stmt3->get_result();
+
+			$row3 = $result3->fetch_assoc();
+			$array["pocet_otazok"] = $row3["pocet_otazok"];
+
+
+
 			if ( $row["aktivny"] ) { // na aktivnom teste nacitaj aj pocet pisucich studentov
 				$stmt2->bind_param("s", $row["kluc_testu"]);
 				$stmt2->execute();
 				$result2 = $stmt2->get_result();
 
 				$row2 = $result2->fetch_assoc();
-				$array["pocet_pisucich_studentov"] = $row2["pocet"];
+				$array["pocet_pisucich_studentov"] = $row2["pocet_studentov"];
 			}
 
 			$return[] = $array;

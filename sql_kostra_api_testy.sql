@@ -66,7 +66,7 @@ CREATE TABLE zoznam_testov_otazky_typ_3 (
 
 CREATE TABLE zoznam_pisucich_studentov (
 	kluc_testu varchar(40) NOT NULL,
-	student_id varchar(40) NOT NULL,
+	student_id int NOT NULL,
 	zostavajuci_cas int NOT NULL COMMENT 'v sekundach',
 
 	PRIMARY KEY (kluc_testu, student_id),
