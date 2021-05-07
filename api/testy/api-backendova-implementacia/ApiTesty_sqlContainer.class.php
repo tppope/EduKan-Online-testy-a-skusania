@@ -3,8 +3,7 @@
 // STATICKY KONTAJNER NA TEXTOVE SQL QUERIES, RESP. MULTI-QUERIES
 
 class ApiTesty_sqlContainer {
-	
-	// Vytvori novy test pre tohto ucitela v DB.
+
 	public static function vytvor_novy_test(&$mysqli, $ucitel_id, $data) {
 		$sql_novy_test = "INSERT INTO zoznam_testov(kluc_testu, kto_vytvoril, nazov, casovy_limit) VALUES(?, ?, ?, ?)";
 		$stmt_novy_test = $mysqli->prepare($sql_novy_test);
@@ -90,22 +89,15 @@ class ApiTesty_sqlContainer {
 
 		return $mysqli->commit();
 	}
-	
-	
-	// Vrati multiquery, ktora zmaze test s tymto id.
-	public static function zmaz_test(&$mysqli, $kluc, $ucitel_id) {
-		$sql_zmaz_test = "DELETE FROM zoznam_testov WHERE kluc_testu = ? AND kto_vytvoril = ?";
-		$stmt_zmaz_test = $mysqli->prepare($sql_zmaz_test);
-		if (!$stmt_zmaz_test) return false;
 
-		$stmt_zmaz_test->bind_param("si", $kluc, $ucitel_id);
-		$stmt_zmaz_test->execute();
 
-		//$mysqli->query("DELETE FROM zoznam_testov WHERE kluc_testu = '{$kluc}' AND kto_vytvoril = {$ucitel_id}");
+	public static function nastav_aktivnost_testu(&$mysqli, $kluc, $ucitel_id, $aktivny) {
+		$sql = "UPDATE zoznam_testov SET aktivny = ? WHERE kluc_testu = ? AND kto_vytvoril = ?";
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
 
-		// nefunguje ziadna varianta : TODO: opravit
-
-		return $mysqli->affected_rows; // ci boli zmazane data
+		$stmt->bind_param("isi", $aktivny, $kluc, $ucitel_id);
+		return $stmt->execute();
 	}
 	
 	
@@ -114,11 +106,7 @@ class ApiTesty_sqlContainer {
 	
 	// Nacita test (bez otazok) pre daneho studenta.
 	public static function get_result_test_pre_studenta(&$mysqli, $kluc) {
-		$sql = "
-			SELECT nazov, casovy_limit, zoznam_testov_otvorenych.kluc_testu FROM zoznam_testov
-			INNER JOIN zoznam_testov_otvorenych ON zoznam_testov.kluc_testu = zoznam_testov_otvorenych.kluc_testu
-			WHERE zoznam_testov_otvorenych.kluc_testu = ?
-		";
+		$sql = "SELECT kluc_testu, nazov, casovy_limit FROM zoznam_testov WHERE kluc_testu = ? AND aktivny = 1";
 		$stmt = $mysqli->prepare($sql);
 
 		$stmt->bind_param("s", $kluc);
@@ -140,30 +128,6 @@ class ApiTesty_sqlContainer {
 		return $result->fetch_assoc(); // vzdy max. jeden riadok
 	}
 	
-
-	// Nacita zoznam vsetkych testov (bez otazok), ktore vytvoril dany ucitel.
-	public static function get_result_vsetky_testy_ucitela(&$mysqli, $ucitel_id) {
-		$sql = "SELECT kluc_testu, nazov, casovy_limit, aktivny FROM zoznam_testov WHERE kto_vytvoril = ?";
-		$stmt = $mysqli->prepare($sql);
-
-		$stmt->bind_param("i", $ucitel_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-
-		$return = array();
-		while ( $row = $result->fetch_assoc() ) {
-			$return[] = array(
-				"kluc" => $row["kluc_testu"],
-				"nazov" => $row["nazov"],
-				"casovy_limit" => $row["casovy_limit"],
-				"aktivny" => $row["aktivny"]
-			);
-		}
-		
-		return $return;
-	}
-	
-
 
 	// Nacita testove otazky (input parameter je vzdy bezpecny, nikdy nepochadza z uzivatelskeho vstupu).
 	public static function get_result_testove_otazky(&$mysqli, $kluc, $s_odpovedami = false) {
@@ -202,6 +166,7 @@ class ApiTesty_sqlContainer {
 
 					if ($otazka["znamy_pocet_spravnych"] == 1) {
 						$jedna_otazka["vie_student_pocet_spravnych"] = true; // kvoli JSON, aby bolo true a nie 1
+						$jedna_otazka["pocet_spravnych"] = 0;
 					}
 					else $jedna_otazka["vie_student_pocet_spravnych"] = false;
 				break;
@@ -275,12 +240,75 @@ class ApiTesty_sqlContainer {
 			foreach ($fetch_all_array["typy_1_2"] as $otazka) {
 				if ( $vyskladana_odpoved[ $otazka["otazka_id"] ]["typ"] == 2 ) {
 					$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $otazka["odpoved"];
+
+					// ak student vie, kolko ma spravnych odpovedi, zrataj ich
+					if (
+						$vyskladana_odpoved[ $otazka["otazka_id"] ]["vie_student_pocet_spravnych"] &&
+						$otazka["je_spravna"]
+					) {
+						$vyskladana_odpoved[ $otazka["otazka_id"] ]["pocet_spravnych"]++;
+					}
 				}
 			}
 		}
 
 
 		return $vyskladana_odpoved;
+	}
+
+
+
+	// Nacita zoznam vsetkych testov (bez otazok), ktore vytvoril dany ucitel.
+	public static function get_result_vsetky_testy_ucitela(&$mysqli, $ucitel_id) {
+		$sql = "SELECT kluc_testu, nazov, casovy_limit, aktivny FROM zoznam_testov WHERE kto_vytvoril = ?";
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		$sql2 = "SELECT COUNT(student_id) AS pocet_studentov FROM zoznam_pisucich_studentov WHERE kluc_testu = ?";
+		$stmt2 = $mysqli->prepare($sql2);
+		if (!$stmt2) return false;
+
+		$sql3 = "SELECT COUNT(otazka_id) AS pocet_otazok FROM zoznam_testov_otazky WHERE kluc_testu = ?";
+		$stmt3 = $mysqli->prepare($sql3);
+		if (!$stmt3) return false;
+
+
+		$stmt->bind_param("i", $ucitel_id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		$return = array();
+		while ( $row = $result->fetch_assoc() ) {
+			$array = array(
+				"kluc" => $row["kluc_testu"],
+				"nazov" => $row["nazov"],
+				"casovy_limit" => $row["casovy_limit"],
+				"aktivny" => $row["aktivny"]
+			);
+
+
+			$stmt3->bind_param("s", $row["kluc_testu"]);
+			$stmt3->execute();
+			$result3 = $stmt3->get_result();
+
+			$row3 = $result3->fetch_assoc();
+			$array["pocet_otazok"] = $row3["pocet_otazok"];
+
+
+
+			if ( $row["aktivny"] ) { // na aktivnom teste nacitaj aj pocet pisucich studentov
+				$stmt2->bind_param("s", $row["kluc_testu"]);
+				$stmt2->execute();
+				$result2 = $stmt2->get_result();
+
+				$row2 = $result2->fetch_assoc();
+				$array["pocet_pisucich_studentov"] = $row2["pocet_studentov"];
+			}
+
+			$return[] = $array;
+		}
+		
+		return $return;
 	}
 }
 ?>

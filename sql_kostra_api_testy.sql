@@ -2,9 +2,9 @@
  START TRANSACTION;
 
 CREATE TABLE typy_otazok (
-  id tinyint(4) NOT NULL AUTO_INCREMENT,
-  typ tinytext NOT NULL,
-  PRIMARY KEY (id)
+	id tinyint NOT NULL AUTO_INCREMENT,
+	typ tinytext NOT NULL,
+	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO typy_otazok (id, typ) VALUES
@@ -17,20 +17,13 @@ INSERT INTO typy_otazok (id, typ) VALUES
 
 
 CREATE TABLE zoznam_testov (
-  kluc_testu varchar(40) NOT NULL,
-  kto_vytvoril int(11) NOT NULL,
-  nazov text NOT NULL,
-  casovy_limit tinyint(4) NOT NULL COMMENT 'v minutach',
-  aktivny tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (kluc_testu)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+	kluc_testu varchar(40) NOT NULL,
+	kto_vytvoril int NOT NULL,
+	nazov text NOT NULL,
+	casovy_limit tinyint NOT NULL COMMENT 'v minutach',
+	aktivny tinyint(1) NOT NULL DEFAULT 0,
 
-
-
-CREATE TABLE zoznam_testov_otvorenych (
-  kluc_testu varchar(40) NOT NULL,
-  PRIMARY KEY (kluc_testu),
-  FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+	PRIMARY KEY (kluc_testu)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -66,6 +59,17 @@ CREATE TABLE zoznam_testov_otazky_typ_3 (
 
 	PRIMARY KEY (kluc_testu, otazka_id, odpoved),
 	FOREIGN KEY (kluc_testu, otazka_id) REFERENCES zoznam_testov_otazky(kluc_testu, otazka_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE zoznam_pisucich_studentov (
+	kluc_testu varchar(40) NOT NULL,
+	student_id int NOT NULL,
+	zostavajuci_cas int NOT NULL COMMENT 'v sekundach',
+
+	PRIMARY KEY (kluc_testu, student_id),
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

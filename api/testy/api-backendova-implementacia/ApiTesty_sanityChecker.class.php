@@ -68,11 +68,19 @@ class ApiTesty_sanityChecker {
 	}
 
 
-	// Skontroluje data na zmazanie testu pre ucitelom.
-	public static function praca_s_testami_ucitel__zmaz_test($data) {
+	// Skontroluje data na aktivaciu testu.
+	public static function praca_s_testami_ucitel__aktivuj_test($data) {
 		return
 			isset( $data["akcia"] ) &&
-			$data["akcia"] == "zmaz-test" &&
+			$data["akcia"] == "aktivuj-test" &&
+			isset( $data["kluc"] );
+	}
+
+	// Skontroluje data na deaktivaciu testu.
+	public static function praca_s_testami_ucitel__deaktivuj_test($data) {
+		return
+			isset( $data["akcia"] ) &&
+			$data["akcia"] == "deaktivuj-test" &&
 			isset( $data["kluc"] );
 	}
 

@@ -66,18 +66,23 @@ class Hlasky__API_T {
 
 		"API_T__PT_U_2" => array(
 			"kod" => "API_T__PT_U_2",
-			"sprava" => "Test bol úspešne zmazaný."
+			"sprava" => "Test bol úspešne aktivovaný."
+		),
+
+		"API_T__PT_U_3" => array(
+			"kod" => "API_T__PT_U_3",
+			"sprava" => "Test bol úspešne deaktivovaný."
 		),
 		// END --- PT = praca s testami z pohladu ucitela, U = uspesna operacia
 
 
 
-		// PT = praca s testami z pohladu ucitela, C = chyba, neuspesna operacia
-		"API_T__PT_C_1" => array(
-			"kod" => "API_T__PT_C_1",
-			"sprava" => "Test sa nepodarilo zmazať."
+		// PT = praca s testami z pohladu ucitela, GC = genericka chybova hlaska, neuspesna operacia
+		"API_T__PT_GC" => array(
+			"kod" => "API_T__PT_GC",
+			"sprava" => "Požadovaná operácia s testom nebola úspešná."
 		),
-		// END --- PT = praca s testami z pohladu ucitela, C = chyba, neuspesna operacia
+		// END --- PT = praca s testami z pohladu ucitela, GC = genericka chybova hlaska, neuspesna operacia
 
 
 

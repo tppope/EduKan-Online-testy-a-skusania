@@ -1,0 +1,48 @@
+﻿Načítanie zoznamu testov:
+
+{
+	kod: "API_T__PT_U_1",
+	sprava: "Zoznam testov bol úspešne načítaný.",
+	zoznam_testov: [
+		zoznam testov - ak učiteľ nemá žiadne testy, je to prázdny zoznam, inak array indexovaná od 0
+	
+		každý test je array v tvare
+		{
+			kluc: [string kľúč testu],
+			nazov: [string názov testu],
+			casovy_limit: [int časový limit v minútach],
+			aktivny: [true/false, či je aktívny alebo nie],
+			pocet_otazok: [int pocet otazok],
+
+			[
+				ak je test aktivny, je tu este jedno pole:
+				pocet_pisucich_studentov: [pocet studentov, ktori vypracovavaju test]
+			]
+		}
+	]
+}
+
+
+Aktivácia testu:
+{
+	kod: "API_T__PT_U_2",
+	sprava: "Test bol úspešne aktivovaný."
+}
+
+
+Deaktivácia testu:
+{
+	kod: "API_T__PT_U_3",
+	sprava: "Test bol úspešne deaktivovaný."
+}
+
+
+
+
+
+
+Všetky neúspešné operácie práce s testami majú jednu spoločnú chybovú hlášku:
+{
+	kod: "API_T__PT_GC",
+	sprava: "Požadovaná operácia s testom nebola úspešná."
+}

@@ -4,6 +4,19 @@
 
 class ApiTesty_API_frontend_ucitel {
 	
+	// Aktivuje tento test, ak ho vytvoril prihlaseny ucitel.
+	public static function nastav_aktivnost_testu(&$mysqli, $kluc, $ucitel_id, $aktivny) {
+		$uspech_pokusu = ApiTesty_sqlContainer::nastav_aktivnost_testu($mysqli, $kluc, $ucitel_id, $aktivny);
+
+		if ($uspech_pokusu) {
+			if ($aktivny) return Hlasky__API_T::get_hlaska("API_T__PT_U_2");
+			return Hlasky__API_T::get_hlaska("API_T__PT_U_3"); // test bol deaktivovany
+		}
+		
+		return Hlasky__API_T::get_hlaska("API_T__PT_GC");
+	}
+
+
 	// Nacita existujuci test.
 	public static function nacitaj_existujuci_test(&$mysqli, $kluc, $ucitel_id) {
 		$test_bez_otazok = ApiTesty_sqlContainer::get_result_test_pre_ucitela($mysqli, $kluc, $ucitel_id);
@@ -13,7 +26,7 @@ class ApiTesty_API_frontend_ucitel {
 			return Hlasky__API_T::get_hlaska("API_T__LT_C_1");
 		}
 		
-		$otazky_v_teste = ApiTesty_sqlContainer::get_result_testove_otazky($mysqli, $kluc, true); // aj s odpovedami
+		$otazky_v_teste = ApiTesty_sqlContainer::get_result_testove_otazky($mysqli, $test_bez_otazok["kluc_testu"], true); // aj s odpovedami, kluc testu je SQL bezpecny
 		
 		
 		$vystup = Hlasky__API_T::get_hlaska("API_T__LT_U_1");
@@ -54,16 +67,6 @@ class ApiTesty_API_frontend_ucitel {
 		}
 
 		return Hlasky__API_T::get_hlaska("API_T__NT_C_1");
-	}
-
-
-
-	// Zmaze tento test, ak ho vytvoril prihlaseny ucitel.
-	public static function zmaz_test(&$mysqli, $kluc, $ucitel_id) {
-		$uspech_pokusu = ApiTesty_sqlContainer::zmaz_test($mysqli, $kluc, $ucitel_id);
-
-		if ($uspech_pokusu) return Hlasky__API_T::get_hlaska("API_T__PT_U_2");
-		else return Hlasky__API_T::get_hlaska("API_T__PT_C_1");
 	}
 }
 ?>
