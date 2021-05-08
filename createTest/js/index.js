@@ -1,6 +1,7 @@
 let qId=1;
 let qNum=1;
-
+let conNum=0;
+let listOfInstances=[];
 
 
 function  clicked(id,pairId){
@@ -95,7 +96,7 @@ function createQuestion(typ,number){
 
     qDiv.setAttribute('id',`question-${qId}`)
     qDiv.setAttribute('class','card');
-    qDiv.setAttribute('style','padding:3rem;margin-bottom:3rem');
+    qDiv.setAttribute('style','padding:3rem;margin-bottom:3rem;z-index:0');
     qDiv.appendChild(pDiv);
 
     pDiv.setAttribute('id',`text-${qId}`);
@@ -125,30 +126,54 @@ function createQuestion(typ,number){
         question.value="Spojte správne tvrdenia";
         store(question.value,qId);
 
-        const btn=document.createElement('button');
+        const lavyDiv=document.createElement('div');
+        const pravyDiv=document.createElement('div');
+        const parentDiv=document.createElement('div');
+        const btnL=document.createElement('button');
+        const btnP=document.createElement('button');
         const p=document.createElement('p');
-
-
+        const coverL=document.createElement('div');
+        const coverP=document.createElement('div');
+        listOfInstances.push(jsPlumb.getInstance());
         p.setAttribute('style','padding-top:1.5em;font-size:1rem;margin-top:1rem;margin-bottom:3rem');
 
-        btn.setAttribute('id',`adder-${qId}`);
-        btn.setAttribute('class','btn btn-dark')
 
-        btn.innerHTML=`<label for=${btn.id} style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
-        btn.setAttribute('onclick',`addCard(this.parentElement,${qId},${typ})`)
+        btnL.setAttribute('class','btn btn-dark')
 
-        btn.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
-        btn.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
-        btn.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer')");
+        btnL.innerHTML=`<label  style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
+        btnL.setAttribute('onclick',`addCard(this,${qId},${typ})`)
 
-        qDiv.appendChild(btn);
+        btnL.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
+        btnL.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
+        btnL.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer')");
+        btnL.setAttribute('class','btn btn-dark left')
+
+        btnP.innerHTML=`<label  style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
+        btnP.setAttribute('onclick',`addCard(this,${qId},${typ})`)
+
+        btnP.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
+        btnP.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
+        btnP.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer')");
+        btnP.setAttribute('class','btn btn-dark right')
+        lavyDiv.appendChild(btnL);
+        pravyDiv.appendChild(btnP);
+        parentDiv.appendChild(lavyDiv);
+        parentDiv.appendChild(pravyDiv);
+        parentDiv.setAttribute('style','display:flex;justify-content:space-between');
+
+
+
+
         qDiv.appendChild(p);
-        p.innerHTML="<img src='images/info.png' alt='info' style='max-height:1.5rem;margin-right: 0.5em'>Vytvorte dvojice, ak necháte pole prázdne, tak toto pole nebude mať dvojicu v teste";
-
-        moznostDiv.setAttribute('style','display:grid');
-
-
-
+        p.innerHTML="<img src='images/info.png' alt='info' style='max-height:1.5rem;margin-right: 0.5em'>Dvojicu vytvoríte ťahom ľavej karty smerom k pravej.";
+        qDiv.appendChild(parentDiv);
+        moznostDiv.setAttribute('style','display:flex;justify-content:space-between');
+        moznostDiv.appendChild(coverL);
+        moznostDiv.appendChild(coverP);
+        //coverL.setAttribute('style','display:grid');
+        coverL.setAttribute('class','left');
+        //coverP.setAttribute('style','display:grid');
+        coverP.setAttribute('class','right');
 
         // moznostDiv.setAttribute('style','display:flex;justify-content:space-around');
 
@@ -251,36 +276,66 @@ function removeBtn(){
 
 
 function addCard(node,id,typ){
-    const  line=document.createElement('hr');
+    const moznostDiv=node.parentElement.parentElement.parentElement.children[5];
+    const left=moznostDiv.children[0];
+    const right=moznostDiv.children[1];
+    const button=removeBtn();
     const cover=document.createElement('div');
-    const btn=removeBtn();
-    btn.setAttribute('onclick',`this.parentElement.remove()`);
-     cover.appendChild(btn)
-    const lavyDiv=document.createElement('div');
-    const pravyDiv=document.createElement('div');
-    const moznost1=document.createElement('input');
-    const moznost2=document.createElement('input');
-    moznost1.setAttribute('type','text');
-    moznost1.setAttribute('class',`${id}-option`);
+    const input=document.createElement('textarea');
+    const dot=document.createElement('div');
+    const removeDiv=document.createElement('div');
+//TODO
+    //1. pozri ci ma MoznostDiv children
+    //ak ano nepridavaj novu instance iba zober od nich
+    cover.setAttribute('id',`connect-${conNum++}`)
+    cover.setAttribute('style',`z-index:1;border:1px solid black;border-radius:50%;padding:3rem`)
+    input.setAttribute('class',`${listOfInstances.length-1}`);
+    button.setAttribute('onclick',`this.parentElement.remove();listOfInstances[${listOfInstances.length-1}].remove(this.parentElement.children[2].id);`);
+    removeDiv.setAttribute('style','display:flex;margin:1rem');
+    if(node.classList.contains('right')){
+        cover.appendChild(dot)
 
-    moznost2.setAttribute('type','text');
-    moznost2.setAttribute('class',`${id}-option`);
+        removeDiv.appendChild(cover)
+        removeDiv.appendChild(input)
+        removeDiv.appendChild(button);
 
-    cover.setAttribute('class','d-flex justify-content-center');
-    cover.setAttribute('style','margin-bottom:1rem');
-    line.setAttribute('style','width:2rem;margin:0;align-self:center; border: none;border-top: 3px double #333;')
-    lavyDiv.setAttribute('class',`lavy-div-${id}`);
-    pravyDiv.setAttribute('class',`pravy-div-${id}`);
-    cover.appendChild(lavyDiv);
-    cover.appendChild(line)
-    cover.appendChild(pravyDiv);
-    cover.setAttribute('style','margin-top:3rem');
-   lavyDiv.appendChild(moznost1);
-   pravyDiv.appendChild(moznost2);
-   node.children[5].appendChild(cover);
+
+
+        right.appendChild(removeDiv)
+        //instance.makeTarget(cover.id, {anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+        dot.setAttribute('onclick',`createTarget(this.parentElement.id,listOfInstances[${listOfInstances.length-1}]);this.remove()`);
+
+    }
+
+    if(node.classList.contains('left')){
+
+        removeDiv.appendChild(input)
+        cover.appendChild(dot)
+        removeDiv.appendChild(button);
+        removeDiv.appendChild(cover)
+
+        left.appendChild(removeDiv);
+
+
+        dot.setAttribute('onclick',`createSource(this.parentElement.id,listOfInstances[${listOfInstances.length-1}]);this.remove()`);
+
+    }
+    dot.click();
 
 }
+function createSource(id,instance){
 
+    instance.makeSource(id, {anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+}
+
+function createTarget(id,instance){
+    instance.makeTarget(id, {
+    anchor:"Continuous",
+    endpoint:["Dot", { width:5, height:5 }],
+    maxConnections:1,
+});
+
+}
 function addChoice(id,typ){
     const moznostDiv=document.getElementById(`moznostDiv-${id}`)
     moznostDiv.setAttribute('class',`${id}-options row `)
