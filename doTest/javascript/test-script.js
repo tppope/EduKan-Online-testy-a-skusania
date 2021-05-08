@@ -2,8 +2,54 @@ $(window).on("load", function () {
     createMathQuestion(1, "napiste vzorec na koleso");
     createMathQuestion(2, "napiste vzorec na hovno");
 
+    //startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+function startTest(){
+
+    let zacniTest = {
+        "akcia":"zacat-pisat",
+        "kluc": sessionStorage.getItem("key")
+    }
+    let request = new Request('../api/testy/vypracovanie-testu.php', {
+        method: 'POST',
+        body: JSON.stringify(zacniTest),
+    });
+    fetch(request)
+        .then(response => response.json())
+        .then(data => {
+            if (data.kod === "API_T__VT_U_1"){
+                loadTest();
+            }
+            else if (data.kod === "API_T__VT_U_2"){
+                loadTest();
+            }
+            else{
+                console.log(data.kod);
+            }
+        });
+}
+
+function loadTest(){
+    $.getJSON("../api/testy/nacitaj-test.php",function (data){
+        if (data.kod === "API_T__LT_U_1")
+            printTest(data.data_testu.otazky)
+    })
+}
+
+function printTest(otazky){
+    $.each(otazky,function (index){
+        let otazka = this;
+        switch (otazka.typ){
+            case 1:true;break;
+            case 2:true;break;
+            case 3:true;break;
+            case 4:createMathQuestion(index,otazka.nazov);break;
+            case 5:true;break;
+        }
+    })
+}
 
 function createMathQuestion(order,name){
     let mathField = createMathField(order);
@@ -87,7 +133,7 @@ function createDivFormGroup(form){
     $(row).addClass("form-row");
     form.append(row)
     let div = document.createElement("div");
-    $(div).addClass("form-group col");
+    $(div).addClass("form-group col-12");
     row.append(div);
     return div;
 }

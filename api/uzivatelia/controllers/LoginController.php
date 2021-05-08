@@ -101,6 +101,7 @@ class LoginController extends DatabaseController
     public function performStudentLogin($testKey, $studentOwnId, $name, $surname): array
     {
         if ($this->checkTest($testKey)) {
+            session_start();
             $studentId = $this->getStudentId($studentOwnId, $name, $surname);
             if ($studentId == false)
                 $studentId = $this->insertStudent($studentOwnId, $name, $surname);
@@ -131,7 +132,7 @@ class LoginController extends DatabaseController
             $statement->bindValue(':priezvisko', $surname, PDO::PARAM_STR);
             $statement->bindValue(':ownId', $studentOwnId, PDO::PARAM_STR);
             $statement->execute();
-            return $statement->fetch(PDO::FETCH_ASSOC);
+            return $statement->fetchColumn();
         } catch (PDOException $PDOException) {
             throw $PDOException;
         }
@@ -161,6 +162,23 @@ class LoginController extends DatabaseController
                 return false;
         } catch (PDOException $PDOException) {
             throw $PDOException;
+        }
+    }
+
+    public function getStudent($studentId){
+        $statement = $this->mysqlDatabase->prepareStatement("SELECT student.student_own_id as id, student.meno as name, student.priezvisko as surname
+                                                                    FROM student
+                                                                    WHERE student.id = :studentId");
+        try {
+            $statement->bindValue(':studentId', $studentId, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $PDOException) {
+            return array(
+                "error"=>true,
+                "status"=>"failed",
+                "message"=>$PDOException->getMessage()
+            );
         }
     }
 

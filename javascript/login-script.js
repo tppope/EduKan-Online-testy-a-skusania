@@ -104,7 +104,8 @@ function submitStudentLoginForm(){
             .then(data => {
                 let key = $("#key");
                 if (!data.error){
-
+                    sessionStorage.setItem("key",key.val());
+                    window.location.href = "doTest/test.html";
                 }
                 else {
                     if (data.badTestKey)

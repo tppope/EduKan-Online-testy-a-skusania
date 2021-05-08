@@ -39,14 +39,27 @@ function printTests(zoznamTestov){
     else {
         $.each(zoznamTestov, function () {
             let tr = createTr(tbodyTests);
-            let th = createTh(this.kluc);
+            let kluc = this.kluc
+            let th = createTh(kluc);
             $(th).addClass("test-th");
             $(th).on("click",function (){
-                console.log("aaa")
-            })
-            tr.append(th, createTd(this.nazov), createTd(this.casovy_limit), createTd(this.pocet_otazok), createTd(this.pocet_pisucich_studentov), createToggle(this.kluc,this.aktivny))
+                showTest(kluc);
+            });
+            let pocetPisucichStudentov = this.pocet_pisucich_studentov;
+            if (pocetPisucichStudentov === undefined)
+                pocetPisucichStudentov = "Aktivujte test";
+            tr.append(th, createTd(this.nazov), createTd(this.casovy_limit + " min"), createTd(this.pocet_otazok), createTd(pocetPisucichStudentov), createToggle(this.kluc,this.aktivny))
         })
     }
+}
+
+function showTest(kluc){
+    $.getJSON("api/uzivatelia/set-test-session.php?akcia=nastav&klucTestu="+kluc, function (data){
+        if (!data.error) {
+            window.location.href = 'test-info.html';
+        }
+    });
+
 }
 
 function createToggle(kodTestu,aktivny){
@@ -107,7 +120,7 @@ function createTr(tbody){
 function createEmptyTable(tbody){
     let emptyTr = createTr(tbody);
     let emptyTd = createTd("Nemáte zatiaľ vytvorené žiadne testy.");
-    $(emptyTd).attr("colspan","6");
+    $(emptyTd).attr("colspan","4");
     $(emptyTd).attr("id","empty-tests");
     emptyTr.append(emptyTd);
 }

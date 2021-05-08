@@ -60,9 +60,9 @@ h3{
     position: -webkit-sticky;
     top: 100px;
 }
-
-#test-questions{
-    margin-bottom: 1000px;
+#submit-test-button{
+    margin-top: 20px;
+    margin-bottom: 300px;
 }
 #time-counter{
     display: flex;
@@ -132,6 +132,28 @@ math-field {
     content: "Prechádzať";
 }
 
+.modal-footer{
+    justify-content: space-around;
+}
+
+.modal-footer button{
+    width: 48%;
+}
+
+.modal-body{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+}
+
+#are-you-sure-label{
+    font-family: "Roboto", sans-serif;
+    font-size: 35px;
+    font-weight: bold;
+    font-style: normal;
+}
 @media (max-width: 768px) {
     .section-content{
         width: 90%;

@@ -32,6 +32,10 @@
     <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
 </header>
 <section>
+    <div onclick="teacherHomescreen()" id="back-button">
+        Späť
+        <img id="left-arrow" src="resources/pictures/left-arrow.svg" alt="leftarrow">
+    </div>
     <div id="login-div">
         <span id="login-name"></span>
         <div id="logout-button" data-toggle="tooltip" title="Odhlásiť sa" onclick="logout()"><img
@@ -41,8 +45,8 @@
                 alt="login"></div>
     </div>
     <header id="section-header" class="section-content">
-        <h2 class="section-h2">
-            Test:
+        <h2 id="test-name" class="section-h2">
+            Názov testu
         </h2>
         <div id="exports">
             <div class="export-buttons" data-toggle="tooltip" title="Export do PDF" onclick="">
@@ -59,17 +63,48 @@
             <thead class="bg-info text-white">
             <tr>
                 <th>
+                    Identifikačné čislo
+                </th>
+                <th>
                     Meno
                 </th>
                 <th>
                     Priezvisko
                 </th>
                 <th>
-                    Trvanie
+                    Zostávajúci čas
                 </th>
             </tr>
             </thead>
             <tbody id="students-tbody">
+            <tr class="student-tr">
+                <td>
+                    97908
+                </td>
+                <td>
+                    Janko
+                </td>
+                <td>
+                    Hráško
+                </td>
+                <td>
+                    57 min
+                </td>
+            </tr>
+            <tr class="student-tr">
+                <td>
+                    97948
+                </td>
+                <td>
+                    Jozef
+                </td>
+                <td>
+                    Mrkva
+                </td>
+                <td>
+                    13 min
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
