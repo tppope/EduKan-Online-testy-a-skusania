@@ -37,6 +37,10 @@ class ApiTesty_API_frontend_ucitel {
 			"aktivny" => $test_bez_otazok["aktivny"],
 			"otazky" => $otazky_v_teste
 		);
+
+		if ($test_bez_otazok["aktivny"]) {
+			$vystup["data_testu"]["zoznam_pisucich_studentov"] = ApiTesty_sqlContainer::get_zoznam_studentov_na_teste($mysqli, $test_bez_otazok["kluc_testu"]);
+		}
 		
 		return $vystup;
 	}

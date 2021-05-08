@@ -456,5 +456,24 @@ class ApiTesty_sqlContainer {
 
 		return $mysqli->affected_rows;
 	}
+
+
+
+
+	public static function get_zoznam_studentov_na_teste(&$mysqli, $kluc) {
+		$sql = "SELECT student_id, zostavajuci_cas FROM zoznam_pisucich_studentov WHERE kluc_testu = ?";
+
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return array();
+
+		$stmt->bind_param("s", $kluc);
+		$exec = $stmt->execute();
+		if (!$exec) return array();
+
+		$result = $stmt->get_result();
+		if ($result == null) return array();
+		
+		return $result->fetch_all(MYSQLI_ASSOC);
+	}
 }
 ?>

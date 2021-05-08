@@ -6,7 +6,7 @@ $surove_prijate_data = file_get_contents('php://input');
 include "api-endpoint-include.php";
 include "api-frontend/ApiTesty_API_frontend_student.class.php";
 
-$_SESSION["pisanyTestKluc"] = "U1T1620377014";
+
 if ($generic_sanity_check) { // na tejto API musi byt prihlaseny vylucne student
 	$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prihlaseny_student();
 }
