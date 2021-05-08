@@ -44,7 +44,7 @@ function printTests(zoznamTestov){
             $(th).on("click",function (){
                 console.log("aaa")
             })
-            tr.append(th, createTd(this.nazov), createTd(this.casovy_limit), createTd("tu bude pocet otazok"), createTd("tu bude pocet studentov"), createToggle("tu kod testu",this.aktivny))
+            tr.append(th, createTd(this.nazov), createTd(this.casovy_limit), createTd(this.pocet_otazok), createTd(this.pocet_pisucich_studentov), createToggle(this.kluc,this.aktivny))
         })
     }
 }
@@ -57,33 +57,23 @@ function createToggle(kodTestu,aktivny){
     $(input).attr("type","checkbox");
     if (aktivny)
         $(input).prop("checked",true);
+    changeState(kodTestu, $(input));
     let span = document.createElement("span");
     $(span).addClass("slider round");
-    $(span).on("click",()=>{
-        changeState(kodTestu);
-    })
     label.append(input,span);
     td.append(label);
     $(td).css("text-align","center");
     return td;
 }
 
-function changeState(kodTest){
-    console.log(kodTest);
-    // let radioSwitch = $("#radio-a");
-    // if (radioSwitch.is(":checked")) {
-    //     $("#equation-system-interface").show();
-    //     $("#matrix-interface").hide();
-    //     $("#math-type").text("Zadaj sústavu");
-    //     $("#row-equ-span").text("Rovnice");
-    //     $("#col-var-span").text("Premenné");
-    // } else {
-    //     $("#equation-system-interface").hide();
-    //     $("#matrix-interface").show();
-    //     $("#math-type").text("Zadaj maticu");
-    //     $("#row-equ-span").text("Riadky");
-    //     $("#col-var-span").text("Stĺpce");
-    // }
+function changeState(kodTest, input){
+    input.on("change", function (){
+        if (this.checked)
+            $.getJSON("api/testy/praca-s-testami.php?akcia=aktivuj-test&kluc="+kodTest);
+        else
+            $.getJSON("api/testy/praca-s-testami.php?akcia=deaktivuj-test&kluc="+kodTest);
+    })
+
 }
 
 function setLottieHover() {

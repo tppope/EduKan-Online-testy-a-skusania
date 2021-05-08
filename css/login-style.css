@@ -154,6 +154,10 @@ body {
     background-color: #FFD2D2;
 }
 
+#key-validation{
+    font-size: 0.7rem !important;
+}
+
 @media (max-width: 1024px) {
     .login-section-content {
         width: 60%;

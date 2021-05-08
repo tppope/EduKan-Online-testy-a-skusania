@@ -92,6 +92,29 @@ function submitTeacherLoginForm() {
     return false;
 }
 
+function submitStudentLoginForm(){
+    let form = document.getElementById("student-login-form");
+    if (checkFormValidation(form)) {
+        let request = new Request('api/uzivatelia/prihlasenieStudenta/', {
+            method: 'POST',
+            body: new FormData(form),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                let key = $("#key");
+                if (!data.error){
+
+                }
+                else {
+                    if (data.badTestKey)
+                        key.addClass("is-invalid")
+                }
+            });
+    }
+    return false;
+}
+
 function checkFormValidation(form) {
     let inputs = $(form).find("input");
     for (let i = 0; i < inputs.length; i++) {
@@ -112,11 +135,8 @@ function checkIfAlreadyLogin() {
     })
 }
 
-function removeEmailIsInvalid() {
-    $("#email").removeClass("is-invalid");
+function removeIsInvalid(dom) {
+    $(dom).removeClass("is-invalid");
 }
 
-function removePasswordIsInvalid() {
-    $("#password").removeClass("is-invalid");
-}
 

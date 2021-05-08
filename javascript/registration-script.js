@@ -10,8 +10,8 @@ function checkSamePasswords() {
         password2.get(0).setCustomValidity("");
 }
 
-function removeIsInvalid() {
-    $("#email").removeClass("is-invalid");
+function removeIsInvalid(email) {
+    $(email).removeClass("is-invalid");
 }
 
 function checkFormValidation(form) {

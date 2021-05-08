@@ -5,12 +5,12 @@ html, body {
 }
 
 html {
-    position: relative;
     min-height: 100%;
 }
 
 body {
     height: 100%;
+    position: relative;
 }
 
 #main-header {
@@ -42,11 +42,96 @@ body {
     margin: 0;
 }
 
+h3{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    width: 95%;
+    margin: auto;
+}
+
 #section-header {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 100px;
+}
+
+#test-questions{
+    margin-bottom: 1000px;
+}
+#time-counter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: #17a2b8;
+    font-family: "Roboto", sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+}
+
+math-field {
+    cursor: pointer;
+    border: 1px solid #ced4da;
+    width: 94%;
+    border-radius: 2px;
+    margin: auto;
+}
+
+.picture-form{
+    width: 94%;
+}
+
+.question-style{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 200px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.question-header{
+    width: 96%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: auto;
+    margin-top: 20px;
 }
+
+.change-input-button {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 29px;
+    height: 29px;
+}
+
+.change-input-image {
+    transition: height 300ms, width 300ms;
+}
+
+.change-input-button:hover .change-input-image {
+    width: 29px;
+    height: 29px;
+}
+
+.custom-file-label::after{
+    content: "Prechádzať";
+}
+
 @media (max-width: 768px) {
     .section-content{
         width: 90%;

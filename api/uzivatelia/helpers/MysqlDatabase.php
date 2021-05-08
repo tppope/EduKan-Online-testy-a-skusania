@@ -14,7 +14,7 @@ class MysqlDatabase{
     public function __construct(){
         include __DIR__ . "/../../../db-login.php";
         try {
-            $this->setConnection(new PDO("mysql:host=".$db_host.";dbname=wt_skuskove_zadanie_databaza_pouzivatelov", $db_user, $db_password, $this->getOptions()));
+            $this->setConnection(new PDO("mysql:host=".$db_host.";dbname=wt_skuskove_zadanie_databaza_testov", $db_user, $db_password, $this->getOptions()));
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
