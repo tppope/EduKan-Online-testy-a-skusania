@@ -86,24 +86,6 @@ document.getElementById('send').onclick=function (){
         }
 
         else if(q[i].classList.contains("type-3")===true) {
-            let odpovede_lave={};
-            let odpovede_prave={};
-            let pary=[]
-            const moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
-
-            for(let j=0;j<moznostDiv.children.length;j++){
-
-                odpovede_lave[Number(j+1)]=moznostDiv.children[j].children[1].children[0].value;
-                odpovede_prave[Number(j+1)]=moznostDiv.children[j].children[3].children[0].value;
-                if(moznostDiv.children[j].children[1].children[0].value!=="" && moznostDiv.children[j].children[3].children[0].value!==""){
-                    pary.push({lava:j+1,prava:j+1});
-
-                }
-
-            }
-            otazky[Number(i+1)].odpovede_lave=odpovede_lave;
-            otazky[Number(i+1)].odpovede_prave=odpovede_prave;
-            otazky[Number(i+1)].pary=pary;
 
 
 
@@ -114,17 +96,21 @@ document.getElementById('send').onclick=function (){
         }
     }
     test.otazky=otazky
+    for(let i=0;i<listOfInstances.length;i++){
+        console.log(listOfInstances[i].getAllConnections());
+    }
+
     console.log(JSON.stringify(test));
 
-   fetch("../api/testy/novy-test.php", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(test)
-    })
-        .then(response => response.json())
-        .then(data => console.log(data));
+   // fetch("../api/testy/novy-test.php", {
+   //      method: 'POST',
+   //      headers: {
+   //          'Content-Type': 'application/json',
+   //      },
+   //      body: JSON.stringify(test)
+   //  })
+   //      .then(response => response.json())
+   //      .then(data => console.log(data));
     //neviem aku mas path na servery tak len dopln
    //location.href="http://"+location.hostname+"/teacher-homescreen.html"
 

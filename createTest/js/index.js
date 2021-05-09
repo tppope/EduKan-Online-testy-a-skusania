@@ -141,7 +141,7 @@ function createQuestion(typ,number){
         btnL.setAttribute('class','btn btn-dark')
 
         btnL.innerHTML=`<label  style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
-        btnL.setAttribute('onclick',`addCard(this,${qId},${typ})`)
+        btnL.setAttribute('onclick',`addCard(this,${qId},${typ},${(listOfInstances.length-1).toString()})`)
 
         btnL.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
         btnL.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
@@ -149,7 +149,7 @@ function createQuestion(typ,number){
         btnL.setAttribute('class','btn btn-dark left')
 
         btnP.innerHTML=`<label  style='vertical-align:top;font-size:x-large'>Pridaj možnosť</label>`;
-        btnP.setAttribute('onclick',`addCard(this,${qId},${typ})`)
+        btnP.setAttribute('onclick',`addCard(this,${qId},${typ},${(listOfInstances.length-1).toString()})`)
 
         btnP.setAttribute('style',`max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer`);
         btnP.setAttribute('onmouseover',"this.setAttribute('style',' max-width:12rem;max-height:3rem;cursor:pointer')");
@@ -167,7 +167,7 @@ function createQuestion(typ,number){
         qDiv.appendChild(p);
         p.innerHTML="<img src='images/info.png' alt='info' style='max-height:1.5rem;margin-right: 0.5em'>Dvojicu vytvoríte ťahom ľavej karty smerom k pravej.";
         qDiv.appendChild(parentDiv);
-        moznostDiv.setAttribute('style','display:flex;justify-content:space-between');
+        moznostDiv.setAttribute('style','display:flex;justify-content:space-between;margin-top:2rem');
         moznostDiv.appendChild(coverL);
         moznostDiv.appendChild(coverP);
         //coverL.setAttribute('style','display:grid');
@@ -275,7 +275,7 @@ function removeBtn(){
 
 
 
-function addCard(node,id,typ){
+function addCard(node,id,typ,instance){
     const moznostDiv=node.parentElement.parentElement.parentElement.children[5];
     const left=moznostDiv.children[0];
     const right=moznostDiv.children[1];
@@ -284,13 +284,12 @@ function addCard(node,id,typ){
     const input=document.createElement('textarea');
     const dot=document.createElement('div');
     const removeDiv=document.createElement('div');
-//TODO
-    //1. pozri ci ma MoznostDiv children
-    //ak ano nepridavaj novu instance iba zober od nich
+
     cover.setAttribute('id',`connect-${conNum++}`)
-    cover.setAttribute('style',`z-index:1;border:1px solid black;border-radius:50%;padding:3rem`)
-    input.setAttribute('class',`${listOfInstances.length-1}`);
-    button.setAttribute('onclick',`this.parentElement.remove();listOfInstances[${listOfInstances.length-1}].remove(this.parentElement.children[2].id);`);
+    cover.setAttribute('style',`z-index:1;border:1px solid black;border-radius:25px;width:2rem;margin:1rem`)
+
+    input.setAttribute('class',instance);
+    button.setAttribute('onclick','this.parentElement.remove();listOfInstances['+instance+'].remove(this.parentElement.children[2].id);');
     removeDiv.setAttribute('style','display:flex;margin:1rem');
     if(node.classList.contains('right')){
         cover.appendChild(dot)
@@ -303,21 +302,21 @@ function addCard(node,id,typ){
 
         right.appendChild(removeDiv)
         //instance.makeTarget(cover.id, {anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-        dot.setAttribute('onclick',`createTarget(this.parentElement.id,listOfInstances[${listOfInstances.length-1}]);this.remove()`);
+        dot.setAttribute('onclick','createTarget(this.parentElement.id,listOfInstances['+instance+']);this.remove()');
 
     }
 
     if(node.classList.contains('left')){
-
+        removeDiv.appendChild(button);
         removeDiv.appendChild(input)
         cover.appendChild(dot)
-        removeDiv.appendChild(button);
+
         removeDiv.appendChild(cover)
 
         left.appendChild(removeDiv);
 
 
-        dot.setAttribute('onclick',`createSource(this.parentElement.id,listOfInstances[${listOfInstances.length-1}]);this.remove()`);
+        dot.setAttribute('onclick','createSource(this.parentElement.id,listOfInstances['+instance+']);this.remove()');
 
     }
     dot.click();
