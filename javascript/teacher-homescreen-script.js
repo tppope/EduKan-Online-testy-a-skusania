@@ -39,14 +39,27 @@ function printTests(zoznamTestov){
     else {
         $.each(zoznamTestov, function () {
             let tr = createTr(tbodyTests);
-            let th = createTh(this.kluc);
+            let kluc = this.kluc
+            let th = createTh(kluc);
             $(th).addClass("test-th");
             $(th).on("click",function (){
-                console.log("aaa")
-            })
-            tr.append(th, createTd(this.nazov), createTd(this.casovy_limit), createTd("tu bude pocet otazok"), createTd("tu bude pocet studentov"), createToggle("tu kod testu",this.aktivny))
+                showTest(kluc);
+            });
+            let pocetPisucichStudentov = this.pocet_pisucich_studentov;
+            if (pocetPisucichStudentov === undefined)
+                pocetPisucichStudentov = "Aktivujte test";
+            tr.append(th, createTd(this.nazov), createTd(this.casovy_limit + " min"), createTd(this.pocet_otazok), createTd(pocetPisucichStudentov), createToggle(this.kluc,this.aktivny))
         })
     }
+}
+
+function showTest(kluc){
+    $.getJSON("api/uzivatelia/set-test-session.php?akcia=nastav&klucTestu="+kluc, function (data){
+        if (!data.error) {
+            window.location.href = 'test-info.html';
+        }
+    });
+
 }
 
 function createToggle(kodTestu,aktivny){
@@ -57,33 +70,23 @@ function createToggle(kodTestu,aktivny){
     $(input).attr("type","checkbox");
     if (aktivny)
         $(input).prop("checked",true);
+    changeState(kodTestu, $(input));
     let span = document.createElement("span");
     $(span).addClass("slider round");
-    $(span).on("click",()=>{
-        changeState(kodTestu);
-    })
     label.append(input,span);
     td.append(label);
     $(td).css("text-align","center");
     return td;
 }
 
-function changeState(kodTest){
-    console.log(kodTest);
-    // let radioSwitch = $("#radio-a");
-    // if (radioSwitch.is(":checked")) {
-    //     $("#equation-system-interface").show();
-    //     $("#matrix-interface").hide();
-    //     $("#math-type").text("Zadaj sústavu");
-    //     $("#row-equ-span").text("Rovnice");
-    //     $("#col-var-span").text("Premenné");
-    // } else {
-    //     $("#equation-system-interface").hide();
-    //     $("#matrix-interface").show();
-    //     $("#math-type").text("Zadaj maticu");
-    //     $("#row-equ-span").text("Riadky");
-    //     $("#col-var-span").text("Stĺpce");
-    // }
+function changeState(kodTest, input){
+    input.on("change", function (){
+        if (this.checked)
+            $.getJSON("api/testy/praca-s-testami.php?akcia=aktivuj-test&kluc="+kodTest);
+        else
+            $.getJSON("api/testy/praca-s-testami.php?akcia=deaktivuj-test&kluc="+kodTest);
+    })
+
 }
 
 function setLottieHover() {
@@ -117,7 +120,7 @@ function createTr(tbody){
 function createEmptyTable(tbody){
     let emptyTr = createTr(tbody);
     let emptyTd = createTd("Nemáte zatiaľ vytvorené žiadne testy.");
-    $(emptyTd).attr("colspan","6");
+    $(emptyTd).attr("colspan","4");
     $(emptyTd).attr("id","empty-tests");
     emptyTr.append(emptyTd);
 }

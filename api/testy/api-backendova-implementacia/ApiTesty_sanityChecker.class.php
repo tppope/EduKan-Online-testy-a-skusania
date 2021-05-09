@@ -48,7 +48,6 @@ class ApiTesty_sanityChecker {
 
 
 
-	// Skontroluje data na nacitanie existujuceho testu.
 	public static function nacitaj_test_ucitel($data) {
 		return isset($_SESSION["userId"]) && isset( $data["kluc"] );
 	}
@@ -60,26 +59,25 @@ class ApiTesty_sanityChecker {
 
 
 
-	// Skontroluje data na nacitanie zoznamu testov pre ucitela.
 	public static function praca_s_testami_ucitel__nacitaj_vsetky_testy($data) {
-		return
-			isset( $data["akcia"] ) &&
-			$data["akcia"] == "zoznam-testov";
+		return isset( $data["akcia"] ) && $data["akcia"] == "zoznam-testov";
 	}
 
-
-	// Skontroluje data na zmazanie testu pre ucitelom.
-	public static function praca_s_testami_ucitel__zmaz_test($data) {
+	public static function praca_s_testami_ucitel__aktivuj_test($data) {
 		return
-			isset( $data["akcia"] ) &&
-			$data["akcia"] == "zmaz-test" &&
+			isset( $data["akcia"] ) && $data["akcia"] == "aktivuj-test" &&
+			isset( $data["kluc"] );
+	}
+
+	public static function praca_s_testami_ucitel__deaktivuj_test($data) {
+		return
+			isset( $data["akcia"] ) && $data["akcia"] == "deaktivuj-test" &&
 			isset( $data["kluc"] );
 	}
 
 
 
-
-	// Skontroluje data na vytvorenie noveho testu.
+	// Skontroluje, ci data novovytvaraneho testu su v poriadku a spravnom formate.
 	public static function novy_test($data) {
 		$spravny_format_dat =
 			isset( $data["nazov"] ) &&
@@ -150,6 +148,62 @@ class ApiTesty_sanityChecker {
 		}
 
 		// test je v poriadku
+		return true;
+	}
+
+
+
+	public static function vypracovanie_testu__zacni_pisat($data) {
+		return
+			isset( $data["akcia"] ) && $data["akcia"] == "zacat-pisat" &&
+			isset( $data["kluc"] );
+	}
+
+
+	public static function vypracovanie_testu__ukladanie_odpovede($data) {
+		return
+			isset( $data["akcia"] ) && $data["akcia"] == "odoslat-odpoved" &&
+			isset( $data["otazka_id"] ) &&
+			isset( $data["typ_odpovede"] ) &&
+			(
+				isset( $data["odpoved"] ) ||
+				isset( $data["volba_odpovede"] ) && ( $data["volba_odpovede"] == "neexistuje" || $data["volba_odpovede"] == "zmazat" )
+			);
+	}
+
+	public static function vypracovanie_testu__uloz_odpoved__typ_1($data) {
+		return $data["typ_odpovede"] == "textova";
+	}
+
+	public static function vypracovanie_testu__uloz_odpoved__typ_2($data) {
+		return
+			$data["typ_odpovede"] == "vyberova" && (
+				isset( $data["volba_odpovede"] ) ||
+				isset( $data["odpoved"] ) && is_array($data["odpoved"])
+			);
+	}
+
+	public static function vypracovanie_testu__uloz_odpoved__typ_3($data) {
+		$prvotna_kontrola = 
+			$data["typ_odpovede"] == "parovacia" && (
+				isset( $data["volba_odpovede"] ) ||
+				isset( $data["odpoved"] ) && is_array($data["odpoved"])
+			);
+
+		if (!$prvotna_kontrola) return false;
+		
+		// skontroluj, ze ak je zadana odpoved, vsetky hodnoty su pary v spravnom tvare
+		if ( isset($data["odpoved"]) ) {
+			foreach ($data["odpoved"] as $odpoved) {
+				if (
+					!isset($odpoved["lava"]) || !isset($odpoved["prava"]) ||
+					!is_int($odpoved["lava"]) || !is_int($odpoved["prava"])
+				) {
+					return false; // par nie je v spravnom tvare
+				}
+			}
+		}
+
 		return true;
 	}
 }

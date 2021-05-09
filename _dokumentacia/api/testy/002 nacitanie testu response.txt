@@ -8,7 +8,17 @@ Pre učiteľa:
 		nazov: [nazov],
 		casovy_limit: [v minutach],
 		aktivny: [true/false, ci je aktivny],
-		otazky: [rovnaka array ako v subore "001 vytvorenie testu request ukazka.json"]
+		otazky: [rovnaka array ako v subore "001 vytvorenie testu request ukazka.txt"]
+
+		[
+			ak je test aktívny, je tu ešte jedna položka, zoznam študentov, ktorí píšu test a ich zostávajúci čas, v tvare 
+			zoznam_pisucich_studentov: [
+				{
+					student_id: [int]
+					zostavajuci_cas: [int v sekundach]
+				}
+			]
+		]
 	}
 }
 
@@ -21,13 +31,19 @@ Pre študenta:
 		nazov: [nazov],
 		casovy_limit: [v minutach],
 		otazky: [
-			podobna array ako v subore "001 vytvorenie testu request ukazka.json", iba bez odpovedi, tj. kazda otazka vyzera takto:
+			podobna array ako v subore "001 vytvorenie testu request ukazka.txt", iba bez odpovedi, tj. kazda otazka vyzera takto:
 
 			nazov: [nazov otazky],
 			typ: [typ otazky]
 			[
 				ak je typ otazky 2, este tu je jeden parameter, a to
 				vie_student_pocet_spravnych: [s hodnotou true/false]
+
+				[
+					ak vie_student_pocet_spravnych = true, existuje tu este jedno pole:
+					pocet_spravnych: [int kolko je spravnych odpovedi]
+				]
+
 				odpovede su ciselne indexovany zoznam
 			]
 			[
