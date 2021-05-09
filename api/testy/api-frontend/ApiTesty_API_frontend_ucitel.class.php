@@ -35,12 +35,9 @@ class ApiTesty_API_frontend_ucitel {
 			"nazov" => $test_bez_otazok["nazov"],
 			"casovy_limit" => $test_bez_otazok["casovy_limit"],
 			"aktivny" => $test_bez_otazok["aktivny"],
-			"otazky" => $otazky_v_teste
+			"otazky" => $otazky_v_teste,
+			"zoznam_pisucich_studentov" => ApiTesty_sqlContainer::get_zoznam_studentov_na_teste($mysqli, $test_bez_otazok["kluc_testu"])
 		);
-
-		if ($test_bez_otazok["aktivny"]) {
-			$vystup["data_testu"]["zoznam_pisucich_studentov"] = ApiTesty_sqlContainer::get_zoznam_studentov_na_teste($mysqli, $test_bez_otazok["kluc_testu"]);
-		}
 		
 		return $vystup;
 	}

@@ -461,7 +461,7 @@ class ApiTesty_sqlContainer {
 
 
 	public static function get_zoznam_studentov_na_teste(&$mysqli, $kluc) {
-		$sql = "SELECT student_id, zostavajuci_cas FROM zoznam_pisucich_studentov WHERE kluc_testu = ?";
+		$sql = "SELECT student_id, zostavajuci_cas, datum_zaciatku_pisania, cas_zaciatku_pisania, datum_konca_pisania, cas_konca_pisania FROM zoznam_pisucich_studentov WHERE kluc_testu = ?";
 
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return array();

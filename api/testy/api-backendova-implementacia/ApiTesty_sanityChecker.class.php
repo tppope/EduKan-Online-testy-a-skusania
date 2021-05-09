@@ -48,12 +48,12 @@ class ApiTesty_sanityChecker {
 
 
 
-	public static function nacitaj_test_ucitel($data) {
-		return isset($_SESSION["userId"]) && isset( $data["kluc"] );
+	public static function nacitaj_test_ucitel() {
+		return isset($_SESSION["userId"]) && isset( $_SESSION["pisanyTestKluc"] );
 	}
 	
-	public static function nacitaj_test_student($data) {
-		return isset($_SESSION["studentId"]) && isset( $data["kluc"] );
+	public static function nacitaj_test_student() {
+		return isset($_SESSION["studentId"]) && isset( $_SESSION["pisanyTestKluc"] );
 	}
 
 
