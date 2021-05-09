@@ -21,6 +21,8 @@ body {
     height: 240px;
 }
 
+
+
 #main-h1 {
     font-family: "Roboto", sans-serif;
     font-size: 45px;
@@ -31,7 +33,7 @@ body {
 }
 
 .section-content {
-    width: 60%;
+    width: 70%;
     margin: auto;
 }
 .section-h2 {
@@ -53,18 +55,22 @@ h3{
 
 #section-header {
     margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 100px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 #submit-test-button{
     margin-top: 20px;
     margin-bottom: 300px;
 }
 #time-counter{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 50px;
+    right: 15%;
+    float: right;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,6 +82,7 @@ h3{
     font-size: 30px;
     font-weight: bold;
     color: white;
+    z-index: 100;
 }
 
 math-field {
@@ -83,7 +90,6 @@ math-field {
     border: 1px solid #ced4da;
     width: 94%;
     border-radius: 2px;
-    margin: auto;
 }
 
 .picture-form{
@@ -93,12 +99,11 @@ math-field {
 .question-style{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    height: 200px;
     margin-top: 20px;
     background-color: white;
     border-radius: 15px;
+    padding-bottom: 20px;
 }
 
 .question-header{
@@ -106,8 +111,8 @@ math-field {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: auto;
     margin-top: 20px;
+    margin-bottom: 15px;
 }
 
 .change-input-button {
@@ -127,6 +132,80 @@ math-field {
     width: 29px;
     height: 29px;
 }
+
+.canvas-style{
+    width: 94%;
+    height: 500px;
+    border: solid 3px black;
+    box-shadow: black 3px 3px 10px;
+    border-radius: 10px;
+}
+
+.canvas-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 94%;
+    margin-bottom: 5px;
+}
+
+.whole-canvas{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.draw-tools{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.draw-button{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 29px;
+    height: 29px;
+    margin-left: 10px;
+}
+
+.draw-img{
+    width: 25px;
+    height: 25px;
+    transition: height 300ms, width 300ms;
+}
+
+.draw-button:hover .draw-img {
+    width: 29px;
+    height: 29px;
+}
+
+
+.clean-button{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+.clean-img{
+    width: 30px;
+    height: 30px;
+    transition: height 300ms, width 300ms;
+}
+
+.clean-button:hover .clean-img {
+    width: 35px;
+    height: 35px;
+}
+
 
 .custom-file-label::after{
     content: "Prechádzať";
@@ -148,6 +227,8 @@ math-field {
     text-align: center;
 }
 
+
+
 #are-you-sure-label{
     font-family: "Roboto", sans-serif;
     font-size: 35px;
@@ -157,6 +238,15 @@ math-field {
 @media (max-width: 768px) {
     .section-content{
         width: 90%;
+    }
+    .section-h2{
+        font-size: 25px;
+    }
+    #time-counter{
+        right: 5%;
+        font-size: 20px;
+        width: 80px;
+        height: 40px;
     }
 }
 @media (max-width: 576px) {
