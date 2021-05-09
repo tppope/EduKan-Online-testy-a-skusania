@@ -86,19 +86,38 @@ document.getElementById('send').onclick=function (){
         }
 
         else if(q[i].classList.contains("type-3")===true) {
+            const moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
 
+            let odpovede_lave={};
+            let odpovede_prave= {};
+            let odpovede_laveObj=[];
+            let odpovede_praveObj=[];
+            for(let l=0;l<moznostDiv.children[0].children.length;l++){
+                odpovede_laveObj.push(moznostDiv.children[0].children[l].children[2].id);
+                odpovede_lave[l+1]=moznostDiv.children[0].children[l].children[1].value;
+            }
+            for(let p=0;p<moznostDiv.children[1].children.length;p++){
+                odpovede_praveObj.push(moznostDiv.children[1].children[p].children[0].id);
+                odpovede_prave[p+1]=moznostDiv.children[1].children[p].children[1].value;
+            }
+            otazky[i+1].odpovede_lave=odpovede_lave;
+            otazky[i+1].odpovede_prave=odpovede_prave;
 
+            const conn=listOfInstances[i].getConnections();
+            let pary=[];
+            for(let j=0;j<conn.length;j++){
+                let dvojice={lava:odpovede_laveObj.indexOf(conn[j].sourceId)+1, prava:odpovede_praveObj.indexOf(conn[j].targetId)+1};
 
-
+                pary.push(dvojice)
+            }
+            otazky[i+1].pary=pary;
 
 
 
         }
     }
     test.otazky=otazky
-    for(let i=0;i<listOfInstances.length;i++){
-        console.log(listOfInstances[i].getAllConnections());
-    }
+
 
     console.log(JSON.stringify(test));
 

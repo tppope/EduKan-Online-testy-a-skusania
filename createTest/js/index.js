@@ -289,9 +289,10 @@ function addCard(node,id,typ,instance){
     cover.setAttribute('style',`z-index:1;border:1px solid black;border-radius:25px;width:2rem;margin:1rem`)
 
     input.setAttribute('class',instance);
-    button.setAttribute('onclick','this.parentElement.remove();listOfInstances['+instance+'].remove(this.parentElement.children[2].id);');
     removeDiv.setAttribute('style','display:flex;margin:1rem');
     if(node.classList.contains('right')){
+        button.setAttribute('onclick','this.parentElement.remove();listOfInstances['+instance+"].removeAllEndpoints('"+cover.id+"');");
+
         cover.appendChild(dot)
 
         removeDiv.appendChild(cover)
@@ -307,6 +308,8 @@ function addCard(node,id,typ,instance){
     }
 
     if(node.classList.contains('left')){
+        button.setAttribute('onclick','this.parentElement.remove();listOfInstances['+instance+'].remove(this.parentElement.children[2].id)');
+
         removeDiv.appendChild(button);
         removeDiv.appendChild(input)
         cover.appendChild(dot)
@@ -335,6 +338,8 @@ function createTarget(id,instance){
 });
 
 }
+
+
 function addChoice(id,typ){
     const moznostDiv=document.getElementById(`moznostDiv-${id}`)
     moznostDiv.setAttribute('class',`${id}-options row `)
