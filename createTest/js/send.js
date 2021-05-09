@@ -102,17 +102,19 @@ document.getElementById('send').onclick=function (){
 
     console.log(JSON.stringify(test));
 
-   // fetch("../api/testy/novy-test.php", {
-   //      method: 'POST',
-   //      headers: {
-   //          'Content-Type': 'application/json',
-   //      },
-   //      body: JSON.stringify(test)
-   //  })
-   //      .then(response => response.json())
-   //      .then(data => console.log(data));
-    //neviem aku mas path na servery tak len dopln
-   //location.href="http://"+location.hostname+"/teacher-homescreen.html"
+
+
+   fetch("../api/testy/novy-test.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(test)
+    })
+        .then(response => response.json())
+        .then(data =>{
+            window.location.replace("../teacher-homescreen.html")
+        });
 
 
 }

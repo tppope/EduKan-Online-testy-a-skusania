@@ -75,8 +75,10 @@ function submitTeacherLoginForm() {
                 let email = $("#email");
                 let password = $("#password");
                 if (!data.error) {
-                    if (data.emailVerify && data.passwordVerify)
+                    if (data.emailVerify && data.passwordVerify) {
                         window.location.href = 'teacher-homescreen.html';
+                        sessionStorage.setItem("fromLogin", "true");
+                    }
                     else if (!data.emailVerify)
                         email.addClass("is-invalid");
                     else if (!data.passwordVerify)
@@ -102,8 +104,10 @@ function checkFormValidation(form) {
 function checkIfAlreadyLogin() {
     $.getJSON("api/uzivatelia/prihlasenie/", function (data) {
         if (!data.error) {
-            if (data.alreadyLogin)
+            if (data.alreadyLogin) {
                 window.location.href = 'teacher-homescreen.html';
+                sessionStorage.setItem("fromLogin", "true");
+            }
         }
     })
 }

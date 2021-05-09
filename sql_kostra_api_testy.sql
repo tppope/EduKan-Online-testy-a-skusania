@@ -1,6 +1,5 @@
-﻿-- Najskor vytvor databazu s nazvom wt_skuskove_zadanie_databaza_testov a v nej spusti cely tento subor
-
-START TRANSACTION;
+﻿
+ START TRANSACTION;
 
 CREATE TABLE typy_otazok (
   id tinyint(4) NOT NULL AUTO_INCREMENT,

@@ -11,14 +11,18 @@ function getLoggedInUser() {
         if (!data.error) {
             if (data.alreadyLogin) {
                 let userName = data.user.meno + " " + data.user.priezvisko;
-                $("#log-success-info").text("Vitajte " + userName + ". Boli ste úspešne prihlásený.");
-                showLogInfo(data.status);
+                if (sessionStorage.getItem("fromLogin") === "true") {
+                    $("#log-success-info").text("Vitajte " + userName + ". Boli ste úspešne prihlásený.");
+                    showLogInfo(data.status);
+                }
                 showUserName(userName);
             } else {
                 sessionStorage.setItem("logoutStatus", "failed");
+                sessionStorage.removeItem("fromLogin");
                 window.location.href = 'index.html';
             }
         }
+        sessionStorage.removeItem("fromLogin");
     })
 }
 
@@ -35,7 +39,7 @@ function printTests(zoznamTestov){
     else {
         $.each(zoznamTestov, function () {
             let tr = createTr(tbodyTests);
-            let th = createTh("tu bude kod test");
+            let th = createTh(this.kluc);
             $(th).addClass("test-th");
             $(th).on("click",function (){
                 console.log("aaa")
