@@ -182,6 +182,62 @@ class LoginController extends DatabaseController
         }
     }
 
+    public function sendLeaveTabAlert(){
+
+    }
+
+    public function getLeftStudents(): array
+    {
+        if (!isset($_SESSION["pisanyTestKluc"]))
+            return array("aaa"=>"aa");
+
+        $key = $_SESSION["pisanyTestKluc"];
+        $statement = $this->mysqlDatabase->prepareStatement("SELECT zoznam_pisucich_studentov.student_id
+                                                                    FROM zoznam_pisucich_studentov
+                                                                    WHERE kluc_testu = :key AND pocet_tab_odideni = 1");
+
+        try {
+            $statement->bindValue(':key', $key, PDO::PARAM_STR);
+            $statement->execute();
+            $students = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+            if (empty($students))
+                return array();
+            $this->setLeftStudentToFalse($key);
+
+            return $this->getStudents($students);
+        }
+        catch (Exception $e){
+            return array(
+                "error"=>true,
+                "status"=>"failed",
+                "message"=>$e->getMessage()
+            );
+        }
+    }
+
+    private function getStudents($students): array
+    {
+        $studentsNames = array();
+        foreach ($students as $studentId){
+            array_push($studentsNames,$this->getStudent($studentId));
+        }
+        return $studentsNames;
+    }
+
+
+    private function setLeftStudentToFalse($key){
+        $statement = $this->mysqlDatabase->prepareStatement("UPDATE zoznam_pisucich_studentov
+                                                                    SET zoznam_pisucich_studentov.pocet_tab_odideni = 0
+                                                                    WHERE kluc_testu = :key");
+        try{
+            $statement->bindValue(':key', $key, PDO::PARAM_STR);
+            $statement->execute();
+        }catch(PDOException $e) {
+            throw $e;
+        }
+    }
+
 
 
 }

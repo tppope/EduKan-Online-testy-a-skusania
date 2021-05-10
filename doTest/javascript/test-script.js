@@ -8,6 +8,18 @@ $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
+
+document.addEventListener("visibilitychange", onVisibilityChange);
+
+
+function onVisibilityChange(){
+    if (document.hidden){
+        // $.getJSON("../api/testy/send-leave-tab-alert.php",function (data){
+        //
+        // })
+    }
+}
+
 function startTest(){
 
     let zacniTest = {
