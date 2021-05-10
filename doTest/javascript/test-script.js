@@ -3,10 +3,37 @@ $(window).on("load", function () {
     createMathQuestion(2, "napiste vzorec na hovno");
     createCanvasQuestion(3,"Nakreslite leva");
     createCanvasQuestion(4,"Nakreslite sliepku");
-
+    let array = {
+        "nazov": "Spojte spravne otazky",
+        "odpovede_lave":{
+            1: "červený",
+            2: "ostrý",
+            3: "zelená",
+            4: "šľachetné"
+        },
+        "odpovede_prave": {
+            1: "tráva",
+            2: "srdce",
+            3: "mak",
+            4: "nôž"
+        },
+    }
+    createConnectQuestion(5, array)
     //startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+
+document.addEventListener("visibilitychange", onVisibilityChange);
+
+
+function onVisibilityChange(){
+    if (document.hidden){
+        // $.getJSON("../api/testy/send-leave-tab-alert.php",function (data){
+        //
+        // })
+    }
+}
 
 function startTest(){
 
@@ -155,7 +182,7 @@ function canvasSettings(myCan, ctx){
             ctx.beginPath();
         }else if (event.type === "touchstart") {
             event.preventDefault();
-            mouse[mouse.buttonNames[event.which]] = true;
+            mouse[mouse.buttonNames[event.whzich]] = true;
         }
         else if (event.type === "touchend") {
             mouse[mouse.buttonNames[event.which]] = false; // set the button up
@@ -293,23 +320,24 @@ function createQuestionName(order,name,type){
     let questionH3 = document.createElement("h3");
     $(questionH3).text(order+". "+name);
     questionHeader.append(questionH3);
-    let pictureButton = $("<div class=\"change-input-button math-input-content-"+order+"\" data-toggle=\"tooltip\" title=\"Vložiť obrázok riešenia\" onclick=\"changeToPictureInput("+order+")\">\n" +
-        "                <img class=\"change-input-image\" src=\"resources/pictures/add.svg\" width=\"25\" height=\"25\" alt=\"picture input\">\n" +
-        "            </div>").get(0);
+    if (type !== null){
+        let pictureButton = $("<div class=\"change-input-button math-input-content-"+order+"\" data-toggle=\"tooltip\" title=\"Vložiť obrázok riešenia\" onclick=\"changeToPictureInput("+order+")\">\n" +
+            "                <img class=\"change-input-image\" src=\"resources/pictures/add.svg\" width=\"25\" height=\"25\" alt=\"picture input\">\n" +
+            "            </div>").get(0);
 
-    let mathButton;
-    if (type === 'math') {
-        mathButton = $("<div class=\"change-input-button picture-input-content-" + order + "\" data-toggle=\"tooltip\" title=\"Vložiť matematický vzorec\" onclick=\"changeToMathInput(" + order + ")\" style='display: none'>\n" +
-            "                <img class=\"change-input-image\" src=\"resources/pictures/mathematics.svg\" width=\"32\" height=\"32\" alt=\"math input\">\n" +
-            "            </div>").get(0);
-    }else if (type === 'canvas'){
-        mathButton = $("<div class=\"change-input-button picture-input-content-" + order + "\" data-toggle=\"tooltip\" title=\"Kresliť\" onclick=\"changeToMathInput(" + order + ")\" style='display: none'>\n" +
-            "                <img class=\"change-input-image\" src=\"resources/pictures/canvas.svg\" width=\"25\" height=\"25\" alt=\"math input\">\n" +
-            "            </div>").get(0);
+        let mathButton;
+        if (type === 'math') {
+            mathButton = $("<div class=\"change-input-button picture-input-content-" + order + "\" data-toggle=\"tooltip\" title=\"Vložiť matematický vzorec\" onclick=\"changeToMathInput(" + order + ")\" style='display: none'>\n" +
+                "                <img class=\"change-input-image\" src=\"resources/pictures/mathematics.svg\" width=\"32\" height=\"32\" alt=\"math input\">\n" +
+                "            </div>").get(0);
+        }else if (type === 'canvas'){
+            mathButton = $("<div class=\"change-input-button picture-input-content-" + order + "\" data-toggle=\"tooltip\" title=\"Kresliť\" onclick=\"changeToMathInput(" + order + ")\" style='display: none'>\n" +
+                "                <img class=\"change-input-image\" src=\"resources/pictures/canvas.svg\" width=\"25\" height=\"25\" alt=\"math input\">\n" +
+                "            </div>").get(0);
+        }
+        questionHeader.append(pictureButton);
+        questionHeader.append(mathButton);
     }
-    questionHeader.append(pictureButton);
-    questionHeader.append(mathButton);
-
     return questionHeader;
 }
 

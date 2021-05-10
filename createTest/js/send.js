@@ -1,6 +1,7 @@
 
 document.getElementById('send').onclick=function (){
     let test={};
+    let instance=0;
     if(document.getElementById('meno-testu').value===""){
         document.getElementById('error-msg').innerText="názov testu nemôže byť prázdny";
         return null;
@@ -103,7 +104,7 @@ document.getElementById('send').onclick=function (){
             otazky[i+1].odpovede_lave=odpovede_lave;
             otazky[i+1].odpovede_prave=odpovede_prave;
 
-            const conn=listOfInstances[i].getConnections();
+            const conn=listOfInstances[instance++].getConnections();
             let pary=[];
             for(let j=0;j<conn.length;j++){
                 let dvojice={lava:odpovede_laveObj.indexOf(conn[j].sourceId)+1, prava:odpovede_praveObj.indexOf(conn[j].targetId)+1};

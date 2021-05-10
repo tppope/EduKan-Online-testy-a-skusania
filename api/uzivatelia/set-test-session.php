@@ -17,3 +17,5 @@ catch (Exception $exception){
         "status" => "failed",
     ));
 }
+
+session_commit();

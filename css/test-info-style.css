@@ -23,6 +23,91 @@ section{
     align-items: center;
     background-color: white;
     height: 240px;
+    position: relative;
+    overflow: hidden;
+}
+
+#notifications{
+    display: flex;
+    justify-content: flex-start;
+    position: absolute;
+    height: 100%;
+    width: 400px;
+    border: solid 3px black;
+    top: 0;
+    right: -360px;
+    background-color: #17a2b8;
+
+    transition: right 300ms;
+
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#notifications-text{
+   width: 350px;
+    overflow: scroll;
+}
+
+#notifications-text span{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    color: white;
+}
+
+#notifications-text ul{
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    color: white;
+}
+
+
+#notification-button{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    color: white;
+    writing-mode: vertical-rl;
+    height: 100%;
+    width: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+
+}
+
+.blink{
+    animation: blink-animation 2s infinite;
+}
+@keyframes blink-animation {
+    0%{
+        color: white;
+    }
+    50%{
+        color: black;
+    }
+    100%{
+        color: white;
+    }
+
+}
+#notification-text{
+    overflow: scroll;
+    width: 100%;
 }
 
 #left-arrow{
