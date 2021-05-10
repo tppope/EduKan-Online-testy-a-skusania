@@ -98,3 +98,11 @@ Otázky s párovaním odpovedí (typ 3):
 	}
 
 --- END ODOSIELANIE ODPOVEDÍ
+
+
+
+
+ODOVZDANIE TESTU
+	{
+		akcia: "odovzdat-test"
+	}

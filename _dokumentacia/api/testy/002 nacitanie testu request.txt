@@ -4,4 +4,5 @@ co je zapisane v [], su vysvetlene premenlive hodnoty
 
 
 pre ucitela aj studenta:
-	url: api/testy/nacitaj-test.php?kluc=[kluc testu]
+	url: api/testy/nacitaj-test.php
+		vo fáze, kedy je táto požiadavka relevantná, už kľúč testu bol uložený do session, preto sa neposúva do požiadavky ako parameter
