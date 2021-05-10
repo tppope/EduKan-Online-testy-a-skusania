@@ -314,8 +314,8 @@ class ApiTesty_sqlContainer {
 	}
 
 
-	// Nacita zoznam vsetkych odpovedi studenta na danom teste
-	public static function get_result_zoznam_odpovedi(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+	// Nacita zoznam vsetkych odpovedi studenta na danom teste podla typu otazky.
+	private static function get_result_zoznam_odpovedi_podla_typu(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
 		$sql = array(
 			"1_4_5" => "SELECT otazka_id, zadana_odpoved, vyhodnotenie FROM odpovede_studentov_typ_1_4_5
 			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?",
@@ -344,41 +344,65 @@ class ApiTesty_sqlContainer {
 		}
 
 
-		$odpovede = array();
+		$odpovede = array(
+			"1_4_5" => array(),
+			"2" => array(),
+			"3" => array()
+		);
 		
 		while ( $row = $result["1_4_5"]->fetch_assoc() ) { // tu je iba jedna mozna odpoved ku kazdej otazke
-			$odpovede[ $row["otazka_id"] ] = array(
+			$odpovede["1_4_5"][ $row["otazka_id"] ] = array(
 				"zadana_odpoved" => $row["zadana_odpoved"],
 				"vyhodnotenie" => $row["vyhodnotenie"]
 			);
 		}
 
 		while ( $row = $result["2"]->fetch_assoc() ) { // viac moznosti ku kazdej odpovedi
-			if ( !isset($odpovede[ $row["otazka_id"] ]) ) {
-				$odpovede[ $row["otazka_id"] ] = array();
+			if ( !isset($odpovede["2"][ $row["otazka_id"] ]) ) {
+				$odpovede["2"][ $row["otazka_id"] ] = array();
 			}
 			
-			$odpovede[ $row["otazka_id"] ][] = array(
+			$odpovede["2"][ $row["otazka_id"] ][] = array(
 				"zadana_odpoved" => $row["zadana_odpoved"],
 				"vyhodnotenie" => $row["vyhodnotenie"]
 			);
 		}
 
 		while ( $row = $result["3"]->fetch_assoc() ) { // viac moznosti ku kazdej odpovedi, pary
-			if ( !isset($odpovede[ $row["otazka_id"] ]) ) {
-				$odpovede[ $row["otazka_id"] ] = array();
+			if ( !isset($odpovede["3"][ $row["otazka_id"] ]) ) {
+				$odpovede["3"][ $row["otazka_id"] ] = array();
 			}
 			
-			$odpovede[ $row["otazka_id"] ][] = array(
+			$odpovede["3"][ $row["otazka_id"] ][] = array(
 				"par_lava_strana" => $row["par_lava_strana"],
 				"par_prava_strana" => $row["par_prava_strana"],
 				"vyhodnotenie" => $row["vyhodnotenie"]
 			);
 		}
 
-		ksort($odpovede);
-
 		return $odpovede;
+	}
+
+
+
+
+	// Nacita zoznam vsetkych odpovedi studenta na danom teste
+	public static function get_result_zoznam_odpovedi(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$odpovede = self::get_result_zoznam_odpovedi_podla_typu($mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+		
+		$spolu = array();
+		foreach ($odpovede["1_4_5"] as $otazka_id => $odpoved) {
+			$spolu[$otazka_id] = $odpoved;
+		}
+		foreach ($odpovede["2"] as $otazka_id => $odpoved) {
+			$spolu[$otazka_id] = $odpoved;
+		}
+		foreach ($odpovede["3"] as $otazka_id => $odpoved) {
+			$spolu[$otazka_id] = $odpoved;
+		}
+
+		ksort($spolu);
+		return $spolu;
 	}
 
 
@@ -576,7 +600,89 @@ class ApiTesty_sqlContainer {
 		$exec = $stmt->execute();
 		if (!$exec) return false;
 
+		self::automaticky_vyhodnot_odpovede_typy_1_2_3($mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+
 		return $mysqli->affected_rows;
+	}
+
+
+
+	private static function automaticky_vyhodnot_odpovede_typy_1_2_3(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$odpovede_studenta = self::get_result_zoznam_odpovedi($mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+		$spravne_odpovede = self::get_result_testove_otazky($mysqli, $kluc, true);
+
+		$sql = array(
+			"1_4_5" => "UPDATE odpovede_studentov_typ_1_4_5 SET vyhodnotenie = ?
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?",
+
+			"2" => "UPDATE odpovede_studentov_typ_2 SET vyhodnotenie = ?
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND zadana_odpoved = ?",
+
+			"3" => "UPDATE odpovede_studentov_typ_3 SET vyhodnotenie = ?
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND par_lava_strana = ? AND par_prava_strana = ?",
+		);
+
+
+		$stmt = array();
+
+		foreach ($sql as $kod => $query) {
+			$stmt[$kod] = $mysqli->prepare($query);
+			if (!$stmt[$kod]) return false;
+		}
+		
+		
+		foreach ($spravne_odpovede as $otazka_id=>$otazka) {
+			if ( isset($odpovede_studenta[$otazka_id]) ) {
+				switch ($otazka["typ"]) {
+					case 1:
+						$zadana = $odpovede_studenta[$otazka_id]["zadana_odpoved"];
+						$vyhodnotenie = in_array($zadana, $otazka["spravne_odpovede"]) ? 1 : 0;
+
+						$stmt["1_4_5"]->bind_param("isiss", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+						$exec = $stmt["1_4_5"]->execute();
+						if (!$exec) return false;
+					break;
+
+					case 2:
+						foreach ( $odpovede_studenta[$otazka_id] as $id=>$odpoved_studenta ) {
+							$vyhodnotenie = 0;
+
+							foreach ($otazka["odpovede"] as $odpoved) {
+								if ( $odpoved["text"] == $odpoved_studenta["zadana_odpoved"] && $odpoved["je_spravna"] ) {
+									$vyhodnotenie = 1;
+								}
+							}
+
+							$stmt["2"]->bind_param(
+								"isisss", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["zadana_odpoved"]
+							);
+							$exec = $stmt["2"]->execute();
+							if (!$exec) return false;
+						}
+					break;
+
+					case 3:
+						foreach ( $odpovede_studenta[$otazka_id] as $id=>$odpoved_studenta ) {
+							$vyhodnotenie = 0;
+
+							foreach ($otazka["pary"] as $par) {
+								if ($par["lava"] == $odpoved_studenta["par_lava_strana"] && $par["prava"] == $odpoved_studenta["par_prava_strana"]) {
+									$vyhodnotenie = 1;
+								}
+							}
+
+							$stmt["3"]->bind_param(
+								"isissii", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["par_lava_strana"], $odpoved_studenta["par_prava_strana"]
+							);
+							$exec = $stmt["3"]->execute();
+							if (!$exec) return false;
+						}
+					break;
+				}
+			}
+		}
+
+		return true;
 	}
 }
 ?>

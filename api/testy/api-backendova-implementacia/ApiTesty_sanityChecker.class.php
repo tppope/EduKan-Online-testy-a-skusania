@@ -74,6 +74,13 @@ class ApiTesty_sanityChecker {
 			isset( $data["akcia"] ) && $data["akcia"] == "deaktivuj-test" &&
 			isset( $data["kluc"] );
 	}
+	
+	public static function praca_s_testami_ucitel__nacitaj_vysledky_testu($data) {
+		return
+			isset( $data["akcia"] ) && $data["akcia"] == "nacitaj-vysledky" &&
+			isset( $data["kluc"] ) && isset( $data["student-id"] ) &&
+			isset( $data["datum-zaciatku-pisania"] ) && isset( $data["cas-zaciatku-pisania"] );
+	}
 
 
 

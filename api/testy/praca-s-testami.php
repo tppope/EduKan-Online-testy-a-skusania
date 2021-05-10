@@ -29,6 +29,15 @@ if ($generic_sanity_check) {
 		echo json_encode($vystup);
 	}
 
+	elseif (ApiTesty_sanityChecker::praca_s_testami_ucitel__nacitaj_vysledky_testu($surove_prijate_data)) {
+		$vystup = ApiTesty_API_frontend_ucitel::nacitaj_odpovede(
+			$mysqli_api_testy, $surove_prijate_data["kluc"],
+			$surove_prijate_data["student-id"], $surove_prijate_data["datum-zaciatku-pisania"], $surove_prijate_data["cas-zaciatku-pisania"]
+		);
+		
+		echo json_encode($vystup);
+	}
+
 	else {
 		echo json_encode( Hlasky__API_T::get_hlaska("API_T__GSC_3") ); // nespravny format dat
 	}

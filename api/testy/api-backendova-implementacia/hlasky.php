@@ -82,6 +82,12 @@ class Hlasky__API_T {
 			"kod" => "API_T__PT_U_3",
 			"sprava" => "Test bol úspešne deaktivovaný."
 		),
+
+		"API_T__PT_U_4" => array(
+			"kod" => "API_T__PT_U_4",
+			"sprava" => "Odpovede študenta boli úspešne načítané.",
+			"odpovede" => null // sem ide zoznam odpovedi z db
+		),
 		// END --- PT = praca s testami z pohladu ucitela, U = uspesna operacia
 
 
