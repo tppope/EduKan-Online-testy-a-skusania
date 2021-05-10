@@ -3,22 +3,9 @@ $(window).on("load", function () {
     createMathQuestion(2, "napiste vzorec na hovno");
     createCanvasQuestion(3,"Nakreslite leva");
     createCanvasQuestion(4,"Nakreslite sliepku");
-    let array = {
-        "nazov": "Spojte spravne otazky",
-        "odpovede_lave":{
-            1: "červený",
-            2: "ostrý",
-            3: "zelená",
-            4: "šľachetné"
-        },
-        "odpovede_prave": {
-            1: "tráva",
-            2: "srdce",
-            3: "mak",
-            4: "nôž"
-        },
-    }
-    createConnectQuestion(5, array)
+
+
+    createShortQuestion(5,"Ako sa voláš?");
     //startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
@@ -73,7 +60,7 @@ function printTest(otazky){
     $.each(otazky,function (index){
         let otazka = this;
         switch (otazka.typ){
-            case 1:true;break;
+            case 1:createShortQuestion(index, otazka.nazov);break;
             case 2:true;break;
             case 3:createConnectQuestion(index,otazka);break;
             case 4:createMathQuestion(index,otazka.nazov);break;
@@ -405,3 +392,64 @@ function createCard(id,card_phrase){
     return card
 }
 
+
+function createShortQuestion(order,name){
+
+    let questionDiv = createQuestionDiv(order,name,null);
+    questionDiv.append(createShortInput(order));
+
+}
+
+function createShortInput(order){
+    let inputAreaDiv = document.createElement("div");
+    let inputArea = document.createElement("input");
+
+    $(inputAreaDiv).addClass("input-area-short");
+    $(inputAreaDiv).append(inputArea);
+    $(inputArea).attr({
+        "type":"text",
+        "class": "form-control",
+
+    });
+
+    $(inputArea).on("change", function (){
+        console.log(this.value);
+        let postArray = {
+            "akcia": "odoslat-odpoved",
+            "otazka": order,
+            "typ_odpovede": "textova",
+            "odpoved": this.value
+
+        }
+        let request = new Request('../api/testy/vypracovanie-testu.php', {
+            method: 'POST',
+            body: JSON.stringify(postArray),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                if (data.kod === "API_T__VT_U_3"){
+                    console.log("API_T__VT_U_3  "  + data);
+                }
+                else if (data.kod === "API_T__VT_U_2"){
+                    loadTest();
+                }
+                else{
+                    console.log(data.kod);
+                }
+            });
+
+    })
+    return inputAreaDiv;
+
+}
+
+//
+// function removeBtn(){
+//     const button=document.createElement('img');
+//     button.setAttribute('src','//createTest/images/trash.png');
+//     button.setAttribute('onmouseover',"this.src='//createTest/images/thrash-active.png'");
+//     button.setAttribute('onmouseout',"this.src='//createTest/images/trash.png'");
+//     button.setAttribute('class',"remover");
+//     button.setAttribute('style','max-height:1rem;vertical-align:top;margin-right:0.5em;cursor:pointer')
+// }
