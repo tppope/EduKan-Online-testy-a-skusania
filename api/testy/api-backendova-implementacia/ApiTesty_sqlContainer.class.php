@@ -314,6 +314,74 @@ class ApiTesty_sqlContainer {
 	}
 
 
+	// Nacita zoznam vsetkych odpovedi studenta na danom teste
+	public static function get_result_zoznam_odpovedi(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$sql = array(
+			"1_4_5" => "SELECT otazka_id, zadana_odpoved, vyhodnotenie FROM odpovede_studentov_typ_1_4_5
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?",
+
+			"2" => "SELECT otazka_id, zadana_odpoved, vyhodnotenie FROM odpovede_studentov_typ_2
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?",
+
+			"3" => "SELECT otazka_id, par_lava_strana, par_prava_strana, vyhodnotenie FROM odpovede_studentov_typ_3
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?"
+		);
+
+
+		$stmt = array();
+		$result = array();
+
+		foreach ($sql as $kod => $query) {
+			$stmt[$kod] = $mysqli->prepare($query);
+			if (!$stmt[$kod]) return false;
+		}
+
+		foreach ($stmt as $kod => $stmt_obj) {
+			$stmt_obj->bind_param("siss", $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+			$exec = $stmt_obj->execute();
+			if (!$exec) return false;
+			$result[$kod] = $stmt_obj->get_result();
+		}
+
+
+		$odpovede = array();
+		
+		while ( $row = $result["1_4_5"]->fetch_assoc() ) { // tu je iba jedna mozna odpoved ku kazdej otazke
+			$odpovede[ $row["otazka_id"] ] = array(
+				"zadana_odpoved" => $row["zadana_odpoved"],
+				"vyhodnotenie" => $row["vyhodnotenie"]
+			);
+		}
+
+		while ( $row = $result["2"]->fetch_assoc() ) { // viac moznosti ku kazdej odpovedi
+			if ( !isset($odpovede[ $row["otazka_id"] ]) ) {
+				$odpovede[ $row["otazka_id"] ] = array();
+			}
+			
+			$odpovede[ $row["otazka_id"] ][] = array(
+				"zadana_odpoved" => $row["zadana_odpoved"],
+				"vyhodnotenie" => $row["vyhodnotenie"]
+			);
+		}
+
+		while ( $row = $result["3"]->fetch_assoc() ) { // viac moznosti ku kazdej odpovedi, pary
+			if ( !isset($odpovede[ $row["otazka_id"] ]) ) {
+				$odpovede[ $row["otazka_id"] ] = array();
+			}
+			
+			$odpovede[ $row["otazka_id"] ][] = array(
+				"par_lava_strana" => $row["par_lava_strana"],
+				"par_prava_strana" => $row["par_prava_strana"],
+				"vyhodnotenie" => $row["vyhodnotenie"]
+			);
+		}
+
+		ksort($odpovede);
+
+		return $odpovede;
+	}
+
+
 
 	public static function zacni_pisat_test(&$mysqli, $kluc, $student_id) {
 		// over, ci student tento test uz nepise
@@ -383,14 +451,16 @@ class ApiTesty_sqlContainer {
 
 
 	// Ulozi odpoved, ktora je na kazdu otazku unikatna (otazky typu 1, 4 a 5).
-	public static function uloz_odpoved__typ_1_4_5($mysqli, $kluc, $student_id, $otazka_id, $odpoved_hodnota) {
-		$sql = "INSERT INTO odpovede_studentov_typ_1_4_5(kluc_testu, student_id, otazka_id, zadana_odpoved) VALUES(?, ?, ?, ?)
-		ON DUPLICATE KEY UPDATE zadana_odpoved = ?";
+	public static function uloz_odpoved__typ_1_4_5($mysqli, $kluc, $student_id, $otazka_id, $odpoved_hodnota, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$sql = "INSERT INTO
+			odpovede_studentov_typ_1_4_5(kluc_testu, student_id, otazka_id, zadana_odpoved, datum_zaciatku_pisania, cas_zaciatku_pisania)
+			VALUES(?, ?, ?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE zadana_odpoved = ?";
 		
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return false;
 
-		$stmt->bind_param("siiss", $kluc, $student_id, $otazka_id, $odpoved_hodnota, $odpoved_hodnota);
+		$stmt->bind_param("siissss", $kluc, $student_id, $otazka_id, $odpoved_hodnota, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_hodnota);
 		$exec = $stmt->execute();
 		if (!$exec) return false;
 
@@ -399,10 +469,11 @@ class ApiTesty_sqlContainer {
 
 
 	// Ulozi odpoved na otazku typu 2 (viac moznosti), no predtym zmaze vsetky predosle odpovede.
-	public static function uloz_odpoved__typ_2($mysqli, $kluc, $student_id, $otazka_id, $odpovede_array) {
-		self::zmaz_odpoved("2", $mysqli, $kluc, $student_id, $otazka_id);
+	public static function uloz_odpoved__typ_2($mysqli, $kluc, $student_id, $otazka_id, $odpovede_array, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		self::zmaz_odpoved("2", $mysqli, $kluc, $student_id, $otazka_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
 
-		$sql = "INSERT INTO odpovede_studentov_typ_2(kluc_testu, student_id, otazka_id, zadana_odpoved) VALUES(?, ?, ?, ?)";
+		$sql = "INSERT INTO odpovede_studentov_typ_2(kluc_testu, student_id, otazka_id, zadana_odpoved, datum_zaciatku_pisania, cas_zaciatku_pisania)
+				VALUES(?, ?, ?, ?, ?, ?)";
 
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return false;
@@ -412,7 +483,7 @@ class ApiTesty_sqlContainer {
 		$mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
 		foreach ($odpovede_array as $odpoved) {
-			$stmt->bind_param("siis", $kluc, $student_id, $otazka_id, $odpoved);
+			$stmt->bind_param("siisss", $kluc, $student_id, $otazka_id, $odpoved, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
 			$exec = $stmt->execute();
 			if (!$exec) {
 				$mysqli->rollback();
@@ -423,10 +494,11 @@ class ApiTesty_sqlContainer {
 		return $mysqli->commit();
 	}
 
-	public static function uloz_odpoved__typ_3($mysqli, $kluc, $student_id, $otazka_id, $odpovede_array) {
-		self::zmaz_odpoved("3", $mysqli, $kluc, $student_id, $otazka_id);
+	public static function uloz_odpoved__typ_3($mysqli, $kluc, $student_id, $otazka_id, $odpovede_array, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		self::zmaz_odpoved("3", $mysqli, $kluc, $student_id, $otazka_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
 
-		$sql = "INSERT INTO odpovede_studentov_typ_3(kluc_testu, student_id, otazka_id, par_lava_strana, par_prava_strana) VALUES(?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO odpovede_studentov_typ_3(kluc_testu, student_id, otazka_id, par_lava_strana, par_prava_strana, datum_zaciatku_pisania, cas_zaciatku_pisania)
+		VALUES(?, ?, ?, ?, ?, ?, ?)";
 
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return false;
@@ -436,7 +508,7 @@ class ApiTesty_sqlContainer {
 		$mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
 		foreach ($odpovede_array as $odpoved) {
-			$stmt->bind_param("siiii", $kluc, $student_id, $otazka_id, $odpoved["lava"], $odpoved["prava"]);
+			$stmt->bind_param("siiiiss", $kluc, $student_id, $otazka_id, $odpoved["lava"], $odpoved["prava"], $datum_zaciatku_pisania, $cas_zaciatku_pisania);
 			$exec = $stmt->execute();
 			if (!$exec) {
 				$mysqli->rollback();
@@ -449,15 +521,17 @@ class ApiTesty_sqlContainer {
 
 
 	// Zmaze vsetky odpovede studenta na tuto otazku.
-	public static function zmaz_odpoved($typ, $mysqli, $kluc, $student_id, $otazka_id) {
+	public static function zmaz_odpoved($typ, $mysqli, $kluc, $student_id, $otazka_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
 		$tabulka = "odpovede_studentov_typ_" . $typ; // $typ je stale bezpecny, pochadza z kodu a je pevne zadany
 		
-		$sql = "DELETE FROM {$tabulka} WHERE kluc_testu = ? AND student_id = ? AND otazka_id = ?";
+		$sql = "DELETE FROM {$tabulka} WHERE
+			kluc_testu = ? AND student_id = ? AND otazka_id = ? AND
+			datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?";
 		
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return false;
 
-		$stmt->bind_param("sii", $kluc, $student_id, $otazka_id);
+		$stmt->bind_param("siiss", $kluc, $student_id, $otazka_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
 		$exec = $stmt->execute();
 		if (!$exec) return false;
 

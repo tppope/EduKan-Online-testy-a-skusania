@@ -40,7 +40,9 @@ class ApiTesty_API_frontend_student {
 		// student uz ma tento test rozpisany, vrat mu zostavajuci cas a zoznam doteraz odoslanych odpovedi
 		if ($vysledok_pokusu["udalost"] == "rozpisany-test") {
 			$vystup = Hlasky__API_T::get_hlaska("API_T__VT_U_2");
-			$vystup["odoslane_odpovede"] = array(); // TODO: dokoncit
+			$vystup["odoslane_odpovede"] = ApiTesty_sqlContainer::get_result_zoznam_odpovedi(
+				$mysqli, $kluc, $student_id, $vysledok_pokusu["datum_zaciatku_pisania"], $vysledok_pokusu["cas_zaciatku_pisania"]
+			);
 		}
 
 		else if ($vysledok_pokusu["udalost"] == "student-zacal-pisat-teraz") {
@@ -61,6 +63,8 @@ class ApiTesty_API_frontend_student {
 	// Zapise, ze tento student zacal pisat test.
 	public static function odovzdaj_test(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
 		$uspech_pokusu = ApiTesty_sqlContainer::ukonci_pisanie_testu($mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+
+		unset($_SESSION["pisanyTestKluc"], $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]);
 
 		if ($uspech_pokusu) return Hlasky__API_T::get_hlaska("API_T__VT_U_4");
 		return Hlasky__API_T::get_hlaska("API_T__VT_C_4");

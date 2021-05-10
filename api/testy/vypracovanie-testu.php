@@ -38,30 +38,40 @@ if ($generic_sanity_check) {
 
         if (ApiTesty_sanityChecker::vypracovanie_testu__uloz_odpoved__typ_1($prijate_data)) {
             if ( isset($prijate_data["volba_odpovede"]) && $prijate_data["volba_odpovede"] == "zmazat" ) { // student chce odpoved na tuto otazku zmazat
-                $pokus = ApiTesty_sqlContainer::zmaz_odpoved("1_4_5", $mysqli_api_testy, $kluc, $student_id, $otazka_id);
+                $pokus = ApiTesty_sqlContainer::zmaz_odpoved(
+                    "1_4_5", $mysqli_api_testy, $kluc, $student_id, $otazka_id, $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]
+                );
             }
 
             else {
                 // odpoved sa bud zapisuje, prepisuje alebo nastavuje, ze podla studenta neexistuje
                 $odpoved = isset($prijate_data["odpoved"]) ? $prijate_data["odpoved"] : "NULL";
-                $pokus = ApiTesty_sqlContainer::uloz_odpoved__typ_1_4_5($mysqli_api_testy, $kluc, $student_id, $otazka_id, $odpoved);
+                $pokus = ApiTesty_sqlContainer::uloz_odpoved__typ_1_4_5(
+                    $mysqli_api_testy, $kluc, $student_id, $otazka_id, $odpoved, $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]
+                );
             }
         }
 
         elseif (ApiTesty_sanityChecker::vypracovanie_testu__uloz_odpoved__typ_2($prijate_data)) {
             if ( isset($prijate_data["volba_odpovede"]) && $prijate_data["volba_odpovede"] == "zmazat" ) { // student chce odpoved na tuto otazku zmazat
-                $pokus = ApiTesty_sqlContainer::zmaz_odpoved("2", $mysqli_api_testy, $kluc, $student_id, $otazka_id);
+                $pokus = ApiTesty_sqlContainer::zmaz_odpoved(
+                    "2", $mysqli_api_testy, $kluc, $student_id, $otazka_id, $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]
+                );
             }
             else {
                 // odpoved sa bud zapisuje, prepisuje alebo nastavuje, ze podla studenta neexistuje (pozor, tu to je vzdy ako array odpovedi)
                 $odpoved = isset($prijate_data["odpoved"]) ? $prijate_data["odpoved"] : array("NULL");
-                $pokus = ApiTesty_sqlContainer::uloz_odpoved__typ_2($mysqli_api_testy, $kluc, $student_id, $otazka_id, $odpoved);
+                $pokus = ApiTesty_sqlContainer::uloz_odpoved__typ_2(
+                    $mysqli_api_testy, $kluc, $student_id, $otazka_id, $odpoved, $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]
+                );
             }
         }
 
         elseif (ApiTesty_sanityChecker::vypracovanie_testu__uloz_odpoved__typ_3($prijate_data)) {
             if ( isset($prijate_data["volba_odpovede"]) && $prijate_data["volba_odpovede"] == "zmazat" ) { // student chce odpoved na tuto otazku zmazat
-                $pokus = ApiTesty_sqlContainer::zmaz_odpoved("3", $mysqli_api_testy, $kluc, $student_id, $otazka_id);
+                $pokus = ApiTesty_sqlContainer::zmaz_odpoved(
+                    "3", $mysqli_api_testy, $kluc, $student_id, $otazka_id, $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]
+                );
             }
             else {
                 // odpoved sa bud zapisuje, prepisuje alebo nastavuje, ze podla studenta neexistuje (pozor, tu to je vzdy ako array parov lava-prava strana)
@@ -73,7 +83,9 @@ if ($generic_sanity_check) {
                     $odpoved = $prijate_data["odpoved"];
                 }
 
-                $pokus = ApiTesty_sqlContainer::uloz_odpoved__typ_3($mysqli_api_testy, $kluc, $student_id, $otazka_id, $odpoved);
+                $pokus = ApiTesty_sqlContainer::uloz_odpoved__typ_3(
+                    $mysqli_api_testy, $kluc, $student_id, $otazka_id, $odpoved, $_SESSION["testDatumZaciatkuPisania"], $_SESSION["testCasZaciatkuPisania"]
+                );
             }
         }
 
