@@ -1,25 +1,5 @@
 $(window).on("load", function () {
-    createMathQuestion(1, "napiste vzorec na koleso");
-    createMathQuestion(2, "napiste vzorec na hovno");
-    createCanvasQuestion(3,"Nakreslite leva");
-    createCanvasQuestion(4,"Nakreslite sliepku");
-    let array = {
-        "nazov": "Spojte spravne otazky",
-        "odpovede_lave":{
-            1: "červený",
-            2: "ostrý",
-            3: "zelená",
-            4: "šľachetné"
-        },
-        "odpovede_prave": {
-            1: "tráva",
-            2: "srdce",
-            3: "mak",
-            4: "nôž"
-        },
-    }
-    createConnectQuestion(5, array)
-    //startTest();
+    startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
 
@@ -28,11 +8,11 @@ document.addEventListener("visibilitychange", onVisibilityChange);
 
 
 function onVisibilityChange(){
-    // if (document.hidden){
-    //     $.getJSON("../api/testy/send-leave-tab-alert.php",function (data){
-    //         console.log(data);
-    //     })
-    // }
+    if (document.hidden){
+        $.getJSON("../api/uzivatelia/send-leave-tab-alert.php",function (data){
+            console.log(data);
+        })
+    }
 }
 
 function startTest(){
@@ -54,8 +34,9 @@ function startTest(){
             else if (data.kod === "API_T__VT_U_2"){
                 loadTest();
             }
-            else{
-                console.log(data.kod);
+            else if (data.kod === "API_T__VT_C_2"){
+                sessionStorage.setItem("doTest","failed");
+                window.location.replace("../index.html");
             }
         });
 }
@@ -66,6 +47,8 @@ function loadTest(){
             $("#test-name").text(data.data_testu.nazov);
             printTest(data.data_testu.otazky)
         }
+        else
+            console.log(data);
     })
 }
 
@@ -76,8 +59,8 @@ function printTest(otazky){
             case 1:true;break;
             case 2:true;break;
             case 3:createConnectQuestion(index,otazka);break;
-            case 4:createMathQuestion(index,otazka.nazov);break;
-            case 5:createCanvasQuestion(index,otazka.nazov);break;
+            case 4:createCanvasQuestion(index,otazka.nazov);break;
+            case 5:createMathQuestion(index,otazka.nazov);break;
         }
     })
 }

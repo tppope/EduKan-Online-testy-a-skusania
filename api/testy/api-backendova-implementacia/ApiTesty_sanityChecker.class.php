@@ -78,8 +78,8 @@ class ApiTesty_sanityChecker {
 	public static function praca_s_testami_ucitel__nacitaj_vysledky_testu($data) {
 		return
 			isset( $data["akcia"] ) && $data["akcia"] == "nacitaj-vysledky" &&
-			isset( $data["kluc"] ) && isset( $data["student-id"] ) &&
-			isset( $data["datum-zaciatku-pisania"] ) && isset( $data["cas-zaciatku-pisania"] );
+			isset( $_SESSION["pisanyTestKluc"] ) && isset( $_SESSION["studentId"] ) &&
+			isset( $_SESSION["datumZaciatkuPisania"] ) && isset( $_SESSION["casZaciatkuPisania"] );
 	}
 
 

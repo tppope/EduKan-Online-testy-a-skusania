@@ -298,14 +298,14 @@ class ApiTesty_sqlContainer {
 
 
 
-			if ( $row["aktivny"] ) { // na aktivnom teste nacitaj aj pocet pisucich studentov
-				$stmt2->bind_param("s", $row["kluc_testu"]);
-				$stmt2->execute();
-				$result2 = $stmt2->get_result();
+			 //  pocet pisucich studentov
+            $stmt2->bind_param("s", $row["kluc_testu"]);
+            $stmt2->execute();
+            $result2 = $stmt2->get_result();
 
-				$row2 = $result2->fetch_assoc();
-				$array["pocet_pisucich_studentov"] = $row2["pocet_studentov"];
-			}
+            $row2 = $result2->fetch_assoc();
+            $array["pocet_pisucich_studentov"] = $row2["pocet_studentov"];
+
 
 			$return[] = $array;
 		}

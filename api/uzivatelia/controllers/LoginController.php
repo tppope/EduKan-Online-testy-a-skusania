@@ -149,7 +149,7 @@ class LoginController extends DatabaseController
     private function checkTest($kluc){
         $statement = $this->mysqlDatabase->prepareStatement("SELECT kluc_testu
                                                                     FROM zoznam_testov
-                                                                    WHERE kluc_testu = :kluc");
+                                                                    WHERE kluc_testu = :kluc AND aktivny = 1");
         try {
             $statement->bindValue(':kluc', $kluc, PDO::PARAM_STR);
             $statement->execute();
@@ -163,7 +163,7 @@ class LoginController extends DatabaseController
     }
 
     public function getStudent($studentId){
-        $statement = $this->mysqlDatabase->prepareStatement("SELECT student.student_own_id as id, student.meno as name, student.priezvisko as surname
+        $statement = $this->mysqlDatabase->prepareStatement("SELECT student.id as dbID, student.student_own_id as id, student.meno as name, student.priezvisko as surname
                                                                     FROM student
                                                                     WHERE student.id = :studentId");
         try {
