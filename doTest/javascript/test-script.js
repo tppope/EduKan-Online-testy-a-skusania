@@ -1,5 +1,25 @@
 $(window).on("load", function () {
-    startTest();
+    createMathQuestion(1, "napiste vzorec na koleso");
+    createMathQuestion(2, "napiste vzorec na hovno");
+    createCanvasQuestion(3,"Nakreslite leva");
+    createCanvasQuestion(4,"Nakreslite sliepku");
+    let array = {
+        "nazov": "Spojte spravne otazky",
+        "odpovede_lave":{
+            1: "červený",
+            2: "ostrý",
+            3: "zelená",
+            4: "šľachetné"
+        },
+        "odpovede_prave": {
+            1: "tráva",
+            2: "srdce",
+            3: "mak",
+            4: "nôž"
+        },
+    }
+    createConnectQuestion(5, array)
+    //startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
 
@@ -149,21 +169,15 @@ function canvasSettings(myCan, ctx){
     function mouseEvent(event) {
 
         let bounds = myCan.getBoundingClientRect();
-        let interact = event;
-        if (event.type === "touchmove")
-            interact = event.touches[0];
+        mouse.x = event.pageX - bounds.left - scrollX;
+        mouse.y = event.pageY - bounds.top - scrollY;
 
 
-            mouse.x = interact.pageX - bounds.left - scrollX;
-            mouse.y = interact.pageY - bounds.top - scrollY;
+        mouse.x /= bounds.width;
+        mouse.y /= bounds.height;
 
-
-            mouse.x /= bounds.width;
-            mouse.y /= bounds.height;
-
-            mouse.x *= myCan.width;
-            mouse.y *= myCan.height;
-
+        mouse.x *= myCan.width;
+        mouse.y *= myCan.height;
 
         if (event.type === "mousedown") {
             mouse[mouse.buttonNames[event.which - 1]] = true;  // set the button as down
@@ -171,13 +185,8 @@ function canvasSettings(myCan, ctx){
             mouse[mouse.buttonNames[event.which - 1]] = false; // set the button up
             ctx.beginPath();
         }else if (event.type === "touchstart") {
-            mouse.lastX = mouse.x;
-            mouse.lastY = mouse.y;
-            ctx.beginPath();
-            if (event.cancelable) {
-                event.preventDefault();
-            }
-            mouse[mouse.buttonNames[event.which]] = true;
+            event.preventDefault();
+            mouse[mouse.buttonNames[event.whzich]] = true;
         }
         else if (event.type === "touchend") {
             mouse[mouse.buttonNames[event.which]] = false; // set the button up
@@ -361,42 +370,28 @@ function createConnectDiv(index,question){
     connectorDiv.append(leftDiv,rightDiv);
     connectorDiv.setAttribute('class','connector-wrapper');
 
-    for (const odpoved in question.odpovede_lave) {
+    for (const odpoved of question.odpovede_lave) {
         let id=`question-${index}-left-${odpoved}`;
-        let card=createCard(id,question.odpovede_lave[odpoved]);
-
-        card.classList.add(`connect-left-${index}`);
+        let card=createCard(id,question.odpovede_lave[odpoved])
         leftDiv.appendChild(card);
-
+        newJsPlumbInstance.makeSource(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
     }
-    for (const odpoved in question.odpovede_prave) {
+    for (const odpoved of question.odpovede_prave) {
         let id=`question-${index}-right-${odpoved}`;
-        let card=createCard(id,question.odpovede_prave[odpoved]);
-        card.classList.add(`connect-right-${index}`);
-        rightDiv.appendChild(card);
-
+        let card=createCard(id,question.odpovede_prave[odpoved])
+        leftDiv.appendChild(card);
+        newJsPlumbInstance.makeTarget(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
     }
-    return connectorDiv;
+
 }
 
 function createConnectQuestion(index,question){
-    let questionDiv = createQuestionDiv(index,question.nazov,null);
-    questionDiv.appendChild(createConnectDiv(index,question));
-
-
-    //objekty uz musia byt vytvorene aby som k nim mohol priradit jsPlumb
-    let newJsPlumbInstance=jsPlumb.getInstance();
-    instances.push(newJsPlumbInstance);
-    const lefties=document.getElementsByClassName(`connect-left-${index}`);
-    const righties=document.getElementsByClassName(`connect-right-${index}`);
-
-    for(let i=0;i<lefties.length;i++){
-        newJsPlumbInstance.makeSource(lefties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-    }
-    for(let i=0;i<lefties.length;i++){
-        newJsPlumbInstance.makeTarget(righties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-    }
-
+    let questionDiv = createQuestionDiv(index,question.name,'connect');
+    let questionHeader=createQuestionName(index,question.name,'connect');
+    questionHeader.lastElementChild.remove();
+    questionHeader.lastElementChild.remove();
+    questionHeader.style.marginLeft='1.75rem';
+    questionDiv.appendChild(questionHeader);
 
 }
 
@@ -412,35 +407,5 @@ function createCard(id,card_phrase){
 
 
     return card
-}
-function checkConnectQuestion(){
-
-    for (let i = 0; i < instances.length; i++) {
-        let object={};
-        let pary=[];
-
-        for(let j=0;j<instances[i].getAllConnections().length;j++){
-            let dvojice={};
-            dvojice={lava:Number(instances[i].getAllConnections()[j].sourceId.substr(16,2)),prava:Number(instances[i].getAllConnections()[j].targetId.substr(17,2))};
-            pary.push(dvojice);
-            let q=Number(instances[i].getAllConnections()[0].sourceId.substr(9,1));
-
-            object={akcia:"odoslat-odpoved",otazka_id:q,typ_odpovede: "parovacia"};
-
-        }
-
-        object.odpoved=pary;
-        if(object.otazka_id){
-            fetch("../api/testy/vypracovanie-testu.php", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(object)
-            })
-        }
-
-    }
-
 }
 
