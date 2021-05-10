@@ -432,16 +432,25 @@ function checkConnectQuestion(){
 
         for(let j=0;j<instances[i].getAllConnections().length;j++){
             let dvojice={};
-            dvojice={lava:document.getElementById(instances[i].getAllConnections()[j].sourceId).firstElementChild.innerHTML,prava:document.getElementById(instances[i].getAllConnections()[j].targetId).firstElementChild.innerHTML};
+            dvojice={lava:Number(instances[i].getAllConnections()[j].sourceId.substr(16,2)),prava:Number(instances[i].getAllConnections()[j].targetId.substr(17,2))};
             pary.push(dvojice);
             let q=Number(instances[i].getAllConnections()[0].sourceId.substr(9,1));
 
-            object={index:q};
+            object={akcia:"odoslat-odpoved",otazka_id:q,typ_odpovede: "parovacia"};
 
         }
-        object.typ_odpovede= "parovacia";
-        object.pary=pary;
-        console.log(object);
+
+        object.odpoved=pary;
+        if(object.otazka_id){
+            fetch("../api/testy/vypracovanie-testu.php", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(object)
+            })
+        }
+
     }
 
 }
