@@ -32,8 +32,39 @@ Neúspech:
 }
 
 
--- Test je rozpísaný, no vznikla nejaká chyba s ukladaním odpovede.
+
+
+Ukladanie odpovede:
+
+Úspech:
+{
+	kod: "API_T__VT_U_3",
+	sprava: "Odpoveď bola úspešne uložená."
+}
+
+
+Neúspech:
 {
 	kod: "API_T__VT_C_3",
-	sprava: "Odpoveď sa nepodarilo uložiť."
+	sprava: "Test sa nepodarilo odovzdať, alebo toto je pokus o opakované odovzdanie."
+}
+
+
+
+
+
+
+Odovzdanie testu:
+
+Úspech:
+{
+	kod: "API_T__VT_U_4",
+	sprava: "Test bol úspešne odovzdaný."
+}
+
+
+Neúspech:
+{
+	kod: "API_T__VT_C_4",
+	sprava: "Test sa nepodarilo odovzdať."
 }

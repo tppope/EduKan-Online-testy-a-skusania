@@ -17,3 +17,8 @@ AKTIVUJ TEST
 
 DEAKTIVUJ TEST
 	url: api/testy/praca-s-testami.php?akcia=deaktivuj-test&kluc=[kľúč testu]
+
+
+
+NAČÍTAJ VÝSLEDKY TESTU
+	url: api/testy/praca-s-testami.php?akcia=nacitaj-vysledky&kluc=[kľúč testu]&student-id=[id študenta]&datum-zaciatku-pisania=[dátum]&cas-zaciatku-pisania=[čas]

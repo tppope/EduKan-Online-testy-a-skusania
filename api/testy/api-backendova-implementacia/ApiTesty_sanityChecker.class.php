@@ -48,12 +48,12 @@ class ApiTesty_sanityChecker {
 
 
 
-	public static function nacitaj_test_ucitel($data) {
-		return isset($_SESSION["userId"]) && isset( $data["kluc"] );
+	public static function nacitaj_test_ucitel() {
+		return isset($_SESSION["userId"]) && isset( $_SESSION["pisanyTestKluc"] );
 	}
 	
-	public static function nacitaj_test_student($data) {
-		return isset($_SESSION["studentId"]) && isset( $data["kluc"] );
+	public static function nacitaj_test_student() {
+		return isset($_SESSION["studentId"]) && isset( $_SESSION["pisanyTestKluc"] );
 	}
 
 
@@ -73,6 +73,13 @@ class ApiTesty_sanityChecker {
 		return
 			isset( $data["akcia"] ) && $data["akcia"] == "deaktivuj-test" &&
 			isset( $data["kluc"] );
+	}
+	
+	public static function praca_s_testami_ucitel__nacitaj_vysledky_testu($data) {
+		return
+			isset( $data["akcia"] ) && $data["akcia"] == "nacitaj-vysledky" &&
+			isset( $data["kluc"] ) && isset( $data["student-id"] ) &&
+			isset( $data["datum-zaciatku-pisania"] ) && isset( $data["cas-zaciatku-pisania"] );
 	}
 
 
@@ -205,6 +212,13 @@ class ApiTesty_sanityChecker {
 		}
 
 		return true;
+	}
+
+
+
+
+	public static function vypracovanie_testu__odovzdaj_test($data) {
+		return isset( $data["akcia"] ) && $data["akcia"] == "odovzdat-test";
 	}
 }
 ?>

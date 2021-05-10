@@ -37,6 +37,35 @@ Deaktivácia testu:
 }
 
 
+Načítanie odpovedí k testu:
+{
+	kod: "API_T__PT_U_4",
+	sprava: "Odpovede študenta boli úspešne načítané.",
+	odpovede: [
+		zoradený zoznam odpovedí, indexovaný podľa čísla odpovede. Otázky, na ktoré študent neodpovedal, v tomto zozname nie sú. Každá otázka má dáta v tomto tvare:
+
+		pre otázky typu 1, 4 a 5:
+		{
+			zadana_odpoved: [dáta odpovede],
+			vyhodnotenie: [int výsledok vyhodnotenia odpovede: 0 pre nesprávnu odpoveď a 1 pre správnu, alebo 2, ak odpoveď ešte nebola vyhodnotená]
+		}
+
+		pre otázky typu 2: každá otázka má viac možností, preto to je array odpovedí, a každá odpoveď je v tvare
+		{
+			zadana_odpoved: [dáta odpovede],
+			vyhodnotenie: [int výsledok vyhodnotenia odpovede: 0 pre nesprávnu odpoveď a 1 pre správnu, alebo 2, ak odpoveď ešte nebola vyhodnotená]
+		}
+
+		pre otázky typu 3: každá otázka má viac možností, preto to je array odpovedí, a každá odpoveď je v tvare
+		{
+			par_lava_strana: [int id možnosti z ľavej strany],
+			par_prava_strana: [int id možnosti z pravej strany],
+			vyhodnotenie: [int výsledok vyhodnotenia odpovede: 0 pre nesprávnu odpoveď a 1 pre správnu, alebo 2, ak odpoveď ešte nebola vyhodnotená]
+		}
+	]
+}
+
+
 
 
 
