@@ -24,7 +24,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script src="../resources/modules/node_modules/jsplumb/dist/js/jsplumb.min.js "></script>
+    <script src='https://unpkg.com/mathlive/dist/mathlive.min.js'></script>
     <script src="javascript/test-script.js"></script>
+
 
 </head>
 <body>
@@ -32,9 +35,42 @@
     <img id="edukan" draggable="false" src="../resources/pictures/educan/edukan.png" width="550" alt="tukan">
 </header>
 <section>
-    <div class="section-content">
+
+    <div id="time-counter">
+        00:00
+    </div>
+    <header id="section-header" class="section-content">
+        <h2 id="test-name" class="section-h2">
+            Názov testu
+        </h2>
+    </header>
+
+    <div id="test-questions" class="section-content">
 
     </div>
 
+    <div id="submit-test-button" class="section-content">
+        <button type="button" data-toggle="modal" data-target="#are-you-sure" class="btn btn-lg btn-block btn-outline-info">Odoslať</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="are-you-sure" tabindex="-1" role="dialog" aria-labelledby="are-you-sure-label" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="are-you-sure-label">Odovzdanie testu</h5>
+                </div>
+                <div class="modal-body">
+                    Naozaj si prajete odovzdať test?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Nie</button>
+                    <button type="button" class="btn btn-success">Áno</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
+
 </body>
