@@ -82,6 +82,12 @@ class Hlasky__API_T {
 			"kod" => "API_T__PT_U_3",
 			"sprava" => "Test bol úspešne deaktivovaný."
 		),
+
+		"API_T__PT_U_4" => array(
+			"kod" => "API_T__PT_U_4",
+			"sprava" => "Odpovede študenta boli úspešne načítané.",
+			"odpovede" => null // sem ide zoznam odpovedi z db
+		),
 		// END --- PT = praca s testami z pohladu ucitela, U = uspesna operacia
 
 
@@ -113,6 +119,11 @@ class Hlasky__API_T {
 			"kod" => "API_T__VT_U_3",
 			"sprava" => "Odpoveď bola úspešne uložená."
 		),
+
+		"API_T__VT_U_4" => array(
+			"kod" => "API_T__VT_U_4",
+			"sprava" => "Test bol úspešne odovzdaný."
+		),
 		// END --- VT = vypracovavanie testu studentom, U = uspesna operacia
 
 
@@ -131,6 +142,11 @@ class Hlasky__API_T {
 		"API_T__VT_C_3" => array(
 			"kod" => "API_T__VT_C_3",
 			"sprava" => "Odpoveď sa nepodarilo uložiť."
+		),
+
+		"API_T__VT_C_4" => array(
+			"kod" => "API_T__VT_C_4",
+			"sprava" => "Test sa nepodarilo odovzdať, alebo toto je pokus o opakované odovzdanie."
 		)
 		// END --- VT = vypracovavanie testu studentom, C = chyba, neuspesna operacia
 	);

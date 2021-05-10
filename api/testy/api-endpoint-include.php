@@ -18,7 +18,4 @@ include "api-backendova-implementacia/ApiTesty_sqlContainer.class.php";
 
 
 header('Content-Type: application/json; charset=utf-8');
-
-
-$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prijate_data($surove_prijate_data);
 ?>
