@@ -76,8 +76,8 @@ function printTest(otazky){
     $.each(otazky,function (index){
         let otazka = this;
         switch (otazka.typ){
-            case 1:true;break;
-            case 2:true;break;
+            case 1:createShortQuestion(index, otazka.nazov);break;
+            case 2:createLongQuestion(index,otazka);break;
             case 3:createConnectQuestion(index,otazka);break;
             case 4:createCanvasQuestion(index,otazka.nazov);break;
             case 5:createMathQuestion(index,otazka.nazov);break;
@@ -409,3 +409,120 @@ function createCard(id,card_phrase){
     return card
 }
 
+
+function createShortQuestion(order,name){
+
+    let questionDiv = createQuestionDiv(order,name,null);
+    $(questionDiv).append(createShortInput(order));
+
+}
+
+function createShortInput(order){
+    let inputAreaDiv = document.createElement("div");
+    let inputArea = document.createElement("input");
+
+    $(inputAreaDiv).addClass("input-area-short");
+    $(inputAreaDiv).append(inputArea);
+    $(inputArea).attr({
+        "type":"text",
+        "class": "form-control",
+
+    });
+
+    $(inputArea).on("change", function(){
+        sendShortInput(order, this.value);
+    });
+    return inputAreaDiv;
+
+}
+
+function sendShortInput(order, value){
+        let postArray = {
+            "akcia": "odoslat-odpoved",
+            "otazka": order,
+            "typ_odpovede": "textova",
+            "odpoved": value
+
+        }
+        let request = new Request('../api/testy/vypracovanie-testu.php', {
+            method: 'POST',
+            body: JSON.stringify(postArray),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                if (data.kod === "API_T__VT_U_3"){
+                    console.log("API_T__VT_U_3  "  + data);
+                }
+
+            });
+}
+
+function createLongQuestion(order,otazka){
+    let name = otazka.nazov ;
+    if(otazka.vie_student_pocet_spravnych)
+        name += " (počet správnych odpovedí: " + otazka.pocet_spravnych+" )";
+
+    let questionDiv = createQuestionDiv(order,name,null);
+    $(questionDiv).append(createLongInput(order,otazka.odpovede));
+
+}
+
+function createLongInput(order, answers){
+    let allCheckboxDiv = document.createElement("div");
+    $(allCheckboxDiv).addClass("checkbox-array-div");
+    for (let answer of answers) {
+        let checkboxDiv = document.createElement("div");
+        $(checkboxDiv).addClass("checkbox-div");
+        let inputCheckbox = document.createElement("input");
+        $(inputCheckbox).attr({
+            "value":answer.text,
+            "name":"checkboxName-" + order,
+            "type":"checkbox",
+            "class": "form-check-input checkbox-input",
+            "id":"check-"+order+"-"+answer.text
+
+        });
+        $(inputCheckbox).on("change", function(){
+            sendLongInput(order);
+        });
+        let labelCheckbox = document.createElement("label");
+        $(labelCheckbox).attr({
+            "for":"check-"+order+"-"+answer.text,
+            "class": "form-check-label checkbox-label",
+
+        });
+        $(labelCheckbox).text(answer.text);
+        $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
+    }
+
+
+    return allCheckboxDiv;
+
+}
+
+function sendLongInput(order){
+    let checkboxValues = [];
+    $('input[name=checkboxName-'+ order+']:checked').map(function() {
+        checkboxValues.push($(this).val());
+    });
+    let postArray = {
+        "akcia": "odoslat-odpoved",
+        "otazka": order,
+        "typ_odpovede": "vyberova",
+        "odpoved": checkboxValues
+
+    }
+    let request = new Request('../api/testy/vypracovanie-testu.php', {
+        method: 'POST',
+        body: JSON.stringify(postArray),
+    });
+    fetch(request)
+        .then(response => response.json())
+        .then(data => {
+            if (data.kod === "API_T__VT_U_3"){
+            //    <<<<?????<<<<
+            }
+            console.log("API_T__VT_U_3  "  + data);
+        });
+}

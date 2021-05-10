@@ -275,3 +275,14 @@ math-field {
     padding: 2rem;
     width: 90%;
 }
+
+.input-area-short{
+    width: 96%;
+}
+
+.checkbox-div{
+    padding: 5px;
+}
+.checkbox-array-div{
+    width: 80%;
+}
