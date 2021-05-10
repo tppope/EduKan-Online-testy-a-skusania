@@ -1,0 +1,97 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#main-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 240px;
+}
+
+#main-h1 {
+    font-family: "Roboto", sans-serif;
+    font-size: 45px;
+    font-weight: bold;
+    font-style: normal;
+    color: black;
+    text-align: center;
+}
+
+section{
+    position: relative;
+}
+.section-content {
+    width: 90%;
+    margin: auto;
+}
+
+.section-h2 {
+    font-family: "Roboto", sans-serif;
+    font-size: 35px;
+    font-weight: bold;
+    font-style: normal;
+    margin: 30px 0 30px 0;
+}
+
+#section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+th{
+    white-space: nowrap;
+    text-align: center;
+}
+
+#task-tbody td{
+    text-align: center;
+}
+#left-arrow{
+    height: 80%;
+}
+
+#back-button:hover {
+    left: 0;
+}
+
+@media (max-width: 576px) {
+    #edukan {
+        width: 300px;
+    }
+
+    #main-header {
+        height: 150px;
+    }
+}
+
+#back-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transition: left 300ms;
+    position: absolute;
+    top: 20px;
+    left: -40px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    font-size: 15px;
+    height: 50px;
+    width: 100px;
+    cursor: pointer;
+}
