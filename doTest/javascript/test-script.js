@@ -1,3 +1,5 @@
+let instances=[];
+
 $(window).on("load", function () {
     createMathQuestion(1, "napiste vzorec na koleso");
     createMathQuestion(2, "napiste vzorec na hovno");
@@ -19,6 +21,10 @@ $(window).on("load", function () {
         },
     }
     createConnectQuestion(5, array)
+    createMathQuestion(6, "napiste vzorec na hovno");
+    createCanvasQuestion(7,"Nakreslite leva");
+    createCanvasQuestion(8,"Nakreslite sliepku");
+    createConnectQuestion(9, array)
     //startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
@@ -358,7 +364,7 @@ function createConnectDiv(index,question){
     let connectorDiv=document.createElement("div");
     let leftDiv=document.createElement("div");
     let rightDiv=document.createElement("div");
-    let newJsPlumbInstance=jsPlumb.getInstance();
+
 
     leftDiv.setAttribute('class','connect-card-wrapper-left');
     rightDiv.setAttribute('class','connect-card-wrapper-right');
@@ -366,28 +372,42 @@ function createConnectDiv(index,question){
     connectorDiv.append(leftDiv,rightDiv);
     connectorDiv.setAttribute('class','connector-wrapper');
 
-    for (const odpoved of question.odpovede_lave) {
+    for (const odpoved in question.odpovede_lave) {
         let id=`question-${index}-left-${odpoved}`;
-        let card=createCard(id,question.odpovede_lave[odpoved])
-        leftDiv.appendChild(card);
-        newJsPlumbInstance.makeSource(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-    }
-    for (const odpoved of question.odpovede_prave) {
-        let id=`question-${index}-right-${odpoved}`;
-        let card=createCard(id,question.odpovede_prave[odpoved])
-        leftDiv.appendChild(card);
-        newJsPlumbInstance.makeTarget(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-    }
+        let card=createCard(id,question.odpovede_lave[odpoved]);
 
+        card.classList.add(`connect-left-${index}`);
+        leftDiv.appendChild(card);
+
+    }
+    for (const odpoved in question.odpovede_prave) {
+        let id=`question-${index}-right-${odpoved}`;
+        let card=createCard(id,question.odpovede_prave[odpoved]);
+        card.classList.add(`connect-right-${index}`);
+        rightDiv.appendChild(card);
+
+    }
+    return connectorDiv;
 }
 
 function createConnectQuestion(index,question){
-    let questionDiv = createQuestionDiv(index,question.name,'connect');
-    let questionHeader=createQuestionName(index,question.name,'connect');
-    questionHeader.lastElementChild.remove();
-    questionHeader.lastElementChild.remove();
-    questionHeader.style.marginLeft='1.75rem';
-    questionDiv.appendChild(questionHeader);
+    let questionDiv = createQuestionDiv(index,question.nazov,null);
+    questionDiv.appendChild(createConnectDiv(index,question));
+
+
+    //objekty uz musia byt vytvorene aby som k nim mohol priradit jsPlumb
+    let newJsPlumbInstance=jsPlumb.getInstance();
+    instances.push(newJsPlumbInstance);
+    const lefties=document.getElementsByClassName(`connect-left-${index}`);
+    const righties=document.getElementsByClassName(`connect-right-${index}`);
+
+    for(let i=0;i<lefties.length;i++){
+        newJsPlumbInstance.makeSource(lefties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+    }
+    for(let i=0;i<lefties.length;i++){
+        newJsPlumbInstance.makeTarget(righties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+    }
+
 
 }
 
@@ -403,5 +423,26 @@ function createCard(id,card_phrase){
 
 
     return card
+}
+function checkConnectQuestion(){
+
+    for (let i = 0; i < instances.length; i++) {
+        let object={};
+        let pary=[];
+
+        for(let j=0;j<instances[i].getAllConnections().length;j++){
+            let dvojice={};
+            dvojice={lava:document.getElementById(instances[i].getAllConnections()[j].sourceId).firstElementChild.innerHTML,prava:document.getElementById(instances[i].getAllConnections()[j].targetId).firstElementChild.innerHTML};
+            pary.push(dvojice);
+            let q=Number(instances[i].getAllConnections()[0].sourceId.substr(9,1));
+
+            object={index:q};
+
+        }
+        object.typ_odpovede= "parovacia";
+        object.pary=pary;
+        console.log(object);
+    }
+
 }
 
