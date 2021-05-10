@@ -1,9 +1,62 @@
 $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
-    getLoggedInUser();
+    getLoggedInUser()
     //loadStudents();
 
-})
+    loadSSE();
+
+});
+
+let source = null;
+function loadSSE(){
+    if(typeof(EventSource) !== "undefined") {
+
+        source = new EventSource("api/uzivatelia/check-test-leaving-sse.php");
+
+        source.addEventListener("message", function(e) {
+            notifyLeftTest(JSON.parse(e.data));
+        },false);
+
+    } else {
+        $("#x").text("Sorry, your browser does not support server-sent events...");
+    }
+}
+
+
+function notifyLeftTest(students){
+    let notificationTab = $("#notifications");
+    if (notificationTab.css("right") !== '0px')
+        $("#notification-button").addClass("blink");
+
+    $("#notifications-text").append(leftInfo(students));
+
+}
+
+function leftInfo(students){
+    let div = document.createElement("div");
+    let span = document.createElement("span");
+    $(span).text(new Date().format('H:i:s d.m.Y'));
+    let ul = document.createElement("ul");
+    div.append(span,ul);
+    $.each(students,function (){
+        let li = document.createElement("li");
+        $(li).text(this.id+" - "+this.name+" "+this.surname);
+        ul.append(li);
+    });
+    return div;
+}
+
+function showNotifications(){
+    let notificationTab = $("#notifications");
+    console.log(notificationTab.css("right"));
+    if (notificationTab.css("right") === '0px') {
+        notificationTab.css("right", "-360px");
+
+    }else {
+        notificationTab.css("right", "0px");
+        $("#notification-button").removeClass("blink");
+    }
+}
 
 function getLoggedInUser() {
     $.getJSON("api/uzivatelia/prihlasenie/", function (data) {
@@ -15,6 +68,9 @@ function getLoggedInUser() {
                 sessionStorage.setItem("logoutStatus", "failed");
                 window.location.href = 'index.html';
             }
+        }
+        else {
+            console.log(data);
         }
     })
 }
