@@ -6,11 +6,10 @@ $surove_prijate_data = $_GET;
 include "api-endpoint-include.php";
 include "api-frontend/ApiTesty_API_frontend_ucitel.class.php";
 
-$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prijate_data($surove_prijate_data);
+$generic_sanity_check =
+	ApiTesty_sanityChecker::generic_check__prijate_data($surove_prijate_data) &&
+	$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prihlaseny_ucitel();	// na tejto API musi byt prihlaseny vylucne ucitel
 
-if ($generic_sanity_check) { // na tejto API musi byt prihlaseny vylucne ucitel
-	$generic_sanity_check = ApiTesty_sanityChecker::generic_check__prihlaseny_ucitel();
-}
 
 if ($generic_sanity_check) {
 	// sanity checker v tychto vetvach rovno kontroluje, ktora poziadavka sa ma vykonat, preto je to rozvetvene cez if elseif

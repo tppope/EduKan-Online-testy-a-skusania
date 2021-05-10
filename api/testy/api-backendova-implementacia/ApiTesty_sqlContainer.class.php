@@ -317,7 +317,7 @@ class ApiTesty_sqlContainer {
 
 	public static function zacni_pisat_test(&$mysqli, $kluc, $student_id) {
 		// over, ci student tento test uz nepise
-		$sql = "SELECT zostavajuci_cas FROM zoznam_pisucich_studentov WHERE kluc_testu = ? AND student_id = ?";
+		$sql = "SELECT zostavajuci_cas, datum_zaciatku_pisania, cas_zaciatku_pisania FROM zoznam_pisucich_studentov WHERE kluc_testu = ? AND student_id = ?";
 		$stmt = $mysqli->prepare($sql);
 		if (!$stmt) return false;
 
@@ -332,7 +332,9 @@ class ApiTesty_sqlContainer {
 			// student tento test uz pise, vrat zostavajuci pocet minut a info o tom, ze tento test uz je rozpisany
 			return array(
 				"udalost" => "rozpisany-test",
-				"zostavajuci_cas" => $row["zostavajuci_cas"]
+				"zostavajuci_cas" => $row["zostavajuci_cas"],
+				"datum_zaciatku_pisania" => $row["datum_zaciatku_pisania"],
+				"cas_zaciatku_pisania" => $row["cas_zaciatku_pisania"]
 			);
 		}
 
@@ -369,7 +371,12 @@ class ApiTesty_sqlContainer {
 		if (!$exec2) return false;
 
 		if ($mysqli->affected_rows > 0) {
-			return $zostavajuci_cas;
+			return array(
+				"udalost" => "student-zacal-pisat-teraz",
+				"zostavajuci_cas" => $zostavajuci_cas,
+				"datum_zaciatku_pisania" => $datum,
+				"cas_zaciatku_pisania" => $cas
+			);
 		}
 	}
 
@@ -474,6 +481,28 @@ class ApiTesty_sqlContainer {
 		if ($result == null) return array();
 		
 		return $result->fetch_all(MYSQLI_ASSOC);
+	}
+
+
+
+	public static function ukonci_pisanie_testu(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$cas_akt = time();
+		$datum = date("Y-m-d", $cas_akt);
+		$cas = date("H:i:s", $cas_akt);
+
+		$sql = "UPDATE zoznam_pisucich_studentov
+			SET datum_konca_pisania = ?, cas_konca_pisania = ?
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?
+			AND datum_konca_pisania = NULL AND cas_konca_pisania = NULL";
+
+		$stmt = $mysqli->prepare($sql);
+		if (!$stmt) return false;
+
+		$stmt->bind_param("sssiss", $datum, $cas, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+		$exec = $stmt->execute();
+		if (!$exec) return false;
+
+		return $mysqli->affected_rows;
 	}
 }
 ?>

@@ -206,5 +206,12 @@ class ApiTesty_sanityChecker {
 
 		return true;
 	}
+
+
+
+
+	public static function vypracovanie_testu__odovzdaj_test($data) {
+		return isset( $data["akcia"] ) && $data["akcia"] == "odovzdat-test";
+	}
 }
 ?>

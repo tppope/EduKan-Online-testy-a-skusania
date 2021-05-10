@@ -30,22 +30,39 @@ class ApiTesty_API_frontend_student {
 
 	// Zapise, ze tento student zacal pisat test.
 	public static function zacni_pisat(&$mysqli, $kluc, $student_id) {
-		$zostavajuci_cas = ApiTesty_sqlContainer::zacni_pisat_test($mysqli, $kluc, $student_id);
+		$vysledok_pokusu = ApiTesty_sqlContainer::zacni_pisat_test($mysqli, $kluc, $student_id);
+
+		if (!$vysledok_pokusu) {
+			return Hlasky__API_T::get_hlaska("API_T__VT_C_1");
+		}
+
 
 		// student uz ma tento test rozpisany, vrat mu zostavajuci cas a zoznam doteraz odoslanych odpovedi
-		if (isset($zostavajuci_cas["udalost"]) && $zostavajuci_cas["udalost"] == "rozpisany-test") {
+		if ($vysledok_pokusu["udalost"] == "rozpisany-test") {
 			$vystup = Hlasky__API_T::get_hlaska("API_T__VT_U_2");
-			$vystup["zostavajuci_cas"] = $zostavajuci_cas["zostavajuci_cas"];
 			$vystup["odoslane_odpovede"] = array(); // TODO: dokoncit
-			return $vystup;
 		}
 
-		// inak to nie je array
-		if ($zostavajuci_cas > 0) {
+		else if ($vysledok_pokusu["udalost"] == "student-zacal-pisat-teraz") {
 			$vystup = Hlasky__API_T::get_hlaska("API_T__VT_U_1");
-			$vystup["zostavajuci_cas"] = $zostavajuci_cas;
-			return $vystup;
 		}
-		return Hlasky__API_T::get_hlaska("API_T__VT_C_1");
+
+		$vystup["zostavajuci_cas"] = $vysledok_pokusu["zostavajuci_cas"];
+
+		$_SESSION["pisanyTestKluc"] = $kluc;
+		$_SESSION["testDatumZaciatkuPisania"] = $vysledok_pokusu["datum_zaciatku_pisania"];
+		$_SESSION["testCasZaciatkuPisania"] = $vysledok_pokusu["cas_zaciatku_pisania"];
+
+		return $vystup;
+	}
+
+
+
+	// Zapise, ze tento student zacal pisat test.
+	public static function odovzdaj_test(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$uspech_pokusu = ApiTesty_sqlContainer::ukonci_pisanie_testu($mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+
+		if ($uspech_pokusu) return Hlasky__API_T::get_hlaska("API_T__VT_U_4");
+		return Hlasky__API_T::get_hlaska("API_T__VT_C_4");
 	}
 }
