@@ -60,7 +60,7 @@ function printTest(otazky){
         switch (otazka.typ){
             case 1:true;break;
             case 2:true;break;
-            case 3:true;break;
+            case 3:createConnectQuestion(index,otazka);break;
             case 4:createMathQuestion(index,otazka.nazov);break;
             case 5:createCanvasQuestion(index,otazka.nazov);break;
         }
@@ -338,7 +338,54 @@ function showName(input){
     document.getElementById(input.id+"-label").textContent = input.files[0].name;
 }
 
+function createConnectDiv(index,question){
+    let connectorDiv=document.createElement("div");
+    let leftDiv=document.createElement("div");
+    let rightDiv=document.createElement("div");
+    let newJsPlumbInstance=jsPlumb.getInstance();
+
+    leftDiv.setAttribute('class','connect-card-wrapper-left');
+    rightDiv.setAttribute('class','connect-card-wrapper-right');
+
+    connectorDiv.append(leftDiv,rightDiv);
+    connectorDiv.setAttribute('class','connector-wrapper');
+
+    for (const odpoved of question.odpovede_lave) {
+        let id=`question-${index}-left-${odpoved}`;
+        let card=createCard(id,question.odpovede_lave[odpoved])
+        leftDiv.appendChild(card);
+        newJsPlumbInstance.makeSource(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+    }
+    for (const odpoved of question.odpovede_prave) {
+        let id=`question-${index}-right-${odpoved}`;
+        let card=createCard(id,question.odpovede_prave[odpoved])
+        leftDiv.appendChild(card);
+        newJsPlumbInstance.makeTarget(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+    }
+
+}
+
+function createConnectQuestion(index,question){
+    let questionDiv = createQuestionDiv(index,question.name,'connect');
+    let questionHeader=createQuestionName(index,question.name,'connect');
+    questionHeader.lastElementChild.remove();
+    questionHeader.lastElementChild.remove();
+    questionHeader.style.marginLeft='1.75rem';
+    questionDiv.appendChild(questionHeader);
+
+}
+
+function createCard(id,card_phrase){
+    let card=document.createElement("div");
+    card.setAttribute('class','connect-card');
+    let phrase=document.createElement("h4");
+
+    card.setAttribute('id',id);
+    phrase.innerText=card_phrase;
+
+    card.appendChild(phrase);
 
 
-
+    return card
+}
 

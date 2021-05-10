@@ -258,3 +258,13 @@ math-field {
         height: 150px;
     }
 }
+
+.connect-card{
+    border-radius:15px;
+    border:1px solid black;
+}
+.connector-wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
