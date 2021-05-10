@@ -28,11 +28,11 @@ document.addEventListener("visibilitychange", onVisibilityChange);
 
 
 function onVisibilityChange(){
-    if (document.hidden){
-        // $.getJSON("../api/testy/send-leave-tab-alert.php",function (data){
-        //
-        // })
-    }
+    // if (document.hidden){
+    //     $.getJSON("../api/testy/send-leave-tab-alert.php",function (data){
+    //         console.log(data);
+    //     })
+    // }
 }
 
 function startTest(){
@@ -154,6 +154,7 @@ function canvasSettings(myCan, ctx){
     myCan.height = window.innerHeight;
 
     ctx.lineWidth = 10;
+    ctx.strokeStyle = 'black';
 
     const mouse = {
         x: 0, y: 0,                        // coordinates
@@ -165,15 +166,21 @@ function canvasSettings(myCan, ctx){
     function mouseEvent(event) {
 
         let bounds = myCan.getBoundingClientRect();
-        mouse.x = event.pageX - bounds.left - scrollX;
-        mouse.y = event.pageY - bounds.top - scrollY;
+        let interact = event;
+        if (event.type === "touchmove")
+            interact = event.touches[0];
 
 
-        mouse.x /= bounds.width;
-        mouse.y /= bounds.height;
+            mouse.x = interact.pageX - bounds.left - scrollX;
+            mouse.y = interact.pageY - bounds.top - scrollY;
 
-        mouse.x *= myCan.width;
-        mouse.y *= myCan.height;
+
+            mouse.x /= bounds.width;
+            mouse.y /= bounds.height;
+
+            mouse.x *= myCan.width;
+            mouse.y *= myCan.height;
+
 
         if (event.type === "mousedown") {
             mouse[mouse.buttonNames[event.which - 1]] = true;  // set the button as down
@@ -181,8 +188,13 @@ function canvasSettings(myCan, ctx){
             mouse[mouse.buttonNames[event.which - 1]] = false; // set the button up
             ctx.beginPath();
         }else if (event.type === "touchstart") {
-            event.preventDefault();
-            mouse[mouse.buttonNames[event.whzich]] = true;
+            mouse.lastX = mouse.x;
+            mouse.lastY = mouse.y;
+            ctx.beginPath();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+            mouse[mouse.buttonNames[event.which]] = true;
         }
         else if (event.type === "touchend") {
             mouse[mouse.buttonNames[event.which]] = false; // set the button up

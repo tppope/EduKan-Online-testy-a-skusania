@@ -34,7 +34,6 @@ class LoginController extends DatabaseController
     private function sessionLogin($response, $id)
     {
         if ($response["passwordVerify"]) {
-            session_start();
             $_SESSION["userId"] = $id;
         }
     }
@@ -55,7 +54,6 @@ class LoginController extends DatabaseController
 
     public function getLoggedInUser(): array
     {
-        session_start();
         if (isset($_SESSION["userId"])) {
             $statement = $this->mysqlDatabase->prepareStatement("SELECT ucitel.id, ucitel.meno, ucitel.priezvisko, ucitel.email AS password
                                                                     FROM ucitel
@@ -101,7 +99,6 @@ class LoginController extends DatabaseController
     public function performStudentLogin($testKey, $studentOwnId, $name, $surname): array
     {
         if ($this->checkTest($testKey)) {
-            session_start();
             $studentId = $this->getStudentId($studentOwnId, $name, $surname);
             if ($studentId == false)
                 $studentId = $this->insertStudent($studentOwnId, $name, $surname);
@@ -183,13 +180,38 @@ class LoginController extends DatabaseController
     }
 
     public function sendLeaveTabAlert(){
+        try{
 
+            if (!isset($_SESSION["pisanyTestKluc"]) || !isset($_SESSION["studentId"]))
+                throw new Exception("Nenastavené session");
+
+            $key = $_SESSION["pisanyTestKluc"];
+            $studentId = $_SESSION["studentId"];
+
+            $statement = $this->mysqlDatabase->prepareStatement("UPDATE zoznam_pisucich_studentov
+                                                                    SET zoznam_pisucich_studentov.pocet_tab_odideni = 1
+                                                                    WHERE kluc_testu = :key AND student_id = :studentId");
+
+            $statement->bindValue(':key', $key, PDO::PARAM_STR);
+            $statement->bindValue(':studentId', $studentId, PDO::PARAM_INT);
+            $statement->execute();
+            return array(
+                "status"=>"succes",
+                "error"=>false,
+            );
+        }catch(PDOException $e) {
+            return array(
+                "status"=>"failed",
+                "error"=>true,
+                "errorMessage"=>$e->getMessage()
+            );
+        }
     }
 
     public function getLeftStudents(): array
     {
         if (!isset($_SESSION["pisanyTestKluc"]))
-            return array("aaa"=>"aa");
+            return array();
 
         $key = $_SESSION["pisanyTestKluc"];
         $statement = $this->mysqlDatabase->prepareStatement("SELECT zoznam_pisucich_studentov.student_id
@@ -237,6 +259,7 @@ class LoginController extends DatabaseController
             throw $e;
         }
     }
+
 
 
 

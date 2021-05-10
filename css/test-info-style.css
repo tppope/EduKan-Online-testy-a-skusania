@@ -45,8 +45,8 @@ section{
 }
 
 #notifications-text{
-   width: 350px;
     overflow: scroll;
+    width: 350px;
 }
 
 #notifications-text span{
@@ -75,7 +75,6 @@ section{
     writing-mode: vertical-rl;
     height: 100%;
     width: 40px;
-    text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -231,6 +230,14 @@ section{
     .section-content{
         width: 90%;
     }
+    #login-div{
+        margin-bottom: 50px;
+    }
+    #logout-button{
+        margin-right: 15px;
+    }
+
+
 }
 @media (max-width: 576px) {
     #edukan {
@@ -239,6 +246,26 @@ section{
 
     #main-header {
         height: 150px;
+    }
+    #notification-button{
+        font-size: 15px;
+        margin-right: 10px;
+        width: 30px;
+    }
+    #notification-text{
+        width: 205px;
+    }
+
+    #notifications-text span {
+        font-size: 15px;
+    }
+
+    #notifications-text ul {
+        font-size: 14px;
+    }
+    #notifications{
+        width: 300px;
+        right: -270px;
     }
 }
 

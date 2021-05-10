@@ -35,7 +35,7 @@ function notifyLeftTest(students){
 function leftInfo(students){
     let div = document.createElement("div");
     let span = document.createElement("span");
-    $(span).text(new Date().format('H:i:s d.m.Y'));
+    $(span).text(new Date().format('H:i:s d.m.Y') + " opustil test:");
     let ul = document.createElement("ul");
     div.append(span,ul);
     $.each(students,function (){
@@ -48,9 +48,8 @@ function leftInfo(students){
 
 function showNotifications(){
     let notificationTab = $("#notifications");
-    console.log(notificationTab.css("right"));
     if (notificationTab.css("right") === '0px') {
-        notificationTab.css("right", "-360px");
+        notificationTab.css("right", (window.innerWidth <= 768 )? "-270px":"-360px");
 
     }else {
         notificationTab.css("right", "0px");
