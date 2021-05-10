@@ -84,11 +84,14 @@ CREATE TABLE odpovede_studentov_typ_1_4_5 (
 	kluc_testu varchar(40) NOT NULL,
 	otazka_id tinyint NOT NULL,
 	student_id int NOT NULL,
+	datum_zaciatku_pisania date NOT NULL,
+	cas_zaciatku_pisania time NOT NULL,
 	zadana_odpoved text DEFAULT NULL COMMENT 'ak hrac potvrdi, ze otazka nema spravnu odpoved, sem sa ulozi null',
 	vyhodnotenie tinyint(1) NOT NULL DEFAULT 2 COMMENT '0 znamena, ze odpoved bola vyhodnotena ako nespravna, 1, ze ako spravna, a 2 ze este nebola vyhodnotena',
 
-	PRIMARY KEY (kluc_testu, otazka_id, student_id),
-	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+	PRIMARY KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania),
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) REFERENCES zoznam_pisucich_studentov(student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE odpovede_studentov_typ_2 (
@@ -96,11 +99,14 @@ CREATE TABLE odpovede_studentov_typ_2 (
 	kluc_testu varchar(40) NOT NULL,
 	otazka_id tinyint NOT NULL,
 	student_id int NOT NULL,
+	datum_zaciatku_pisania date NOT NULL,
+	cas_zaciatku_pisania time NOT NULL,
 	zadana_odpoved text DEFAULT NULL COMMENT 'ak hrac potvrdi, ze otazka nema spravnu odpoved, sem sa ulozi null',
 	vyhodnotenie tinyint(1) NOT NULL DEFAULT 2 COMMENT '0 znamena, ze odpoved bola vyhodnotena ako nespravna, 1, ze ako spravna, a 2 ze este nebola vyhodnotena',
 
 	PRIMARY KEY (unique_id),
-	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) REFERENCES zoznam_pisucich_studentov(student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE odpovede_studentov_typ_3 (
@@ -108,12 +114,15 @@ CREATE TABLE odpovede_studentov_typ_3 (
 	kluc_testu varchar(40) NOT NULL,
 	otazka_id tinyint NOT NULL,
 	student_id int NOT NULL,
+	datum_zaciatku_pisania date NOT NULL,
+	cas_zaciatku_pisania time NOT NULL,
 	par_lava_strana tinyint DEFAULT NULL COMMENT 'ak hrac potvrdi, ze otazka nema spravnu odpoved, sem sa ulozi null',
 	par_prava_strana tinyint DEFAULT NULL COMMENT 'a sem tiez',
 	vyhodnotenie tinyint(1) NOT NULL DEFAULT 2 COMMENT '0 znamena, ze odpoved bola vyhodnotena ako nespravna, 1, ze ako spravna, a 2 ze este nebola vyhodnotena',
 
 	PRIMARY KEY (unique_id),
-	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) REFERENCES zoznam_pisucich_studentov(student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

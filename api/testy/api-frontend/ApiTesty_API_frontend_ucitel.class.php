@@ -35,12 +35,9 @@ class ApiTesty_API_frontend_ucitel {
 			"nazov" => $test_bez_otazok["nazov"],
 			"casovy_limit" => $test_bez_otazok["casovy_limit"],
 			"aktivny" => $test_bez_otazok["aktivny"],
-			"otazky" => $otazky_v_teste
+			"otazky" => $otazky_v_teste,
+			"zoznam_pisucich_studentov" => ApiTesty_sqlContainer::get_zoznam_studentov_na_teste($mysqli, $test_bez_otazok["kluc_testu"])
 		);
-
-		if ($test_bez_otazok["aktivny"]) {
-			$vystup["data_testu"]["zoznam_pisucich_studentov"] = ApiTesty_sqlContainer::get_zoznam_studentov_na_teste($mysqli, $test_bez_otazok["kluc_testu"]);
-		}
 		
 		return $vystup;
 	}
@@ -71,6 +68,20 @@ class ApiTesty_API_frontend_ucitel {
 		}
 
 		return Hlasky__API_T::get_hlaska("API_T__NT_C_1");
+	}
+
+
+
+	// Nacita odpovede k testu.
+	public static function nacitaj_odpovede(&$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania) {
+		$pokus = ApiTesty_sqlContainer::get_result_zoznam_odpovedi($mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+
+		if (!$pokus) return Hlasky__API_T::get_hlaska("API_T__PT_GC");
+		else {
+			$hlaska = Hlasky__API_T::get_hlaska("API_T__PT_U_4");
+			$hlaska["odpovede"] = $pokus;
+			return $hlaska;
+		}
 	}
 }
 ?>
