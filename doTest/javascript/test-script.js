@@ -17,7 +17,6 @@ function onVisibilityChange(){
 }
 
 function startTest(){
-
     let zacniTest = {
         "akcia":"zacat-pisat",
         "kluc": sessionStorage.getItem("key")
@@ -29,6 +28,7 @@ function startTest(){
     fetch(request)
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             if (data.kod === "API_T__VT_U_1"){
                 loadTest();
             }
@@ -39,6 +39,8 @@ function startTest(){
                 sessionStorage.setItem("doTest","failed");
                 window.location.replace("../index.html");
             }
+            else
+                console.log(data);
         });
 }
 
