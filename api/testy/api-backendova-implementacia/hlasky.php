@@ -86,7 +86,12 @@ class Hlasky__API_T {
 		"API_T__PT_U_4" => array(
 			"kod" => "API_T__PT_U_4",
 			"sprava" => "Odpovede študenta boli úspešne načítané.",
-			"odpovede" => null // sem ide zoznam odpovedi z db
+			"odpovede" => null, // sem ide zoznam odpovedi z db
+			"vyhodnotenieCeleho" => null, // sem ide zoznam otazok a ich bodove ohodnotenie
+			"suhrnnyPocetBodov" => array( // aj toto sa nacita z db
+				"ziskaneBody" => 0,
+				"celkoveBody" => 0
+			)
 		),
 		// END --- PT = praca s testami z pohladu ucitela, U = uspesna operacia
 
