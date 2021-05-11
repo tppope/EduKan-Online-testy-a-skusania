@@ -1,25 +1,6 @@
+let instances=[];
 $(window).on("load", function () {
-    createMathQuestion(1, "napiste vzorec na koleso");
-    createMathQuestion(2, "napiste vzorec na hovno");
-    createCanvasQuestion(3,"Nakreslite leva");
-    createCanvasQuestion(4,"Nakreslite sliepku");
-    let array = {
-        "nazov": "Spojte spravne otazky",
-        "odpovede_lave":{
-            1: "červený",
-            2: "ostrý",
-            3: "zelená",
-            4: "šľachetné"
-        },
-        "odpovede_prave": {
-            1: "tráva",
-            2: "srdce",
-            3: "mak",
-            4: "nôž"
-        },
-    }
-    createConnectQuestion(5, array)
-    //startTest();
+    startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
 
@@ -362,7 +343,7 @@ function createConnectDiv(index,question){
     let connectorDiv=document.createElement("div");
     let leftDiv=document.createElement("div");
     let rightDiv=document.createElement("div");
-    let newJsPlumbInstance=jsPlumb.getInstance();
+
 
     leftDiv.setAttribute('class','connect-card-wrapper-left');
     rightDiv.setAttribute('class','connect-card-wrapper-right');
@@ -370,28 +351,42 @@ function createConnectDiv(index,question){
     connectorDiv.append(leftDiv,rightDiv);
     connectorDiv.setAttribute('class','connector-wrapper');
 
-    for (const odpoved of question.odpovede_lave) {
+    for (const odpoved in question.odpovede_lave) {
         let id=`question-${index}-left-${odpoved}`;
-        let card=createCard(id,question.odpovede_lave[odpoved])
-        leftDiv.appendChild(card);
-        newJsPlumbInstance.makeSource(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-    }
-    for (const odpoved of question.odpovede_prave) {
-        let id=`question-${index}-right-${odpoved}`;
-        let card=createCard(id,question.odpovede_prave[odpoved])
-        leftDiv.appendChild(card);
-        newJsPlumbInstance.makeTarget(id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
-    }
+        let card=createCard(id,question.odpovede_lave[odpoved]);
 
+        card.classList.add(`connect-left-${index}`);
+        leftDiv.appendChild(card);
+
+    }
+    for (const odpoved in question.odpovede_prave) {
+        let id=`question-${index}-right-${odpoved}`;
+        let card=createCard(id,question.odpovede_prave[odpoved]);
+        card.classList.add(`connect-right-${index}`);
+        rightDiv.appendChild(card);
+
+    }
+    return connectorDiv;
 }
 
 function createConnectQuestion(index,question){
-    let questionDiv = createQuestionDiv(index,question.name,'connect');
-    let questionHeader=createQuestionName(index,question.name,'connect');
-    questionHeader.lastElementChild.remove();
-    questionHeader.lastElementChild.remove();
-    questionHeader.style.marginLeft='1.75rem';
-    questionDiv.appendChild(questionHeader);
+    let questionDiv = createQuestionDiv(index,question.nazov,null);
+    questionDiv.appendChild(createConnectDiv(index,question));
+
+
+    //objekty uz musia byt vytvorene aby som k nim mohol priradit jsPlumb
+    let newJsPlumbInstance=jsPlumb.getInstance();
+    instances.push(newJsPlumbInstance);
+    const lefties=document.getElementsByClassName(`connect-left-${index}`);
+    const righties=document.getElementsByClassName(`connect-right-${index}`);
+
+    for(let i=0;i<lefties.length;i++){
+        newJsPlumbInstance.makeSource(lefties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+    }
+    for(let i=0;i<lefties.length;i++){
+        newJsPlumbInstance.makeTarget(righties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
+    }
+
 
 }
 
@@ -408,7 +403,37 @@ function createCard(id,card_phrase){
 
     return card
 }
+function checkConnectQuestion(){
 
+    for (let i = 0; i < instances.length; i++) {
+        let object={};
+        let pary=[];
+
+        for(let j=0;j<instances[i].getAllConnections().length;j++){
+            let dvojice={};
+            dvojice={lava:Number(instances[i].getAllConnections()[j].sourceId.substr(16,2)),prava:Number(instances[i].getAllConnections()[j].targetId.substr(17,2))};
+            pary.push(dvojice);
+            let q=Number(instances[i].getAllConnections()[0].sourceId.substr(9,1));
+
+            object={akcia:"odoslat-odpoved",otazka_id:q,typ_odpovede: "parovacia"};
+
+        }
+
+        object.odpoved=pary;
+        if(object.otazka_id){
+            console.log(object);
+            fetch("../api/testy/vypracovanie-testu.php", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(object)
+            })
+        }
+
+    }
+
+}
 
 function createShortQuestion(order,name){
 
@@ -439,11 +464,12 @@ function createShortInput(order){
 function sendShortInput(order, value){
         let postArray = {
             "akcia": "odoslat-odpoved",
-            "otazka": order,
+            "otazka_id": Number(order),
             "typ_odpovede": "textova",
             "odpoved": value
 
         }
+        console.log(postArray)
         let request = new Request('../api/testy/vypracovanie-testu.php', {
             method: 'POST',
             body: JSON.stringify(postArray),
@@ -454,6 +480,7 @@ function sendShortInput(order, value){
                 if (data.kod === "API_T__VT_U_3"){
                     console.log("API_T__VT_U_3  "  + data);
                 }
+                console.log(data);
 
             });
 }
@@ -461,7 +488,7 @@ function sendShortInput(order, value){
 function createLongQuestion(order,otazka){
     let name = otazka.nazov ;
     if(otazka.vie_student_pocet_spravnych)
-        name += " (počet správnych odpovedí: " + otazka.pocet_spravnych+" )";
+        name += " (počet správnych odpovedí: " + otazka.pocet_spravnych+")";
 
     let questionDiv = createQuestionDiv(order,name,null);
     $(questionDiv).append(createLongInput(order,otazka.odpovede));
@@ -476,11 +503,11 @@ function createLongInput(order, answers){
         $(checkboxDiv).addClass("checkbox-div");
         let inputCheckbox = document.createElement("input");
         $(inputCheckbox).attr({
-            "value":answer.text,
+            "value":answer,
             "name":"checkboxName-" + order,
             "type":"checkbox",
             "class": "form-check-input checkbox-input",
-            "id":"check-"+order+"-"+answer.text
+            "id":"check-"+order+"-"+answer
 
         });
         $(inputCheckbox).on("change", function(){
@@ -488,11 +515,11 @@ function createLongInput(order, answers){
         });
         let labelCheckbox = document.createElement("label");
         $(labelCheckbox).attr({
-            "for":"check-"+order+"-"+answer.text,
+            "for":"check-"+order+"-"+answer,
             "class": "form-check-label checkbox-label",
 
         });
-        $(labelCheckbox).text(answer.text);
+        $(labelCheckbox).text(answer);
         $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
     }
 
@@ -508,11 +535,12 @@ function sendLongInput(order){
     });
     let postArray = {
         "akcia": "odoslat-odpoved",
-        "otazka": order,
+        "otazka_id": Number(order),
         "typ_odpovede": "vyberova",
         "odpoved": checkboxValues
 
     }
+    console.log(postArray);
     let request = new Request('../api/testy/vypracovanie-testu.php', {
         method: 'POST',
         body: JSON.stringify(postArray),
@@ -523,6 +551,6 @@ function sendLongInput(order){
             if (data.kod === "API_T__VT_U_3"){
             //    <<<<?????<<<<
             }
-            console.log("API_T__VT_U_3  "  + data);
+            console.log(data);
         });
 }
