@@ -28,6 +28,12 @@
 
 </head>
 <body>
+<div id="doTest-failed" class="info failed">
+    <span>Najprv sa musíte do testu prihlásiť.</span>
+</div>
+<div id="doTest-success" class="info success">
+    <span>Váš test bol úspešne odoslaný.</span>
+</div>
 <div id="reg-success" class="info success">
     <span>Registrácia prebehla úspešne, môžete sa prihlásiť.</span>
 </div>
@@ -69,14 +75,16 @@
                 <div class="form-group col-sm-6">
                     <label for="key">Kľúč testu</label>
                     <input type="text" class="form-control" id="key" name="key"
-                           placeholder="Zadajte vstupný kľúč do testu" required pattern='^(?!\s*$).+'>
+                           placeholder="Zadajte vstupný kľúč do testu" required pattern='^(?!\s*$).+'
+                           onfocus="removeIsInvalid(this)">
                     <div id="key-validation" class="invalid-tooltip">
+                        Zadaný test neexisituje alebo nie je aktívny
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="id-number">Identifikačné čislo</label>
                     <input type="number" class="form-control" id="id-number" name="id-number"
-                           placeholder="Zadajte identifikačné čislo" required pattern='^(?!\s*$).+'
+                           placeholder="Zadajte identifikačné čislo" maxlength="10" required pattern='^(?!\s*$).+'
                     >
                     <div id="id-number-validation" class="invalid-tooltip">
                     </div>
@@ -113,7 +121,7 @@
                 <div class="form-group col-md-12">
                     <label for="email">Email</label>
                     <input type="email" class="form-control" name="email" placeholder="Zadajte email" id="email"
-                           required onfocus="removeEmailIsInvalid()">
+                           required onfocus="removeIsInvalid(this)">
                     <div class="invalid-tooltip">
                         Účet so zadaným emailom neexistuje.
                     </div>
@@ -124,7 +132,7 @@
                     <label for="password">Heslo</label>
                     <input type="password" class="form-control" id="password" name="password"
                            placeholder="Zadajte heslo" required pattern='^(?!\s*$).+'
-                           onfocus="removePasswordIsInvalid()">
+                           onfocus="removeIsInvalid(this)">
                     <div class="invalid-tooltip">
                         Zadali ste nesprávne heslo.
                     </div>

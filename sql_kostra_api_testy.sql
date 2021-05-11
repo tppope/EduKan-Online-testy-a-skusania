@@ -1,6 +1,5 @@
-﻿-- Najskor vytvor databazu s nazvom wt_skuskove_zadanie_databaza_testov a v nej spusti cely tento subor
-
-START TRANSACTION;
+﻿
+ START TRANSACTION;
 
 CREATE TABLE typy_otazok (
 	id tinyint NOT NULL AUTO_INCREMENT,
@@ -72,6 +71,7 @@ CREATE TABLE zoznam_pisucich_studentov (
 	cas_zaciatku_pisania time NOT NULL,
 	datum_konca_pisania date DEFAULT NULL,
 	cas_konca_pisania time DEFAULT NULL,
+    pocet_tab_odideni tinyint(1) NOT NULL DEFAULT '0'
 
 	PRIMARY KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania),
 	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE

@@ -13,11 +13,8 @@
 			casovy_limit: [int časový limit v minútach],
 			aktivny: [true/false, či je aktívny alebo nie],
 			pocet_otazok: [int pocet otazok],
+			pocet_pisucich_studentov: [pocet studentov, ktori vypracovavaju test]
 
-			[
-				ak je test aktivny, je tu este jedno pole:
-				pocet_pisucich_studentov: [pocet studentov, ktori vypracovavaju test]
-			]
 		}
 	]
 }

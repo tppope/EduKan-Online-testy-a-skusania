@@ -13,12 +13,113 @@ body {
     height: 100%;
 }
 
+section{
+    position: relative;
+}
+
 #main-header {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: white;
     height: 240px;
+    position: relative;
+    overflow: hidden;
+}
+
+#notifications{
+    display: flex;
+    justify-content: flex-start;
+    position: absolute;
+    height: 100%;
+    width: 400px;
+    border: solid 3px black;
+    top: 0;
+    right: -360px;
+    background-color: #17a2b8;
+
+    transition: right 300ms;
+
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#notifications-text{
+    overflow: scroll;
+    width: 350px;
+}
+
+#notifications-text span{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    color: white;
+}
+
+#notifications-text ul{
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    color: white;
+}
+
+
+#notification-button{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    color: white;
+    writing-mode: vertical-rl;
+    height: 100%;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+
+}
+
+.blink{
+    animation: blink-animation 2s infinite;
+}
+@keyframes blink-animation {
+    0%{
+        color: white;
+    }
+    50%{
+        color: black;
+    }
+    100%{
+        color: white;
+    }
+
+}
+#notification-text{
+    overflow: scroll;
+    width: 100%;
+}
+
+#left-arrow{
+    height: 80%;
+}
+
+.student-tr{
+    cursor: pointer;
+    transition: background-color 300ms;
+}
+
+.student-tr:hover{
+    background-color: rgba(23, 162, 184, 0.1);
 }
 
 #main-h1 {
@@ -102,10 +203,51 @@ body {
     display: block;
 }
 
+#back-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transition: left 300ms;
+    position: absolute;
+    top: 20px;
+    left: -40px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    font-size: 15px;
+    height: 50px;
+    width: 100px;
+    cursor: pointer;
+}
+
+
+#empty-students{
+    text-align: center;
+    font-family: "Roboto",sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    color: black;
+}
+
+#back-button:hover {
+    left: 0;
+}
+
 @media (max-width: 768px) {
     .section-content{
         width: 90%;
     }
+    #login-div{
+        margin-bottom: 50px;
+    }
+    #logout-button{
+        margin-right: 15px;
+    }
+
+
 }
 @media (max-width: 576px) {
     #edukan {
@@ -114,6 +256,26 @@ body {
 
     #main-header {
         height: 150px;
+    }
+    #notification-button{
+        font-size: 15px;
+        margin-right: 10px;
+        width: 30px;
+    }
+    #notification-text{
+        width: 205px;
+    }
+
+    #notifications-text span {
+        font-size: 15px;
+    }
+
+    #notifications-text ul {
+        font-size: 14px;
+    }
+    #notifications{
+        width: 300px;
+        right: -270px;
     }
 }
 

@@ -3,8 +3,17 @@ $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
     $("#reg-button").hide();
     checkRegStatus();
-    checkLogoutStatus()
+    checkLogoutStatus();
+    checkDoTestStatus()
 })
+
+function checkDoTestStatus(){
+    let doTestInfo = sessionStorage.getItem("doTest");
+    if (doTestInfo != null) {
+        showDoTestInfo(doTestInfo);
+        sessionStorage.removeItem('logoutStatus');
+    }
+}
 
 function checkLogoutStatus() {
     let logoutInfo = sessionStorage.getItem("logoutStatus");
@@ -32,8 +41,16 @@ function showRegInfo(regInfo) {
     }, 3000)
 }
 
-function showLogInfo(regInfo) {
-    let logDiv = $("#log-" + regInfo);
+function showDoTestInfo(doTestInfo) {
+    let doTestDiv = $("#doTest-" + doTestInfo);
+    doTestDiv.css("top", 0);
+    setTimeout(function () {
+        doTestDiv.css("top", "-100px");
+    }, 3000)
+}
+
+function showLogInfo(logInfo) {
+    let logDiv = $("#log-" + logInfo);
     logDiv.css("top", 0);
     setTimeout(function () {
         logDiv.css("top", "-100px");
@@ -75,8 +92,10 @@ function submitTeacherLoginForm() {
                 let email = $("#email");
                 let password = $("#password");
                 if (!data.error) {
-                    if (data.emailVerify && data.passwordVerify)
+                    if (data.emailVerify && data.passwordVerify) {
                         window.location.href = 'teacher-homescreen.html';
+                        sessionStorage.setItem("fromLogin", "true");
+                    }
                     else if (!data.emailVerify)
                         email.addClass("is-invalid");
                     else if (!data.passwordVerify)
@@ -84,6 +103,30 @@ function submitTeacherLoginForm() {
                 } else {
                     $("#log-failed-info").text("Prihlásenie neprebehlo úspešne. Skúste to prosím znovu.");
                     showLogInfo(data.status);
+                }
+            });
+    }
+    return false;
+}
+
+function submitStudentLoginForm(){
+    let form = document.getElementById("student-login-form");
+    if (checkFormValidation(form)) {
+        let request = new Request('api/uzivatelia/prihlasenieStudenta/', {
+            method: 'POST',
+            body: new FormData(form),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                let key = $("#key");
+                if (!data.error){
+                    sessionStorage.setItem("key",key.val());
+                    window.location.href = "doTest/test.html";
+                }
+                else {
+                    if (data.badTestKey)
+                        key.addClass("is-invalid")
                 }
             });
     }
@@ -102,17 +145,17 @@ function checkFormValidation(form) {
 function checkIfAlreadyLogin() {
     $.getJSON("api/uzivatelia/prihlasenie/", function (data) {
         if (!data.error) {
-            if (data.alreadyLogin)
+            if (data.alreadyLogin) {
                 window.location.href = 'teacher-homescreen.html';
+                sessionStorage.setItem("fromLogin", "true");
+            }
         }
     })
 }
 
-function removeEmailIsInvalid() {
-    $("#email").removeClass("is-invalid");
+function removeIsInvalid(dom) {
+    $(dom).removeClass("is-invalid");
 }
 
-function removePasswordIsInvalid() {
-    $("#password").removeClass("is-invalid");
-}
+
 

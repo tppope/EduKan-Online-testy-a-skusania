@@ -1,8 +1,9 @@
 
 document.getElementById('send').onclick=function (){
     let test={};
+    let instance=0;
     if(document.getElementById('meno-testu').value===""){
-        document.getElementById('error-msg').innerText="nazov testu nemoze byt prazdny";
+        document.getElementById('error-msg').innerText="názov testu nemôže byť prázdny";
         return null;
     }
     else{
@@ -12,7 +13,6 @@ document.getElementById('send').onclick=function (){
 
     test.nazov=document.getElementById('meno-testu').value;
     test.casovy_limit=Number(document.getElementById('cas-num').value);
-    test.aktivny=false;
     let otazky= {};
     const q=document.getElementsByClassName('question');
 
@@ -20,7 +20,7 @@ document.getElementById('send').onclick=function (){
         let q1Id=q[i].id;
         otazky[Number(i+1)]={}
         if(q[i].value===""){
-            document.getElementById('error-msg').innerText=`nazov otazky cislo ${i+1} nemoze byt prazdny`;
+            document.getElementById('error-msg').innerText=`text otázky číslo ${i+1} nemôže byť prázdny`;
             return null;
         }
         else{
@@ -54,7 +54,7 @@ document.getElementById('send').onclick=function (){
 
             otazky[Number(i+1)].spravne_odpovede = spravne_odpovede;
             if(spravne_odpovede.length===0){
-                document.getElementById('error-msg').innerText=`otazka cislo ${i+1} nema zadanu ziadnu odpoved`;
+                document.getElementById('error-msg').innerText=`otázka číslo ${i+1} nemá zadanú žiadnu odpoveď`;
                 return null;
             }else{
                 document.getElementById('error-msg').innerText="";
@@ -70,7 +70,7 @@ document.getElementById('send').onclick=function (){
                 odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
 
                 if(odpovede.length===0){
-                    document.getElementById('error-msg').innerText=`otazka cislo ${i+1} nema zadanu ziadnu odpoved`;
+                    document.getElementById('error-msg').innerText=`otázka číslo ${i+1} nemá zadanú žiadnu odpoveď`;
                     return null;
                 }else{
                     document.getElementById('error-msg').innerText="";
@@ -87,37 +87,44 @@ document.getElementById('send').onclick=function (){
         }
 
         else if(q[i].classList.contains("type-3")===true) {
-            let odpovede_lave={};
-            let odpovede_prave={};
-            let pary=[]
             const moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
 
-            for(let j=1;j<moznostDiv.children.length;j++){
-
-                odpovede_lave[Number(j)]=moznostDiv.children[j].children[1].children[0].value;
-                odpovede_prave[Number(j)]=moznostDiv.children[j].children[3].children[0].value;
-                if(moznostDiv.children[j].children[1].children[0].value!=="" && moznostDiv.children[j].children[3].children[0].value!==""){
-                    pary.push({lava:j,prava:j});
-
-                }
-
+            let odpovede_lave={};
+            let odpovede_prave= {};
+            let odpovede_laveObj=[];
+            let odpovede_praveObj=[];
+            for(let l=0;l<moznostDiv.children[0].children.length;l++){
+                odpovede_laveObj.push(moznostDiv.children[0].children[l].children[2].id);
+                odpovede_lave[l+1]=moznostDiv.children[0].children[l].children[1].value;
             }
-            otazky[Number(i+1)].odpovede_lave=odpovede_lave;
-            otazky[Number(i+1)].odpovede_prave=odpovede_prave;
-            otazky[Number(i+1)].pary=pary;
+            for(let p=0;p<moznostDiv.children[1].children.length;p++){
+                odpovede_praveObj.push(moznostDiv.children[1].children[p].children[0].id);
+                odpovede_prave[p+1]=moznostDiv.children[1].children[p].children[1].value;
+            }
+            otazky[i+1].odpovede_lave=odpovede_lave;
+            otazky[i+1].odpovede_prave=odpovede_prave;
 
+            const conn=listOfInstances[instance++].getConnections();
+            let pary=[];
+            for(let j=0;j<conn.length;j++){
+                let dvojice={lava:odpovede_laveObj.indexOf(conn[j].sourceId)+1, prava:odpovede_praveObj.indexOf(conn[j].targetId)+1};
 
-
-
+                pary.push(dvojice)
+            }
+            otazky[i+1].pary=pary;
 
 
 
         }
     }
     test.otazky=otazky
+
+
     console.log(JSON.stringify(test));
 
-    fetch("../api/testy/novy-test.php", {
+
+
+   fetch("../api/testy/novy-test.php", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -125,5 +132,9 @@ document.getElementById('send').onclick=function (){
         body: JSON.stringify(test)
     })
         .then(response => response.json())
-        .then(data => console.log(data));
+        .then(data =>{
+            window.location.replace("../teacher-homescreen.html")
+        });
+
+
 }

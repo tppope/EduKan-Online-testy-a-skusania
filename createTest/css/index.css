@@ -37,3 +37,7 @@ input[type="range"]::-ms-fill-lower {
 input[type="range"]::-ms-fill-upper {
     background-color: #292b2c;
 }
+
+#test{
+    z-index: 0;
+}

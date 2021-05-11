@@ -31,8 +31,8 @@ if ($generic_sanity_check) {
 
 	elseif (ApiTesty_sanityChecker::praca_s_testami_ucitel__nacitaj_vysledky_testu($surove_prijate_data)) {
 		$vystup = ApiTesty_API_frontend_ucitel::nacitaj_odpovede(
-			$mysqli_api_testy, $surove_prijate_data["kluc"],
-			$surove_prijate_data["student-id"], $surove_prijate_data["datum-zaciatku-pisania"], $surove_prijate_data["cas-zaciatku-pisania"]
+			$mysqli_api_testy, $_SESSION["pisanyTestKluc"],
+            $_SESSION["studentId"], $_SESSION["datumZaciatkuPisania"], $_SESSION["casZaciatkuPisania"]
 		);
 		
 		echo json_encode($vystup);

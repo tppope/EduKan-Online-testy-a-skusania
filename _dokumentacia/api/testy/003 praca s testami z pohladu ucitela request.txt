@@ -21,4 +21,4 @@ DEAKTIVUJ TEST
 
 
 NAČÍTAJ VÝSLEDKY TESTU
-	url: api/testy/praca-s-testami.php?akcia=nacitaj-vysledky&kluc=[kľúč testu]&student-id=[id študenta]&datum-zaciatku-pisania=[dátum]&cas-zaciatku-pisania=[čas]
+	url: api/testy/praca-s-testami.php?akcia=nacitaj-vysledky
