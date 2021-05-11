@@ -53,6 +53,26 @@ section{
     margin: 0;
 }
 
+.question-style{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 15px;
+    padding-bottom: 20px;
+}
+
+
+.question-header{
+    width: 96%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
 #section-header {
     display: flex;
     justify-content: space-between;
@@ -110,6 +130,29 @@ section{
 
 #back-button:hover {
     left: 0;
+}
+
+.input-area-short{
+    width: 96%;
+}
+
+.checkbox-div{
+    padding: 5px;
+}
+.checkbox-array-div{
+    width: 80%;
+}
+
+.correctQuestionBorder{
+    border: solid 3px #05c905;
+}
+
+.inCorrectQuestionBorder{
+    border: solid 3px red;
+}
+
+.notCheckQuestionBorder{
+    border: solid 3px #999999;
 }
 
 @media (max-width: 768px) {
