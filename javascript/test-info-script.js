@@ -145,6 +145,8 @@ function loadStudents(){
         else if (data.kod === "API_T__GSC_1") {
             createEmptyTable($("#students-tbody"));
         }
+        else
+            console.log(data);
     })
 }
 

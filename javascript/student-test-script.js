@@ -55,7 +55,7 @@ function loadTest(){
             })
         }
         else
-            console.log(data);
+            console.log(test);
     })
 }
 
@@ -71,19 +71,88 @@ function printTest(otazky, odpovede){
         let otazka = this;
         switch (otazka.typ){
             case 1:createShortQuestion(index, otazka.nazov,odpoved);break;
-            case 2:createLongQuestion(index,otazka, odpoved);break;
+            //case 2:createLongQuestion(index,otazka, odpoved);break;
             case 3:;break;
-            case 4:;break;
-            case 5:;break;
+            case 4:createCanvasQuestion(index,otazka.nazov, odpoved);break;
+            case 5:createMathQuestion(index,otazka.nazov, odpoved);break;
         }
     })
 }
 
+
+function createCheckAnswer(order){
+    let checkButtons = document.createElement("div");
+    $(checkButtons).addClass("check-answer-buttons");
+    let wrongButton = document.createElement("button");
+    wrongButton.innerText = "Nesprávne";
+    $(wrongButton).addClass("btn btn-outline-danger check-button");
+    $(wrongButton).on("click",function (){
+
+    })
+
+    let successButton = document.createElement("button");
+    successButton.innerText = "Správne";
+    $(successButton).addClass("btn btn-outline-success check-button");
+    $(successButton).on("click",function (){
+
+    })
+
+    checkButtons.append(wrongButton,successButton)
+
+    return checkButtons;
+
+}
+
+
+function createCanvasQuestion(order,name,odpovede){
+    let img = createImgForCanvasQuestion(odpovede)
+    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenie);
+    questionDiv.append(img,createCheckAnswer(order));
+
+    $("#test-questions").append(questionDiv);
+}
+
+function createImgForCanvasQuestion(odpovede){
+    let img  = document.createElement("img");
+    $(img).attr({
+        "src":odpovede.zadana_odpoved,
+        "draggable": false
+    });
+    $(img).addClass("img-answer");
+    return img;
+}
+
 function createShortQuestion(order,name, odpovede){
-    questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenieCeleho);
+    questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenie);
     $(questionDiv).append(createShortInput(order, odpovede.zadana_odpoved));
 
 }
+
+function createMathQuestion(order,name,odpovede){
+    let mathField = createMathField(odpovede);
+
+    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenie);
+    questionDiv.append(mathField, createCheckAnswer(order));
+
+    $("#test-questions").append(questionDiv);
+}
+
+let promise = Promise.resolve();  // Used to hold chain of typesetting calls
+
+function typeset(code) {
+    promise = promise.then(() => MathJax.typesetPromise(code()))
+        .catch((err) => console.log('Typeset failed: ' + err.message));
+    return promise;
+}
+
+function createMathField(odpovede){
+    let div = document.createElement("div");
+    typeset(() => {
+        div.innerHTML = "$$"+odpovede.zadana_odpoved+"$$";
+    });
+    return div;
+}
+
 
 function createQuestionDiv(order,name, correct){
     console.log(correct);
@@ -118,7 +187,7 @@ function createShortInput(order, zadana_odpoved){
     $(inputArea).attr({
         "type":"text",
         "class": "form-control",
-        "readonly":"readonly",
+        "disabled":"disabled",
         "value":zadana_odpoved
 
     });
@@ -131,7 +200,7 @@ function createLongQuestion(order,otazka, odpovede){
     if(otazka.vie_student_pocet_spravnych)
         name += " (počet správnych odpovedí: " + otazka.pocet_spravnych+")";
 
-    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenieCeleho);
+    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenie);
     $(questionDiv).append(createLongInput(order,otazka.odpovede));
 
 }

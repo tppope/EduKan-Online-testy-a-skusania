@@ -76,6 +76,10 @@ function createCanvasQuestion(order,name){
 function createCanvas(order){
     let wholeCanvas = document.createElement("div");
     $(wholeCanvas).addClass("whole-canvas math-input-content-"+order);
+    let saveButton = document.createElement("button");
+    $(saveButton).addClass("btn btn-block btn-outline-info save-button");
+    $(saveButton).text("Uložiť obrázok");
+
 
     let canvas = document.createElement("canvas");
     $(canvas).addClass("canvas-style");
@@ -83,8 +87,29 @@ function createCanvas(order){
     let ctx = canvas.getContext("2d");
     canvasSettings(canvas,ctx);
     let canvasHeader = createCanvasHeader(canvas,ctx);
-    wholeCanvas.append(canvasHeader,canvas);
+    wholeCanvas.append(canvasHeader,canvas,saveButton);
+    saveCanvas(saveButton,canvas, order);
     return wholeCanvas;
+}
+
+function saveCanvas(button, canvas, order){
+    $(button).on("click", function (){
+        let postArray = {
+            "otazka_id": Number(order),
+            "typ_odpovede": "canvas",
+            "odpoved": canvas.toDataURL()
+        }
+        let request = new Request('../api/uzivatelia/testy/math-canvas-send-text-answer.php', {
+            method: 'POST',
+            body: JSON.stringify(postArray),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+
+    });
 }
 
 function createCanvasHeader(canvas,ctx){
@@ -205,12 +230,34 @@ function canvasSettings(myCan, ctx){
 
 function createMathQuestion(order,name){
     let mathField = createMathField(order);
+    sendMathQuestion(mathField, order);
+
+
     let formPictureInput = createFormPictureInput(order);
 
     let questionDiv = createQuestionDiv(order,name,'math');
 
     questionDiv.append(mathField,formPictureInput);
     $("#test-questions").append(questionDiv);
+}
+
+function sendMathQuestion(mathField, order){
+    $(mathField).on("change",function (){
+        let postArray = {
+            "otazka_id": Number(order),
+            "typ_odpovede": "matematicka",
+            "odpoved": mathField.value
+        }
+        let request = new Request('../api/uzivatelia/testy/math-canvas-send-text-answer.php', {
+            method: 'POST',
+            body: JSON.stringify(postArray),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+    });
 }
 
 function createMathField(order){
@@ -421,7 +468,6 @@ function checkConnectQuestion(){
 
         object.odpoved=pary;
         if(object.otazka_id){
-            console.log(object);
             fetch("../api/testy/vypracovanie-testu.php", {
                 method: 'POST',
                 headers: {
@@ -469,7 +515,6 @@ function sendShortInput(order, value){
             "odpoved": value
 
         }
-        console.log(postArray)
         let request = new Request('../api/testy/vypracovanie-testu.php', {
             method: 'POST',
             body: JSON.stringify(postArray),
@@ -522,10 +567,7 @@ function createLongInput(order, answers){
         $(labelCheckbox).text(answer);
         $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
     }
-
-
     return allCheckboxDiv;
-
 }
 
 function sendLongInput(order){
@@ -540,7 +582,6 @@ function sendLongInput(order){
         "odpoved": checkboxValues
 
     }
-    console.log(postArray);
     let request = new Request('../api/testy/vypracovanie-testu.php', {
         method: 'POST',
         body: JSON.stringify(postArray),
@@ -552,5 +593,24 @@ function sendLongInput(order){
             //    <<<<?????<<<<
             }
             console.log(data);
+        });
+}
+
+function odovzdatTest(){
+    let postArray = {
+        "akcia": "odovzdat-test",
+    }
+    let request = new Request('../api/testy/vypracovanie-testu.php', {
+        method: 'POST',
+        body: JSON.stringify(postArray),
+    });
+    fetch(request)
+        .then(response => response.json())
+        .then(data => {
+            if (data.kod === "API_T__VT_U_4"){
+                sessionStorage.setItem("doTest","success");
+                window.location.replace("../index.html");
+            }else
+                console.log(data);
         });
 }

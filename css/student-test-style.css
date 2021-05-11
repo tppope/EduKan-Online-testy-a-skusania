@@ -127,6 +127,20 @@ section{
     cursor: pointer;
 }
 
+.img-answer{
+    width: 94%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.check-button{
+    width: 40%;
+}
+
+#test-questions{
+    margin-bottom: 300px;
+}
+
 
 #back-button:hover {
     left: 0;
@@ -153,6 +167,13 @@ section{
 
 .notCheckQuestionBorder{
     border: solid 3px #999999;
+}
+
+.check-answer-buttons{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 94%;
 }
 
 @media (max-width: 768px) {
