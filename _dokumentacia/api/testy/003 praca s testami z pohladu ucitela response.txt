@@ -62,6 +62,13 @@ Načítanie odpovedí k testu:
 			par_prava_strana: [int id možnosti z pravej strany],
 			vyhodnotenie: [int výsledok vyhodnotenia odpovede: 0 pre nesprávnu odpoveď a 1 pre správnu, alebo 2, ak odpoveď ešte nebola vyhodnotená]
 		}
+	],
+	vyhodnotenieCeleho: [
+		zoznam otázok a počet bodov za každú
+	],
+	suhrnnyPocetBodov: [
+		ziskaneBody: [počet študentom získaných bodov],
+		celkoveBody: [celkový počet bodov]
 	]
 }
 

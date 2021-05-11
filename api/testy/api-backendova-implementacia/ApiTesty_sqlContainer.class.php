@@ -166,11 +166,14 @@ class ApiTesty_sqlContainer {
 				case 2:
 					$jedna_otazka["odpovede"] = array();
 
-					if ($otazka["znamy_pocet_spravnych"] == 1) {
-						$jedna_otazka["vie_student_pocet_spravnych"] = true; // kvoli JSON, aby bolo true a nie 1
+					if ($otazka["znamy_pocet_spravnych"] == 1) $jedna_otazka["vie_student_pocet_spravnych"] = true;
+					else $jedna_otazka["vie_student_pocet_spravnych"] = false;
+
+
+					if ($otazka["znamy_pocet_spravnych"] == 1 || $s_odpovedami) {
+						// ak student vie pocet spravnych, resp. nacitavas test ucitelovi, zobraz mu pocet spravnych odpovedi
 						$jedna_otazka["pocet_spravnych"] = 0;
 					}
-					else $jedna_otazka["vie_student_pocet_spravnych"] = false;
 				break;
 
 				case 3:
@@ -220,7 +223,12 @@ class ApiTesty_sqlContainer {
 					$array = array(
 						"text" => $otazka["odpoved"]
 					);
-					if ($otazka["je_spravna"] == 1) $array["je_spravna"] = true; // kvoli JSON
+					if ($otazka["je_spravna"] == 1) {
+						$array["je_spravna"] = true; // kvoli JSON
+
+						// ucitel vzdy vie pocet spravnych odpovedi
+						$vyskladana_odpoved[ $otazka["otazka_id"] ]["pocet_spravnych"]++;
+					}
 					else $array["je_spravna"] = false;
 					
 					$vyskladana_odpoved[ $otazka["otazka_id"] ]["odpovede"][] = $array;

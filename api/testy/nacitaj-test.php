@@ -4,7 +4,7 @@
 include "api-endpoint-include.php";
 include "api-frontend/ApiTesty_API_frontend_ucitel.class.php";
 include "api-frontend/ApiTesty_API_frontend_student.class.php";
-
+$_SESSION["pisanyTestKluc"] = "U1T1620377014"; $_SESSION["userId"] = 1;
 
 // na tejto API musi byt prihlaseny bud student alebo ucitel, a klient neposiela ZIADNE data
 $generic_sanity_check = ApiTesty_sanityChecker::generic_check__prihlaseny_ucitel_alebo_student();
