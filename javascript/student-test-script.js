@@ -46,7 +46,8 @@ function loadTest(){
             });
             $.getJSON("api/testy/praca-s-testami.php?akcia=nacitaj-vysledky", function (testOdpovede) {
                 if (testOdpovede.kod === "API_T__PT_U_4"){
-                    printTest(test.data_testu.otazky,testOdpovede.odpovede);
+                    printTest(test.data_testu.otazky,testOdpovede);
+                    console.log(testOdpovede);
                 }
                 else if ( testOdpovede.kod ==="API_T__PT_GC")
                     printTest(test.data_testu.otazky,false);
@@ -55,7 +56,7 @@ function loadTest(){
             })
         }
         else
-            console.log(data);
+            console.log(test);
     })
 }
 
@@ -63,37 +64,112 @@ function printTest(otazky, odpovede){
     console.log(otazky);
     console.log(odpovede);
     $.each(otazky,function (index){
-        let odpoved = {
-            "vyhodnotenieCeleho":2
-        };
-        if (odpovede)
-            odpoved = odpovede[index];
         let otazka = this;
+        if (!odpovede)
+            odpovede = {
+            vyhodnotenieCeleho:[],
+            odpovede:[],
+        }
         switch (otazka.typ){
-            case 1:createShortQuestion(index, otazka.nazov,odpoved);break;
-            case 2:createLongQuestion(index,otazka, odpoved);break;
+            case 1:createShortQuestion(index, otazka.nazov,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
+            //case 2:createLongQuestion(index,otazka, odpoved);break;
             case 3:;break;
-            case 4:;break;
-            case 5:;break;
+            case 4:createCanvasQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
+            case 5:createMathQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
         }
     })
 }
 
-function createShortQuestion(order,name, odpovede){
-    questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenieCeleho);
-    $(questionDiv).append(createShortInput(order, odpovede.zadana_odpoved));
+
+
+function createCheckAnswer(order){
+    let checkButtons = document.createElement("div");
+    $(checkButtons).addClass("check-answer-buttons");
+    let wrongButton = document.createElement("button");
+    wrongButton.innerText = "Nesprávne";
+    $(wrongButton).addClass("btn btn-outline-danger check-button");
+    $(wrongButton).on("click",function (){
+
+    })
+
+    let successButton = document.createElement("button");
+    successButton.innerText = "Správne";
+    $(successButton).addClass("btn btn-outline-success check-button");
+    $(successButton).on("click",function (){
+
+    })
+
+    checkButtons.append(wrongButton,successButton)
+
+    return checkButtons;
 
 }
 
+
+function createCanvasQuestion(order,name,answerCheck,odpovede){
+    let img = createImgForCanvasQuestion(odpovede)
+    let questionDiv = createQuestionDiv(order,name,answerCheck);
+    questionDiv.append(img,createCheckAnswer(order));
+
+    $("#test-questions").append(questionDiv);
+}
+
+function createImgForCanvasQuestion(odpovede){
+    let img  = document.createElement("img");
+    let src = "";
+    if (odpovede)
+        src = odpovede.zadana_odpoved;
+    $(img).attr({
+        "src":src,
+        "draggable": false
+    });
+    $(img).addClass("img-answer");
+    return img;
+}
+
+function createShortQuestion(order,name, answerCheck, odpovede){
+    questionDiv = createQuestionDiv(order,name,answerCheck);
+    $(questionDiv).append(createShortInput(order, odpovede));
+
+}
+
+function createMathQuestion(order,name,answerCheck,odpovede){
+    let mathField = createMathField(odpovede);
+
+    let questionDiv = createQuestionDiv(order,name,answerCheck);
+    questionDiv.append(mathField, createCheckAnswer(order));
+
+    $("#test-questions").append(questionDiv);
+}
+
+let promise = Promise.resolve();  // Used to hold chain of typesetting calls
+
+function typeset(code) {
+    promise = promise.then(() => MathJax.typesetPromise(code()))
+        .catch((err) => console.log('Typeset failed: ' + err.message));
+    return promise;
+}
+
+function createMathField(odpovede){
+    let div = document.createElement("div");
+    let mathValue = "";
+    if (odpovede)
+        mathValue = odpovede.zadana_odpoved;
+    typeset(() => {
+        div.innerHTML = "$$"+mathValue+"$$";
+    });
+    return div;
+}
+
+
 function createQuestionDiv(order,name, correct){
-    console.log(correct);
     let questionDiv = document.createElement("div");
     $(questionDiv).addClass("question-style");
     if (correct === 0)
         $(questionDiv).addClass("inCorrectQuestionBorder")
     else if (correct === 1)
         $(questionDiv).addClass("correctQuestionBorder")
-    else if(correct === 2)
+    else(correct === -1)
         $(questionDiv).addClass("notCheckQuestionBorder")
     $(questionDiv).attr("id","question-"+order)
     questionDiv.append(createQuestionName(order,name))
@@ -108,18 +184,22 @@ function createQuestionName(order,name){
     questionHeader.append(questionH3);
     return questionHeader;
 }
-function createShortInput(order, zadana_odpoved){
+function createShortInput(order, odpoved){
     let inputAreaDiv = document.createElement("div");
     let inputArea = document.createElement("input");
 
-    console.log(zadana_odpoved);
+    let value = "";
+    if (odpoved)
+        value = odpoved.zadana_odpoved;
+
+
     $(inputAreaDiv).addClass("input-area-short");
     $(inputAreaDiv).append(inputArea);
     $(inputArea).attr({
         "type":"text",
         "class": "form-control",
-        "readonly":"readonly",
-        "value":zadana_odpoved
+        "disabled":"disabled",
+        "value":value
 
     });
     return inputAreaDiv;
@@ -131,7 +211,7 @@ function createLongQuestion(order,otazka, odpovede){
     if(otazka.vie_student_pocet_spravnych)
         name += " (počet správnych odpovedí: " + otazka.pocet_spravnych+")";
 
-    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenieCeleho);
+    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenie);
     $(questionDiv).append(createLongInput(order,otazka.odpovede));
 
 }

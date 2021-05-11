@@ -97,6 +97,26 @@ Otázky s párovaním odpovedí (typ 3):
 		]
 	}
 
+	Otázky s krátkou odpoveďou (typ 4):
+    	{
+    		akcia: "odoslat-odpoved",
+    		otazka_id: [int id otazky],
+    		typ_odpovede: "matematicka",
+
+    		[
+    			ďalej tu musí byť jedna z týchto troch možností:
+
+    				ak študent zvolil nejakú odpoveď, bude tu pole
+    				odpoved: [text odpovede]
+
+    				ak študent zvolil, že odpoveď neexistuje, bude tu pole
+    				volba_odpovede: "neexistuje"
+
+    				ak študent zvolil, že odpoveď chce zmazať, bude tu pole
+    				volba_odpovede: "zmazat"
+    		]
+    	}
+
 --- END ODOSIELANIE ODPOVEDÍ
 
 

@@ -53,6 +53,7 @@ h3{
     margin: auto;
 }
 
+
 #section-header {
     margin-top: 20px;
     -webkit-touch-callout: none; /* iOS Safari */
@@ -139,6 +140,7 @@ math-field {
     border: solid 3px black;
     box-shadow: black 3px 3px 10px;
     border-radius: 10px;
+    margin-bottom: 15px;
 }
 
 .canvas-header{
@@ -147,6 +149,10 @@ math-field {
     align-items: center;
     width: 94%;
     margin-bottom: 5px;
+}
+
+.save-button{
+    width: 94%;
 }
 
 .whole-canvas{

@@ -96,21 +96,26 @@ function teacherHomescreen(){
 }
 
 function printStudents(zoznamStudentov){
-    let tbodyStudents = $("#students-tbody");
-    $.each(zoznamStudentov, function () {
-        let student = this;
-        let tr = createTr(tbodyStudents);
-        $(tr).addClass("student-tr");
-        $.getJSON("api/uzivatelia/studenti/?studentId="+student.student_id, function (findStudent) {
-            $(tr).on("click",function (){
-                showStudentTest(student.student_id, student.datum_zaciatku_pisania, student.cas_zaciatku_pisania);
-            });
-            let tdTime = createTd(Math.ceil(student.zostavajuci_cas/60) + " min");
-            $(tdTime).attr("id","student-time-"+findStudent.dbID)
-            tr.append(createTh(findStudent.id), createTd(findStudent.name), createTd(findStudent.surname), tdTime);
-        })
 
-    })
+    let tbodyStudents = $("#students-tbody");
+    if (zoznamStudentov.length === 0)
+        createEmptyTable(tbodyStudents)
+    else {
+        $.each(zoznamStudentov, function () {
+            let student = this;
+            let tr = createTr(tbodyStudents);
+            $(tr).addClass("student-tr");
+            $.getJSON("api/uzivatelia/studenti/?studentId=" + student.student_id, function (findStudent) {
+                $(tr).on("click", function () {
+                    showStudentTest(student.student_id, student.datum_zaciatku_pisania, student.cas_zaciatku_pisania);
+                });
+                let tdTime = createTd(Math.ceil(student.zostavajuci_cas / 60) + " min");
+                $(tdTime).attr("id", "student-time-" + findStudent.dbID)
+                tr.append(createTh(findStudent.id), createTd(findStudent.name), createTd(findStudent.surname), tdTime);
+            })
+
+        })
+    }
 }
 
 function createEmptyTable(tbody){
@@ -138,6 +143,7 @@ function createTr(tbody){
 
 function loadStudents(){
     $.getJSON("api/testy/nacitaj-test.php", function (data) {
+        console.log(data);
         if (data.kod === "API_T__LT_U_1") {
             $("#test-name").text(data.data_testu.nazov);
             printStudents(data.data_testu.zoznam_pisucich_studentov);
@@ -145,6 +151,8 @@ function loadStudents(){
         else if (data.kod === "API_T__GSC_1") {
             createEmptyTable($("#students-tbody"));
         }
+        else
+            console.log(data);
     })
 }
 
