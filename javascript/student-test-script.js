@@ -335,7 +335,7 @@ function studentChecked(order, studentAnswers){
 }
 
 function makeColorLabel(answer,studentAnswers,labelCheckbox){
-    if(answer.je_spravna){
+    if(studentAnswers  && answer.je_spravna){
         if(isContains(answer.text, studentAnswers)){
             $(labelCheckbox).css("color", "green");
         }
@@ -343,7 +343,7 @@ function makeColorLabel(answer,studentAnswers,labelCheckbox){
             $(labelCheckbox).css("color", "red");
     }
     else{
-        if(!isContains(answer.text, studentAnswers)){
+        if(studentAnswers && !isContains(answer.text, studentAnswers)){
             $(labelCheckbox).css("color", "green");
         }
         else
