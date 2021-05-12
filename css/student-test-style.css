@@ -206,6 +206,15 @@ section{
     #logout-button{
         margin-right: 15px;
     }
+
+    .connect-card{
+        width: 5rem;
+        height: 5rem;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: medium;
+    }
 }
 
 @media (max-width: 576px) {
@@ -215,6 +224,14 @@ section{
 
     #main-header {
         height: 150px;
+    }
+    .connect-card{
+        width: 5rem;
+        height: 5rem;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: medium;
     }
 
 }

@@ -106,7 +106,7 @@ document.getElementById('send').onclick=function (){
 
             const conn=listOfInstances[instance].getConnections();
             if(conn.length===0){
-                document.getElementById('error-msg').innerText=`v otázke číslo ${i+1git } musíte mať vytvorené aspoň jedno spojenie`;
+                document.getElementById('error-msg').innerText=`v otázke číslo ${i+1} musíte mať vytvorené aspoň jedno spojenie`;
                 return null;
             }
             instance=instance++;

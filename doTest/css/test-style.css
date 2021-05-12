@@ -283,6 +283,14 @@ math-field {
         width: 80px;
         height: 40px;
     }
+    .connect-card{
+        width: 5rem;
+        height: 5rem;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: medium;
+    }
 }
 @media (max-width: 576px) {
     #edukan {
@@ -291,6 +299,14 @@ math-field {
 
     #main-header {
         height: 150px;
+    }
+    .connect-card{
+        width: 5rem;
+        height: 5rem;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: medium;
     }
 }
 
