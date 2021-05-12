@@ -102,7 +102,11 @@ function createCheckAnswer(order){
                 let questionDiv = $("#question-"+order);
                 let points = $("#points");
                 $(wrongButton).attr("disabled",true);
+                $(wrongButton).removeClass("btn-outline-danger");
+                $(wrongButton).addClass("btn-danger");
                 $(successButton).attr("disabled",false);
+                $(successButton).removeClass("btn-success");
+                $(successButton).addClass("btn-outline-success");
                 points.text(" "+(Number(points.text())-1));
                 questionDiv.removeClass("notCheckQuestionBorder");
                 questionDiv.removeClass("correctQuestionBorder");
@@ -120,7 +124,11 @@ function createCheckAnswer(order){
                 let questionDiv = $("#question-"+order);
                 let points = $("#points");
                 $(wrongButton).attr("disabled",false);
+                $(wrongButton).removeClass("btn-danger");
+                $(wrongButton).addClass("btn-outline-danger");
                 $(successButton).attr("disabled",true);
+                $(successButton).removeClass("btn-outline-success");
+                $(successButton).addClass("btn-success");
                 points.text(" "+(Number(points.text())+1));
                 questionDiv.removeClass("notCheckQuestionBorder");
                 questionDiv.removeClass("inCorrectQuestionBorder");
@@ -129,11 +137,16 @@ function createCheckAnswer(order){
         })
     })
 
-    if ($("#question-"+order).hasClass("inCorrectQuestionBorder"))
-        $(wrongButton).attr("disabled",true);
-    else if ($("#question-"+order).hasClass("correctQuestionBorder"))
-        $(successButton).attr("disabled",true);
-
+    if ($("#question-"+order).hasClass("inCorrectQuestionBorder")) {
+        $(wrongButton).attr("disabled", true);
+        $(wrongButton).removeClass("btn-outline-danger");
+        $(wrongButton).addClass("btn-danger");
+    }
+    else if ($("#question-"+order).hasClass("correctQuestionBorder")) {
+        $(successButton).attr("disabled", true);
+        $(successButton).removeClass("btn-outline-success");
+        $(successButton).addClass("btn-success");
+    }
 
     checkButtons.append(wrongButton,successButton)
 
