@@ -104,7 +104,12 @@ document.getElementById('send').onclick=function (){
             otazky[i+1].odpovede_lave=odpovede_lave;
             otazky[i+1].odpovede_prave=odpovede_prave;
 
-            const conn=listOfInstances[instance++].getConnections();
+            const conn=listOfInstances[instance].getConnections();
+            if(conn.length===0){
+                document.getElementById('error-msg').innerText=`v otázke číslo ${i+1git } musíte mať vytvorené aspoň jedno spojenie`;
+                return null;
+            }
+            instance=instance++;
             let pary=[];
             for(let j=0;j<conn.length;j++){
                 let dvojice={lava:odpovede_laveObj.indexOf(conn[j].sourceId)+1, prava:odpovede_praveObj.indexOf(conn[j].targetId)+1};
