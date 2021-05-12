@@ -650,15 +650,15 @@ class ApiTesty_sqlContainer {
 
 		$sql = array(
 			"1_4_5" => "UPDATE odpovede_studentov_typ_1_4_5 SET vyhodnotenie = ?
-			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ?",
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND otazka_id = ?",
 
 			"2" => "UPDATE odpovede_studentov_typ_2 SET vyhodnotenie = ?
-			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND zadana_odpoved = ?",
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND zadana_odpoved = ? AND otazka_id = ?",
 
 			"3" => "UPDATE odpovede_studentov_typ_3 SET vyhodnotenie = ?
-			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND par_lava_strana = ? AND par_prava_strana = ?",
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND par_lava_strana = ? AND par_prava_strana = ? AND otazka_id = ?",
 
-			"pocet_otazok" => "SELECT MAX(otazka_id) AS pocet_otazok FROM zoznam_testov_otazky WHERE kluc_testu = ? AND typ < 4",
+			"zoznam_otazok" => "SELECT otazka_id FROM zoznam_testov_otazky WHERE kluc_testu = ? AND typ < 4",
 
 			"pocet_spravnych_typ_2" => "SELECT otazka_id, COUNT(je_spravna) as pocet_spravnych_2 FROM zoznam_testov_otazky_typy_1_2
 			WHERE kluc_testu = ? AND je_spravna = 1
@@ -680,13 +680,15 @@ class ApiTesty_sqlContainer {
 			if (!$stmt[$kod]) return false;
 		}
 
-		$stmt["pocet_otazok"]->bind_param("s", $kluc);
-		if ( !$stmt["pocet_otazok"]->execute() ) return false;
-		$pocet_otazok_testu = $stmt["pocet_otazok"]->get_result()->fetch_assoc()["pocet_otazok"];
+		$stmt["zoznam_otazok"]->bind_param("s", $kluc);
+		if ( !$stmt["zoznam_otazok"]->execute() ) return false;
 
 		$vysledky_obodovane = array();
-		for ($a = 1; $a <= $pocet_otazok_testu; $a++) { // cislovane od 1
-			$vysledky_obodovane[$a] = -1; // default nevyhodnotene
+		
+		//$zoznam_automaticky_vyhodnotenych_otazok_testu = $stmt["zoznam_otazok"]->get_result()->fetch_assoc()["pocet_otazok"];
+		$result_zoznam_otazok = $stmt["zoznam_otazok"]->get_result();
+		while ( $row = $result_zoznam_otazok->fetch_assoc() ) {
+			$vysledky_obodovane[ $row["otazka_id"] ] = -1; // default nevyhodnotene
 		}
 
 		// array poctu spravnych odpovedi studenta
@@ -705,7 +707,7 @@ class ApiTesty_sqlContainer {
 
 						$vysledky_obodovane[$otazka_id] = $vyhodnotenie;
 
-						$stmt["1_4_5"]->bind_param("isiss", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania);
+						$stmt["1_4_5"]->bind_param("isissi", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $otazka_id);
 						$exec = $stmt["1_4_5"]->execute();
 						if (!$exec) {
 							$mysqli->rollback();
@@ -731,11 +733,13 @@ class ApiTesty_sqlContainer {
 										}
 									}
 									else $pocet_spravnych_studenta[$otazka_id] = -1; // nespravna odpoved
+
 								}
 							}
 
+							error_log($vyhodnotenie);
 							$stmt["2"]->bind_param(
-								"isisss", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["zadana_odpoved"]
+								"isisssi", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["zadana_odpoved"], $otazka_id
 							);
 							$exec = $stmt["2"]->execute();
 							if (!$exec) {
@@ -765,7 +769,7 @@ class ApiTesty_sqlContainer {
 							}
 
 							$stmt["3"]->bind_param(
-								"isissii", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["par_lava_strana"], $odpoved_studenta["par_prava_strana"]
+								"isissiii", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["par_lava_strana"], $odpoved_studenta["par_prava_strana"], $otazka_id
 							);
 							$exec = $stmt["3"]->execute();
 							if (!$exec) {
@@ -810,11 +814,9 @@ class ApiTesty_sqlContainer {
 
 		// prejdi obodovane vysledky a tam, kde nebola odpoved, daj 0 a zapis vsetko do DB
 		foreach ($vysledky_obodovane as $otazka_id => $body) {
-			if ($body == -1) {
-				$vysledky_obodovane[$otazka_id] = 0;
-			}
+			if ($body == -1) $body = 0;
 
-			$stmt["vyhodnotenie"]->bind_param("isissi", $vysledky_obodovane[$otazka_id], $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $otazka_id);
+			$stmt["vyhodnotenie"]->bind_param("isissi", $body, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $otazka_id);
 			$exec = $stmt["vyhodnotenie"]->execute();
 			if (!$exec) {
 				$mysqli->rollback();

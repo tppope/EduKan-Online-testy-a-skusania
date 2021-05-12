@@ -1,0 +1,16 @@
+﻿Postup instalacie dockera
+
+	sudo apt-get update
+	sudo apt install docker.io
+
+
+Overenie verzie dockera:
+	sudo docker version
+
+
+Postavenie kontajnera:
+	docker build -t skuskove_zadanie:top_tim .
+
+
+Zapnutie (spustenie) kontajnera:
+	 docker run -p 80:80 skuskove_zadanie:top_tim

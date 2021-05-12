@@ -16,8 +16,8 @@ function onVisibilityChange(){
     }
 }
 
-function startTest(){
 
+function startTest(){
     let zacniTest = {
         "akcia":"zacat-pisat",
         "kluc": sessionStorage.getItem("key")
@@ -39,6 +39,8 @@ function startTest(){
                 sessionStorage.setItem("doTest","failed");
                 window.location.replace("../index.html");
             }
+            else
+                console.log(data);
         });
 }
 
@@ -76,6 +78,10 @@ function createCanvasQuestion(order,name){
 function createCanvas(order){
     let wholeCanvas = document.createElement("div");
     $(wholeCanvas).addClass("whole-canvas math-input-content-"+order);
+    let saveButton = document.createElement("button");
+    $(saveButton).addClass("btn btn-lg btn-block btn-info save-button");
+    $(saveButton).text("Uložiť obrázok");
+
 
     let canvas = document.createElement("canvas");
     $(canvas).addClass("canvas-style");
@@ -83,8 +89,29 @@ function createCanvas(order){
     let ctx = canvas.getContext("2d");
     canvasSettings(canvas,ctx);
     let canvasHeader = createCanvasHeader(canvas,ctx);
-    wholeCanvas.append(canvasHeader,canvas);
+    wholeCanvas.append(canvasHeader,canvas,saveButton);
+    saveCanvas(saveButton,canvas, order);
     return wholeCanvas;
+}
+
+function saveCanvas(button, canvas, order){
+    $(button).on("click", function (){
+        let postArray = {
+            "otazka_id": Number(order),
+            "typ_odpovede": "canvas",
+            "odpoved": canvas.toDataURL()
+        }
+        let request = new Request('../api/uzivatelia/testy/math-canvas-send-text-answer.php', {
+            method: 'POST',
+            body: JSON.stringify(postArray),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                showSaveCanvasInfo(data.status);
+            });
+
+    });
 }
 
 function createCanvasHeader(canvas,ctx){
@@ -205,12 +232,34 @@ function canvasSettings(myCan, ctx){
 
 function createMathQuestion(order,name){
     let mathField = createMathField(order);
+    sendMathQuestion(mathField, order);
+
+
     let formPictureInput = createFormPictureInput(order);
 
     let questionDiv = createQuestionDiv(order,name,'math');
 
     questionDiv.append(mathField,formPictureInput);
     $("#test-questions").append(questionDiv);
+}
+
+function sendMathQuestion(mathField, order){
+    $(mathField).on("change",function (){
+        let postArray = {
+            "otazka_id": Number(order),
+            "typ_odpovede": "matematicka",
+            "odpoved": mathField.value
+        }
+        let request = new Request('../api/uzivatelia/testy/math-canvas-send-text-answer.php', {
+            method: 'POST',
+            body: JSON.stringify(postArray),
+        });
+        fetch(request)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+    });
 }
 
 function createMathField(order){
@@ -254,7 +303,29 @@ function createFileSubmit(order){
 
 function submitForm(order){
     let pictureForm = $("#picture-form-"+order).get(0);
-    console.log($("#fileUpload-"+order).get(0));
+
+    const request = new Request("../api/uzivatelia/testy/math-canvas-file-answer.php",{
+        method: 'POST',
+        body: new FormData(pictureForm),
+    });
+
+    fetch(request)
+        .then(response => response.json())
+        .then(data =>
+        {
+            if (!data.error){
+                console.log(data);
+                $(".picture-input-content-"+order).remove();
+                $(".math-input-content-"+order).remove();
+                $("#question-"+order).append("<lottie-player src=\"resources/lf30_editor_hnrbfmbx.json\"  background=\"transparent\"  speed=\"1\"  style=\"width: 300px; height: 300px;\" autoplay></lottie-player>")
+            }
+            else{
+                $("#file-error").text(data.message);
+                showSaveFileInfo(data.status);
+            }
+
+        });
+
 }
 
 function createFileInput(order){
@@ -383,7 +454,7 @@ function createConnectQuestion(index,question){
     for(let i=0;i<lefties.length;i++){
         newJsPlumbInstance.makeSource(lefties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
     }
-    for(let i=0;i<lefties.length;i++){
+    for(let i=0;i<righties.length;i++){
         newJsPlumbInstance.makeTarget(righties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
     }
 
@@ -421,7 +492,6 @@ function checkConnectQuestion(){
 
         object.odpoved=pary;
         if(object.otazka_id){
-            console.log(object);
             fetch("../api/testy/vypracovanie-testu.php", {
                 method: 'POST',
                 headers: {
@@ -469,7 +539,6 @@ function sendShortInput(order, value){
             "odpoved": value
 
         }
-        console.log(postArray)
         let request = new Request('../api/testy/vypracovanie-testu.php', {
             method: 'POST',
             body: JSON.stringify(postArray),
@@ -522,10 +591,7 @@ function createLongInput(order, answers){
         $(labelCheckbox).text(answer);
         $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
     }
-
-
     return allCheckboxDiv;
-
 }
 
 function sendLongInput(order){
@@ -540,7 +606,6 @@ function sendLongInput(order){
         "odpoved": checkboxValues
 
     }
-    console.log(postArray);
     let request = new Request('../api/testy/vypracovanie-testu.php', {
         method: 'POST',
         body: JSON.stringify(postArray),
@@ -553,4 +618,39 @@ function sendLongInput(order){
             }
             console.log(data);
         });
+}
+
+function odovzdatTest(){
+    let postArray = {
+        "akcia": "odovzdat-test",
+    }
+    let request = new Request('../api/testy/vypracovanie-testu.php', {
+        method: 'POST',
+        body: JSON.stringify(postArray),
+    });
+    fetch(request)
+        .then(response => response.json())
+        .then(data => {
+            if (data.kod === "API_T__VT_U_4"){
+                sessionStorage.setItem("doTest","success");
+                window.location.replace("../index.html");
+            }else
+                console.log(data);
+        });
+}
+
+function showSaveCanvasInfo(saveSuccessInfo) {
+    let saveSuccessDiv = $("#canvas-saved-" + saveSuccessInfo);
+    saveSuccessDiv.css("top", 0);
+    setTimeout(function () {
+        saveSuccessDiv.css("top", "-100px");
+    }, 3000)
+}
+
+function showSaveFileInfo(saveSuccessInfo) {
+    let saveSuccessDiv = $("#file-saved-" + saveSuccessInfo);
+    saveSuccessDiv.css("top", 0);
+    setTimeout(function () {
+        saveSuccessDiv.css("top", "-100px");
+    }, 3000)
 }

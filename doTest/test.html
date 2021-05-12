@@ -26,11 +26,21 @@
             crossorigin="anonymous"></script>
     <script src="../resources/modules/node_modules/jsplumb/dist/js/jsplumb.min.js "></script>
     <script src='https://unpkg.com/mathlive/dist/mathlive.min.js'></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="javascript/test-script.js"></script>
 
 
 </head>
 <body>
+<div id="canvas-saved-failed" class="info failed">
+    <span>Váš obrázok nebol úspešne uložený.</span>
+</div>
+<div id="canvas-saved-success" class="info success">
+    <span>Váš obrázok bol úspešne uložený.</span>
+</div>
+<div id="file-saved-failed" class="info failed">
+    <span id="file-error"></span>
+</div>
 <header id="main-header">
     <img id="edukan" draggable="false" src="../resources/pictures/educan/edukan.png" width="550" alt="tukan">
 </header>
@@ -65,7 +75,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Nie</button>
-                    <button type="button" class="btn btn-success">Áno</button>
+                    <button type="button" class="btn btn-success" onclick="odovzdatTest()">Áno</button>
                 </div>
             </div>
         </div>

@@ -44,6 +44,35 @@ body {
     margin: 0;
 }
 
+.info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    height: 30px;
+    width: 100%;
+    top: -100px;
+    transition: top 400ms;
+    text-align: center;
+    line-height: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+
+.failed {
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+
 h3{
     font-family: "Roboto", sans-serif;
     font-size: 20px;
@@ -52,6 +81,7 @@ h3{
     width: 100%;
     margin: auto;
 }
+
 
 #section-header {
     margin-top: 20px;
@@ -139,6 +169,7 @@ math-field {
     border: solid 3px black;
     box-shadow: black 3px 3px 10px;
     border-radius: 10px;
+    margin-bottom: 15px;
 }
 
 .canvas-header{
@@ -147,6 +178,10 @@ math-field {
     align-items: center;
     width: 94%;
     margin-bottom: 5px;
+}
+
+.save-button{
+    width: 94%;
 }
 
 .whole-canvas{
