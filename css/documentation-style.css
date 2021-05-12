@@ -50,6 +50,7 @@ section{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-left: 70px;
 }
 th{
     white-space: nowrap;
@@ -75,7 +76,11 @@ th{
     #main-header {
         height: 150px;
     }
-}
+    .section-h2 {
+        font-size: 30px !important;
+    }
+
+    }
 
 #back-button {
     display: flex;
