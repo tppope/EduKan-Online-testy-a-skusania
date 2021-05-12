@@ -81,7 +81,7 @@ function printTest(otazky, odpovede){
         switch (otazka.typ){
             case 1:createShortQuestion(index, otazka.nazov,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             //case 2:createLongQuestion(index,otazka, odpoved);break;
-            case 3:;break;
+            case 3:createConnectQuestion(index,otazka,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             case 4:createCanvasQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             case 5:createMathQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
         }
@@ -314,5 +314,69 @@ function createLongInput(order, answers){
 
 
     return allCheckboxDiv;
+
+}
+
+function createCard(id,card_phrase){
+    let card=document.createElement("div");
+    card.setAttribute('class','connect-card');
+    let phrase=document.createElement("h4");
+
+    card.setAttribute('id',id);
+    phrase.innerText=card_phrase;
+
+    card.appendChild(phrase);
+
+
+    return card
+}
+
+function createConnectDiv(index,question){
+    let connectorDiv=document.createElement("div");
+    let leftDiv=document.createElement("div");
+    let rightDiv=document.createElement("div");
+
+
+    leftDiv.setAttribute('class','connect-card-wrapper-left');
+    rightDiv.setAttribute('class','connect-card-wrapper-right');
+
+    connectorDiv.append(leftDiv,rightDiv);
+    connectorDiv.setAttribute('class','connector-wrapper');
+
+    for (const odpoved in question.odpovede_lave) {
+        let id=`question-${index}-left-${odpoved}`;
+        let card=createCard(id,question.odpovede_lave[odpoved]);
+
+        card.classList.add(`connect-left-${index}`);
+        leftDiv.appendChild(card);
+
+    }
+    for (const odpoved in question.odpovede_prave) {
+        let id=`question-${index}-right-${odpoved}`;
+        let card=createCard(id,question.odpovede_prave[odpoved]);
+        card.classList.add(`connect-right-${index}`);
+        rightDiv.appendChild(card);
+
+    }
+    return connectorDiv;
+}
+
+function createConnectQuestion(index,question,answer,odpovede){
+    let questionDiv = createQuestionDiv(index,question.nazov,answer);
+    questionDiv.appendChild(createConnectDiv(index,question));
+
+
+
+    let newJsPlumbInstance=jsPlumb.getInstance();
+    for (let i = 0; i < odpovede.length; i++) {
+        if(odpovede[i]){
+            let sourceId=`question-${index}-left-${odpovede[i].par_lava_strana}`;
+            let targetId=`question-${index}-right-${odpovede[i].par_prava_strana}`;
+            newJsPlumbInstance.connect({source:sourceId,target:targetId,detachable:false,anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }]});
+        }
+    }
+
+
+
 
 }
