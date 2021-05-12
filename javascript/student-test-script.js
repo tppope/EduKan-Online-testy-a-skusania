@@ -8,22 +8,28 @@ $(window).on("load", function () {
 let connectIt = false
 let makeConnection = [];
 
-function makeConnect(){
-    let i = setInterval(function (){
-        if (connectIt){
+function makeConnect() {
+    let i = setInterval(function () {
+        if (connectIt) {
             clearInterval(i);
-            for (let connection of makeConnection){
+            for (let connection of makeConnection) {
                 for (let i = 0; i < connection.odpovede.length; i++) {
-                    if(connection.odpovede[i]){
-                        let newJsPlumbInstance=jsPlumb.getInstance();
-                        let sourceId=`question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
-                        let targetId=`question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
-                        newJsPlumbInstance.connect({source:sourceId,target:targetId,detachable:false,anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }]});
+                    if (connection.odpovede[i]) {
+                        let newJsPlumbInstance = jsPlumb.getInstance();
+                        let sourceId = `question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
+                        let targetId = `question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
+                        newJsPlumbInstance.connect({
+                            source: sourceId,
+                            target: targetId,
+                            detachable: false,
+                            anchor: "Continuous",
+                            endpoint: ["Dot", {width: 5, height: 5}]
+                        });
                     }
                 }
             }
         }
-    },200)
+    }, 300)
 
 }
 
@@ -37,8 +43,8 @@ function logout() {
 }
 
 
-function teacherTest(){
-    $.getJSON("api/uzivatelia/set-data-for-answers.php?akcia=vymaz", function (data){
+function teacherTest() {
+    $.getJSON("api/uzivatelia/set-data-for-answers.php?akcia=vymaz", function (data) {
         if (!data.error) {
             window.location = 'test-info.html'
         }
@@ -56,8 +62,7 @@ function getLoggedInUser() {
                 sessionStorage.setItem("logoutStatus", "failed");
                 window.location.href = 'index.html';
             }
-        }
-        else {
+        } else {
             console.log(data);
         }
     })
@@ -67,71 +72,83 @@ function showUserName(userName) {
     $("#login-name").text(userName);
 }
 
-function loadTest(){
+function loadTest() {
     $.getJSON("api/testy/nacitaj-test.php", function (test) {
         if (test.kod === "API_T__LT_U_1") {
             console.log(test);
             $("#test-name").text(test.data_testu.nazov);
             $.getJSON("api/uzivatelia/studenti/?akcia=masSession", function (findStudent) {
-                $("#student-name").text(findStudent.id+"-"+findStudent.name+" "+findStudent.surname);
+                $("#student-name").text(findStudent.id + "-" + findStudent.name + " " + findStudent.surname);
             });
             $.getJSON("api/testy/praca-s-testami.php?akcia=nacitaj-vysledky", function (testOdpovede) {
-                if (testOdpovede.kod === "API_T__PT_U_4"){
-                    printTest(test.data_testu.otazky,testOdpovede);
-                }
-                else if ( testOdpovede.kod ==="API_T__PT_GC")
-                    printTest(test.data_testu.otazky,false);
+                if (testOdpovede.kod === "API_T__PT_U_4") {
+                    printTest(test.data_testu.otazky, testOdpovede);
+                } else if (testOdpovede.kod === "API_T__PT_GC")
+                    printTest(test.data_testu.otazky, false);
                 else
                     console.log(testOdpovede);
             })
-        }
-        else
+        } else
             console.log(test);
     })
 }
 
-function printTest(otazky, odpovede){
+function printTest(otazky, odpovede) {
     console.log(otazky);
     console.log(odpovede);
-    $("#points").text(" "+odpovede.suhrnnyPocetBodov.ziskaneBody);
-    $.each(otazky,function (index){
+    let counter = 0;
+    $("#points").text(" " + odpovede.suhrnnyPocetBodov.ziskaneBody);
+    $.each(otazky, function (index) {
         let otazka = this;
         if (!odpovede)
             odpovede = {
-            vyhodnotenieCeleho:[],
-            odpovede:[],
+                vyhodnotenieCeleho: [],
+                odpovede: [],
+            }
+        switch (otazka.typ) {
+            case 1:
+                createShortQuestion(index, otazka.nazov, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
+                break;
+            case 2:
+                createLongQuestion(index, otazka, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
+                break;
+            case 3:
+                createConnectQuestion(index, otazka, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
+                break;
+            case 4:
+                createCanvasQuestion(index, otazka.nazov, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
+                break;
+            case 5:
+                createMathQuestion(index, otazka.nazov, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
+                break;
         }
-        switch (otazka.typ){
-            case 1:createShortQuestion(index, otazka.nazov,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
-            case 2:createLongQuestion(index, otazka,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
-            case 3:createConnectQuestion(index, otazka,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
-            case 4:createCanvasQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
-            case 5:createMathQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
-        }
+
+        counter++;
     })
     connectIt = true;
 }
 
 
+function createCheckAnswer(order) {
 
-function createCheckAnswer(order){
+    let questionDiv = $("#question-" + order);
     let checkButtons = document.createElement("div");
     $(checkButtons).addClass("check-answer-buttons");
     let wrongButton = document.createElement("button");
     wrongButton.innerText = "Nesprávne";
     $(wrongButton).addClass("btn btn-outline-danger check-button");
-    $(wrongButton).on("click",function (){
-        $.getJSON("api/uzivatelia/testy/evaluate-question.php?vyhodnotenie=nespravne&otazkaId="+order, function (data){
-            if (!data.error){
-                let questionDiv = $("#question-"+order);
+    $(wrongButton).on("click", function () {
+        $.getJSON("api/uzivatelia/testy/evaluate-question.php?vyhodnotenie=nespravne&otazkaId=" + order, function (data) {
+            if (!data.error) {
                 let points = $("#points");
-                $(wrongButton).attr("disabled",true);
+                $(wrongButton).attr("disabled", true);
                 $(wrongButton).removeClass("btn-outline-danger");
                 $(wrongButton).addClass("btn-danger");
-                $(successButton).attr("disabled",false);
+                $(successButton).attr("disabled", false);
                 $(successButton).removeClass("btn-success");
                 $(successButton).addClass("btn-outline-success");
-                points.text(" "+(Number(points.text())-1));
+                if (questionDiv.hasClass("correctQuestionBorder"))
+                    points.text(" " + (Number(points.text()) - 1));
                 questionDiv.removeClass("notCheckQuestionBorder");
                 questionDiv.removeClass("correctQuestionBorder");
                 questionDiv.addClass("inCorrectQuestionBorder");
@@ -142,59 +159,57 @@ function createCheckAnswer(order){
     let successButton = document.createElement("button");
     successButton.innerText = "Správne";
     $(successButton).addClass("btn btn-outline-success check-button");
-    $(successButton).on("click",function (){
-        $.getJSON("api/uzivatelia/testy/evaluate-question.php?vyhodnotenie=spravne&otazkaId="+order, function (data){
+    $(successButton).on("click", function () {
+        $.getJSON("api/uzivatelia/testy/evaluate-question.php?vyhodnotenie=spravne&otazkaId=" + order, function (data) {
             if (!data.error) {
-                let questionDiv = $("#question-"+order);
                 let points = $("#points");
-                $(wrongButton).attr("disabled",false);
+                $(wrongButton).attr("disabled", false);
                 $(wrongButton).removeClass("btn-danger");
                 $(wrongButton).addClass("btn-outline-danger");
-                $(successButton).attr("disabled",true);
+                $(successButton).attr("disabled", true);
                 $(successButton).removeClass("btn-outline-success");
                 $(successButton).addClass("btn-success");
-                points.text(" "+(Number(points.text())+1));
+                points.text(" " + (Number(points.text()) + 1));
                 questionDiv.removeClass("notCheckQuestionBorder");
                 questionDiv.removeClass("inCorrectQuestionBorder");
-                $("#question-" + order).addClass("correctQuestionBorder");
+                questionDiv.addClass("correctQuestionBorder");
             }
         })
     })
 
-    if ($("#question-"+order).hasClass("inCorrectQuestionBorder")) {
+    if (questionDiv.hasClass("inCorrectQuestionBorder")) {
         $(wrongButton).attr("disabled", true);
         $(wrongButton).removeClass("btn-outline-danger");
         $(wrongButton).addClass("btn-danger");
-    }
-    else if ($("#question-"+order).hasClass("correctQuestionBorder")) {
+    } else if ($("#question-" + order).hasClass("correctQuestionBorder")) {
         $(successButton).attr("disabled", true);
         $(successButton).removeClass("btn-outline-success");
         $(successButton).addClass("btn-success");
     }
 
-    checkButtons.append(wrongButton,successButton)
+    checkButtons.append(wrongButton, successButton)
 
     return checkButtons;
 
 }
 
 
-function createCanvasQuestion(order,name,answerCheck,odpovede){
+function createCanvasQuestion(order, name, answerCheck, odpovede) {
     let img = createImgForCanvasQuestion(odpovede, order)
-    let questionDiv = createQuestionDiv(order,name,answerCheck);
-    questionDiv.append(img,createCheckAnswer(order));
+    let questionDiv = createQuestionDiv(order, name, answerCheck);
+    questionDiv.append(img, createCheckAnswer(order));
 
     $("#test-questions").append(questionDiv);
 }
 
-function createImgForCanvasQuestion(odpovede, order){
-    let img  = document.createElement("img");
+function createImgForCanvasQuestion(odpovede, order) {
+    let img = document.createElement("img");
     let src = "";
     if (odpovede)
         src = odpovede.zadana_odpoved;
 
     if (~src.indexOf("inFiles-"))
-        return showImageFile(order,src)
+        return showImageFile(order, src)
     else {
         $(img).attr({
             "src": src,
@@ -205,17 +220,17 @@ function createImgForCanvasQuestion(odpovede, order){
     }
 }
 
-function createShortQuestion(order,name, answerCheck, odpovede){
-    questionDiv = createQuestionDiv(order,name,answerCheck);
+function createShortQuestion(order, name, answerCheck, odpovede) {
+    questionDiv = createQuestionDiv(order, name, answerCheck);
     $(questionDiv).append(createShortInput(order, odpovede));
 
 }
 
-function createMathQuestion(order,name,answerCheck,odpovede){
+function createMathQuestion(order, name, answerCheck, odpovede) {
 
     let mathField = createMathField(odpovede, order);
 
-    let questionDiv = createQuestionDiv(order,name,answerCheck);
+    let questionDiv = createQuestionDiv(order, name, answerCheck);
     questionDiv.append(mathField, createCheckAnswer(order));
 
     $("#test-questions").append(questionDiv);
@@ -229,17 +244,17 @@ function typeset(code) {
     return promise;
 }
 
-function createMathField(odpovede, order){
+function createMathField(odpovede, order) {
     let div = document.createElement("div");
     let mathValue = "";
     if (odpovede)
         mathValue = odpovede.zadana_odpoved;
 
-    if (~mathValue.indexOf("inFiles-")){
+    if (~mathValue.indexOf("inFiles-")) {
         return showImageFile(order, mathValue);
-    }else {
+    } else {
         typeset(() => {
-            div.innerHTML = "$$"+mathValue+"$$";
+            div.innerHTML = "$$" + mathValue + "$$";
         });
         return div;
     }
@@ -248,20 +263,20 @@ function createMathField(odpovede, order){
 }
 
 
-function showImageFile(order, type){
-    let path = "api/uzivatelia/testy/uploadedImages/"+order+"_";
+function showImageFile(order, type) {
+    let path = "api/uzivatelia/testy/uploadedImages/" + order + "_";
     $.ajax({
         url: "api/uzivatelia/set-data-for-answers.php?akcia=dostan",
         dataType: 'json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             path = path + data.fileName
         }
     });
-    path = path +"."+ (type.split("-"))[1];
-    let img  = document.createElement("img");
+    path = path + "." + (type.split("-"))[1];
+    let img = document.createElement("img");
     $(img).attr({
-        "src":path,
+        "src": path,
         "draggable": false
     });
     $(img).addClass("img-answer");
@@ -269,7 +284,7 @@ function showImageFile(order, type){
 }
 
 
-function createQuestionDiv(order,name, correct){
+function createQuestionDiv(order, name, correct) {
     let questionDiv = document.createElement("div");
     $(questionDiv).addClass("question-style");
     if (correct === 0)
@@ -278,20 +293,22 @@ function createQuestionDiv(order,name, correct){
         $(questionDiv).addClass("correctQuestionBorder")
     else
         $(questionDiv).addClass("notCheckQuestionBorder")
-    $(questionDiv).attr("id","question-"+order)
-    questionDiv.append(createQuestionName(order,name))
+    $(questionDiv).attr("id", "question-" + order)
+    questionDiv.append(createQuestionName(order, name))
     $("#test-questions").append(questionDiv);
     return questionDiv;
 }
-function createQuestionName(order,name){
+
+function createQuestionName(order, name) {
     let questionHeader = document.createElement("header");
     $(questionHeader).addClass("question-header");
     let questionH3 = document.createElement("h3");
-    $(questionH3).text(order+". "+name);
+    $(questionH3).text(order + ". " + name);
     questionHeader.append(questionH3);
     return questionHeader;
 }
-function createShortInput(order, odpoved){
+
+function createShortInput(order, odpoved) {
     let inputAreaDiv = document.createElement("div");
     let inputArea = document.createElement("input");
 
@@ -303,24 +320,26 @@ function createShortInput(order, odpoved){
     $(inputAreaDiv).addClass("input-area-short");
     $(inputAreaDiv).append(inputArea);
     $(inputArea).attr({
-        "type":"text",
+        "type": "text",
         "class": "form-control",
-        "disabled":"disabled",
-        "value":value
+        "disabled": "disabled",
+        "value": value
 
     });
     return inputAreaDiv;
 
 }
-function createLongQuestion(order,otazka, answerCheck, odpovede) {
-    let questionDiv = createQuestionDiv(order, otazka.nazov, answerCheck);
-    $(questionDiv).append(createLongInput(order,otazka.odpovede, odpovede));
 
-    studentChecked(order, odpovede);
+function createLongQuestion(order, otazka, answerCheck, odpovede) {
+    let questionDiv = createQuestionDiv(order, otazka.nazov, answerCheck);
+    $(questionDiv).append(createLongInput(order, otazka.odpovede, odpovede));
+
+    if (odpovede)
+        studentChecked(order, odpovede);
 
 }
 
-function createLongInput(order, answers, studentAnswers){
+function createLongInput(order, answers, studentAnswers) {
     let allCheckboxDiv = document.createElement("div");
     $(allCheckboxDiv).addClass("checkbox-array-div");
 
@@ -330,24 +349,25 @@ function createLongInput(order, answers, studentAnswers){
         $(checkboxDiv).addClass("checkbox-div");
         let inputCheckbox = document.createElement("input");
         $(inputCheckbox).attr({
-            "value":answer.text,
-            "name":"checkboxName-" + order,
-            "type":"checkbox",
+            "value": answer.text,
+            "name": "checkboxName-" + order,
+            "type": "checkbox",
             "class": "form-check-input checkbox-input",
-            "id":"check-"+order+"-"+answer.text,
-            "disabled":"disabled"
+            "id": "check-" + order + "-" + answer.text,
+            "disabled": "disabled"
         });
 
         let labelCheckbox = document.createElement("label");
         $(labelCheckbox).attr({
-            "for":"check-"+order+"-"+answer.text,
+            "for": "check-" + order + "-" + answer.text,
             "class": "form-check-label checkbox-label",
 
         });
         $(labelCheckbox).text(answer.text);
-        $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
+        $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox, labelCheckbox));
 
-        makeColorLabel(answer,studentAnswers,labelCheckbox);
+        if (studentAnswers)
+            makeColorLabel(answer, studentAnswers, labelCheckbox);
 
     }
 
@@ -356,45 +376,42 @@ function createLongInput(order, answers, studentAnswers){
 
 }
 
-function studentChecked(order, studentAnswers){
-    for(let answer of studentAnswers){
-        $("#check-"+order+"-"+answer.zadana_odpoved).attr("checked","true");
-    }
-}
-
-function makeColorLabel(answer,studentAnswers,labelCheckbox){
-    if(answer.je_spravna){
-        if(isContains(answer.text, studentAnswers)){
-            $(labelCheckbox).css("color", "green");
-        }
-        else
-            $(labelCheckbox).css("color", "red");
-    }
-    else{
-        if(!isContains(answer.text, studentAnswers)){
-            $(labelCheckbox).css("color", "green");
-        }
-        else
-            $(labelCheckbox).css("color", "red");
-    }
-}
-
-function isContains(rightAnswer, studentAnswers){
+function studentChecked(order, studentAnswers) {
     for (let answer of studentAnswers) {
-        if(answer.zadana_odpoved === rightAnswer)
+        $("#check-" + order + "-" + answer.zadana_odpoved).attr("checked", "true");
+    }
+}
+
+function makeColorLabel(answer, studentAnswers, labelCheckbox) {
+    if (answer.je_spravna) {
+        if (isContains(answer.text, studentAnswers)) {
+            $(labelCheckbox).css("color", "green");
+        } else
+            $(labelCheckbox).css("color", "red");
+    } else {
+        if (!isContains(answer.text, studentAnswers)) {
+            $(labelCheckbox).css("color", "green");
+        } else
+            $(labelCheckbox).css("color", "red");
+    }
+}
+
+function isContains(rightAnswer, studentAnswers) {
+    for (let answer of studentAnswers) {
+        if (answer.zadana_odpoved === rightAnswer)
             return true;
     }
     return false;
 
 }
 
-function createCard(id,card_phrase){
-    let card=document.createElement("div");
-    card.setAttribute('class','connect-card');
-    let phrase=document.createElement("h4");
+function createCard(id, card_phrase) {
+    let card = document.createElement("div");
+    card.setAttribute('class', 'connect-card');
+    let phrase = document.createElement("h4");
 
-    card.setAttribute('id',id);
-    phrase.innerText=card_phrase;
+    card.setAttribute('id', id);
+    phrase.innerText = card_phrase;
 
     card.appendChild(phrase);
 
@@ -402,29 +419,29 @@ function createCard(id,card_phrase){
     return card
 }
 
-function createConnectDiv(index,question){
-    let connectorDiv=document.createElement("div");
-    let leftDiv=document.createElement("div");
-    let rightDiv=document.createElement("div");
+function createConnectDiv(index, question) {
+    let connectorDiv = document.createElement("div");
+    let leftDiv = document.createElement("div");
+    let rightDiv = document.createElement("div");
 
 
-    leftDiv.setAttribute('class','connect-card-wrapper-left');
-    rightDiv.setAttribute('class','connect-card-wrapper-right');
+    leftDiv.setAttribute('class', 'connect-card-wrapper-left');
+    rightDiv.setAttribute('class', 'connect-card-wrapper-right');
 
-    connectorDiv.append(leftDiv,rightDiv);
-    connectorDiv.setAttribute('class','connector-wrapper');
+    connectorDiv.append(leftDiv, rightDiv);
+    connectorDiv.setAttribute('class', 'connector-wrapper');
 
     for (const odpoved in question.odpovede_lave) {
-        let id=`question-${index}-left-${odpoved}`;
-        let card=createCard(id,question.odpovede_lave[odpoved]);
+        let id = `question-${index}-left-${odpoved}`;
+        let card = createCard(id, question.odpovede_lave[odpoved]);
 
         card.classList.add(`connect-left-${index}`);
         leftDiv.appendChild(card);
 
     }
     for (const odpoved in question.odpovede_prave) {
-        let id=`question-${index}-right-${odpoved}`;
-        let card=createCard(id,question.odpovede_prave[odpoved]);
+        let id = `question-${index}-right-${odpoved}`;
+        let card = createCard(id, question.odpovede_prave[odpoved]);
         card.classList.add(`connect-right-${index}`);
         rightDiv.appendChild(card);
 
@@ -432,9 +449,9 @@ function createConnectDiv(index,question){
     return connectorDiv;
 }
 
-function createConnectQuestion(index,question,answer,odpovede){
-    let questionDiv = createQuestionDiv(index,question.nazov,answer);
-    questionDiv.appendChild(createConnectDiv(index,question));
+function createConnectQuestion(index, question, answer, odpovede) {
+    let questionDiv = createQuestionDiv(index, question.nazov, answer);
+    questionDiv.appendChild(createConnectDiv(index, question));
 
     let connection = {
         "index": index,

@@ -140,8 +140,12 @@ document.getElementById('send').onclick=function (){
         .then(data =>{
             console.log(data);
             if (data.kod === "API_T__NT_U_1"){
-                //window.location.replace("../teacher-homescreen.html")
+                sessionStorage.setItem("editTest","success");
             }
+            else{
+                sessionStorage.setItem("editTest","failed");
+            }
+            window.location.replace("../teacher-homescreen.html")
         });
 
 

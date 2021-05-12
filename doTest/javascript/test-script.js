@@ -2,11 +2,34 @@ let instances=[];
 $(window).on("load", function () {
     startTest();
     $('[data-toggle="tooltip"]').tooltip();
+    loadSSE();
 });
 
 
 document.addEventListener("visibilitychange", onVisibilityChange);
 
+
+function loadSSE(){
+    if(typeof(EventSource) !== "undefined") {
+
+        let source = new EventSource("../api/uzivatelia/testy/test-time-sse.php");
+
+        source.addEventListener("message", function(e) {
+            showTime(JSON.parse(e.data));
+        },false);
+
+    } else {
+        $("#x").text("Sorry, your browser does not support server-sent events...");
+    }
+}
+
+function showTime(data){
+    if (data.time === 'end')
+        odovzdatTest();
+    else
+    $("#time-counter").text(data.time);
+
+}
 
 function onVisibilityChange(){
     if (document.hidden){
