@@ -16,3 +16,4 @@ catch (Exception $exception){
     );
     echo json_encode($response);
 }
+session_commit();

@@ -80,6 +80,17 @@ class ApiTesty_API_frontend_ucitel {
 		else {
 			$hlaska = Hlasky__API_T::get_hlaska("API_T__PT_U_4");
 			$hlaska["odpovede"] = $pokus;
+			
+			$hlaska["vyhodnotenieCeleho"] = ApiTesty_sqlContainer::nacitaj_vyhodnotene_odpovede(
+				$mysqli, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania
+			);
+			
+			$hlaska["suhrnnyPocetBodov"]["celkoveBody"] = count($hlaska["vyhodnotenieCeleho"]);
+
+			foreach ($hlaska["vyhodnotenieCeleho"] as $body) {
+				if ($body > 0) $hlaska["suhrnnyPocetBodov"]["ziskaneBody"]++;
+			}
+
 			return $hlaska;
 		}
 	}

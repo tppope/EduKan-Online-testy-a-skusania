@@ -3,8 +3,17 @@ $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
     $("#reg-button").hide();
     checkRegStatus();
-    checkLogoutStatus()
+    checkLogoutStatus();
+    checkDoTestStatus()
 })
+
+function checkDoTestStatus(){
+    let doTestInfo = sessionStorage.getItem("doTest");
+    if (doTestInfo != null) {
+        showDoTestInfo(doTestInfo);
+        sessionStorage.removeItem('logoutStatus');
+    }
+}
 
 function checkLogoutStatus() {
     let logoutInfo = sessionStorage.getItem("logoutStatus");
@@ -32,8 +41,16 @@ function showRegInfo(regInfo) {
     }, 3000)
 }
 
-function showLogInfo(regInfo) {
-    let logDiv = $("#log-" + regInfo);
+function showDoTestInfo(doTestInfo) {
+    let doTestDiv = $("#doTest-" + doTestInfo);
+    doTestDiv.css("top", 0);
+    setTimeout(function () {
+        doTestDiv.css("top", "-100px");
+    }, 3000)
+}
+
+function showLogInfo(logInfo) {
+    let logDiv = $("#log-" + logInfo);
     logDiv.css("top", 0);
     setTimeout(function () {
         logDiv.css("top", "-100px");

@@ -71,7 +71,7 @@ CREATE TABLE zoznam_pisucich_studentov (
 	cas_zaciatku_pisania time NOT NULL,
 	datum_konca_pisania date DEFAULT NULL,
 	cas_konca_pisania time DEFAULT NULL,
-    pocet_tab_odideni tinyint UNSIGNED NOT NULL DEFAULT '0',
+    pocet_tab_odideni tinyint(1) NOT NULL DEFAULT '0'
 
 	PRIMARY KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania),
 	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE
@@ -125,5 +125,19 @@ CREATE TABLE odpovede_studentov_typ_3 (
 	FOREIGN KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) REFERENCES zoznam_pisucich_studentov(student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
+CREATE TABLE vyhodnotenie_testov_studentov (
+	kluc_testu varchar(40) NOT NULL,
+	student_id int NOT NULL,
+	datum_zaciatku_pisania date NOT NULL,
+	cas_zaciatku_pisania time NOT NULL,
+	otazka_id tinyint NOT NULL,
+	vyhodnotenie tinyint NOT NULL DEFAULT -1 COMMENT '-1 znamena, ze odpoved este nebola vyhodnotena, ine cislo znamena pocet bodov za otazku',
+	
+	PRIMARY KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania, otazka_id),
+	FOREIGN KEY (kluc_testu) REFERENCES zoznam_testov(kluc_testu) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) REFERENCES zoznam_pisucich_studentov(student_id, datum_zaciatku_pisania, cas_zaciatku_pisania) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 COMMIT;

@@ -13,11 +13,8 @@
 			casovy_limit: [int časový limit v minútach],
 			aktivny: [true/false, či je aktívny alebo nie],
 			pocet_otazok: [int pocet otazok],
+			pocet_pisucich_studentov: [pocet studentov, ktori vypracovavaju test]
 
-			[
-				ak je test aktivny, je tu este jedno pole:
-				pocet_pisucich_studentov: [pocet studentov, ktori vypracovavaju test]
-			]
 		}
 	]
 }
@@ -62,6 +59,13 @@ Načítanie odpovedí k testu:
 			par_prava_strana: [int id možnosti z pravej strany],
 			vyhodnotenie: [int výsledok vyhodnotenia odpovede: 0 pre nesprávnu odpoveď a 1 pre správnu, alebo 2, ak odpoveď ešte nebola vyhodnotená]
 		}
+	],
+	vyhodnotenieCeleho: [
+		zoznam otázok a počet bodov za každú
+	],
+	suhrnnyPocetBodov: [
+		ziskaneBody: [počet študentom získaných bodov],
+		celkoveBody: [celkový počet bodov]
 	]
 }
 
