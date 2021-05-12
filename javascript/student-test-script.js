@@ -320,7 +320,7 @@ function createLongInput(order, answers, studentAnswers){
 
 function studentChecked(order, studentAnswers){
     for(let answer of studentAnswers){
-    $("check-"+order+"-"+answer.text).attr("checked");}
+        $("check-"+order+"-"+answer.text).attr("checked");}
 }
 
 function makeColorLabel(answer,studentAnswers,labelCheckbox){
