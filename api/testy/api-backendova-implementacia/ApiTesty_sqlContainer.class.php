@@ -653,10 +653,10 @@ class ApiTesty_sqlContainer {
 			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND otazka_id = ?",
 
 			"2" => "UPDATE odpovede_studentov_typ_2 SET vyhodnotenie = ?
-			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND zadana_odpoved = ?",
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND zadana_odpoved = ? AND otazka_id = ?",
 
 			"3" => "UPDATE odpovede_studentov_typ_3 SET vyhodnotenie = ?
-			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND par_lava_strana = ? AND par_prava_strana = ?",
+			WHERE kluc_testu = ? AND student_id = ? AND datum_zaciatku_pisania = ? AND cas_zaciatku_pisania = ? AND par_lava_strana = ? AND par_prava_strana = ? AND otazka_id = ?",
 
 			"zoznam_otazok" => "SELECT otazka_id FROM zoznam_testov_otazky WHERE kluc_testu = ? AND typ < 4",
 
@@ -733,11 +733,13 @@ class ApiTesty_sqlContainer {
 										}
 									}
 									else $pocet_spravnych_studenta[$otazka_id] = -1; // nespravna odpoved
+
 								}
 							}
 
+							error_log($vyhodnotenie);
 							$stmt["2"]->bind_param(
-								"isisss", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["zadana_odpoved"]
+								"isisssi", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["zadana_odpoved"], $otazka_id
 							);
 							$exec = $stmt["2"]->execute();
 							if (!$exec) {
@@ -767,7 +769,7 @@ class ApiTesty_sqlContainer {
 							}
 
 							$stmt["3"]->bind_param(
-								"isissii", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["par_lava_strana"], $odpoved_studenta["par_prava_strana"]
+								"isissiii", $vyhodnotenie, $kluc, $student_id, $datum_zaciatku_pisania, $cas_zaciatku_pisania, $odpoved_studenta["par_lava_strana"], $odpoved_studenta["par_prava_strana"], $otazka_id
 							);
 							$exec = $stmt["3"]->execute();
 							if (!$exec) {
