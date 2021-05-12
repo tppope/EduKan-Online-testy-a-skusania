@@ -3,22 +3,7 @@ $(window).on("load", function () {
     createMathQuestion(2, "napiste vzorec na hovno");
     createCanvasQuestion(3,"Nakreslite leva");
     createCanvasQuestion(4,"Nakreslite sliepku");
-    let array = {
-        "nazov": "Spojte spravne otazky",
-        "odpovede_lave":{
-            1: "červený",
-            2: "ostrý",
-            3: "zelená",
-            4: "šľachetné"
-        },
-        "odpovede_prave": {
-            1: "tráva",
-            2: "srdce",
-            3: "mak",
-            4: "nôž"
-        },
-    }
-    createConnectQuestion(5, array)
+
     //startTest();
     $('[data-toggle="tooltip"]').tooltip();
 });
