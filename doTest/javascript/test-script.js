@@ -455,7 +455,7 @@ function createConnectQuestion(index,question){
     for(let i=0;i<lefties.length;i++){
         newJsPlumbInstance.makeSource(lefties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
     }
-    for(let i=0;i<lefties.length;i++){
+    for(let i=0;i<righties.length;i++){
         newJsPlumbInstance.makeTarget(righties[i].id,{anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }], maxConnections:1,});
     }
 
