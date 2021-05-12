@@ -79,7 +79,7 @@ function printTest(otazky, odpovede){
             odpovede:[],
         }
         switch (otazka.typ){
-            case 1:createShortQuestion(index, otazka.nazov,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
+            case 1:createShortQuestion(index, otazka,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             case 2:createLongQuestion(index, otazka,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             case 3:;break;
             case 4:createCanvasQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
@@ -168,12 +168,6 @@ function createImgForCanvasQuestion(odpovede, order){
     }
 }
 
-function createShortQuestion(order,name, answerCheck, odpovede){
-    questionDiv = createQuestionDiv(order,name,answerCheck);
-    $(questionDiv).append(createShortInput(order, odpovede));
-
-}
-
 function createMathQuestion(order,name,answerCheck,odpovede){
 
     let mathField = createMathField(odpovede, order);
@@ -254,6 +248,12 @@ function createQuestionName(order,name){
     questionHeader.append(questionH3);
     return questionHeader;
 }
+
+function createShortQuestion(order,question, answerCheck, odpovede){
+    questionDiv = createQuestionDiv(order,question.nazov,answerCheck);
+    $(questionDiv).append(createShortInput(order, odpovede, addCorrectAnswers(question.spravne_odpovede)));
+}
+
 function createShortInput(order, odpoved){
     let inputAreaDiv = document.createElement("div");
     let inputArea = document.createElement("input");
@@ -275,6 +275,15 @@ function createShortInput(order, odpoved){
     return inputAreaDiv;
 
 }
+function addCorrectAnswers(answers) {
+    let val = "(Správne odpovede: ";
+
+    for (let answer of answers) {
+        val += answer +", ";
+    }
+    return val.substring(0,val.length-2) + ")"
+}
+
 function createLongQuestion(order,otazka, answerCheck, odpovede) {
     let questionDiv = createQuestionDiv(order, otazka.nazov, answerCheck);
     $(questionDiv).append(createLongInput(order,otazka.odpovede, odpovede));
