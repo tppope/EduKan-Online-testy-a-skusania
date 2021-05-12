@@ -218,3 +218,33 @@ section{
     }
 
 }
+
+
+.connect-card{
+    border-radius:15px;
+    border:1px solid black;
+    width: 10rem;
+    height: 10rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+.connector-wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    width: 90%;
+}
+
+.input-area-short{
+    width: 96%;
+}
+
+.checkbox-div{
+    padding: 5px;
+}
+.checkbox-array-div{
+    width: 80%;
+}
+
