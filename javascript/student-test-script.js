@@ -279,6 +279,8 @@ function createLongQuestion(order,otazka, answerCheck, odpovede) {
     let questionDiv = createQuestionDiv(order, otazka.nazov, answerCheck);
     $(questionDiv).append(createLongInput(order,otazka.odpovede, odpovede));
 
+    studentChecked(order, odpovede);
+
 }
 
 function createLongInput(order, answers, studentAnswers){
@@ -312,7 +314,6 @@ function createLongInput(order, answers, studentAnswers){
 
     }
 
-    studentChecked(order, studentAnswers);
 
     return allCheckboxDiv;
 
@@ -320,7 +321,8 @@ function createLongInput(order, answers, studentAnswers){
 
 function studentChecked(order, studentAnswers){
     for(let answer of studentAnswers){
-        $("check-"+order+"-"+answer.text).attr("checked");}
+        $("#check-"+order+"-"+answer.zadana_odpoved).attr("checked","true");
+    }
 }
 
 function makeColorLabel(answer,studentAnswers,labelCheckbox){
