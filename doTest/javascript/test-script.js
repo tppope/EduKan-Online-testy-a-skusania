@@ -16,6 +16,7 @@ function onVisibilityChange(){
     }
 }
 
+
 function startTest(){
     let zacniTest = {
         "akcia":"zacat-pisat",
@@ -79,7 +80,7 @@ function createCanvas(order){
     let wholeCanvas = document.createElement("div");
     $(wholeCanvas).addClass("whole-canvas math-input-content-"+order);
     let saveButton = document.createElement("button");
-    $(saveButton).addClass("btn btn-block btn-outline-info save-button");
+    $(saveButton).addClass("btn btn-lg btn-block btn-info save-button");
     $(saveButton).text("Uložiť obrázok");
 
 
@@ -108,7 +109,7 @@ function saveCanvas(button, canvas, order){
         fetch(request)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                showSaveCanvasInfo(data.status);
             });
 
     });
@@ -303,7 +304,29 @@ function createFileSubmit(order){
 
 function submitForm(order){
     let pictureForm = $("#picture-form-"+order).get(0);
-    console.log($("#fileUpload-"+order).get(0));
+
+    const request = new Request("../api/uzivatelia/testy/math-canvas-file-answer.php",{
+        method: 'POST',
+        body: new FormData(pictureForm),
+    });
+
+    fetch(request)
+        .then(response => response.json())
+        .then(data =>
+        {
+            if (!data.error){
+                console.log(data);
+                $(".picture-input-content-"+order).remove();
+                $(".math-input-content-"+order).remove();
+                $("#question-"+order).append("<lottie-player src=\"resources/lf30_editor_hnrbfmbx.json\"  background=\"transparent\"  speed=\"1\"  style=\"width: 300px; height: 300px;\" autoplay></lottie-player>")
+            }
+            else{
+                $("#file-error").text(data.message);
+                showSaveFileInfo(data.status);
+            }
+
+        });
+
 }
 
 function createFileInput(order){
@@ -615,4 +638,20 @@ function odovzdatTest(){
             }else
                 console.log(data);
         });
+}
+
+function showSaveCanvasInfo(saveSuccessInfo) {
+    let saveSuccessDiv = $("#canvas-saved-" + saveSuccessInfo);
+    saveSuccessDiv.css("top", 0);
+    setTimeout(function () {
+        saveSuccessDiv.css("top", "-100px");
+    }, 3000)
+}
+
+function showSaveFileInfo(saveSuccessInfo) {
+    let saveSuccessDiv = $("#file-saved-" + saveSuccessInfo);
+    saveSuccessDiv.css("top", 0);
+    setTimeout(function () {
+        saveSuccessDiv.css("top", "-100px");
+    }, 3000)
 }

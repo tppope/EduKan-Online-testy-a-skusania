@@ -61,8 +61,23 @@ section{
     background-color: white;
     border-radius: 15px;
     padding-bottom: 20px;
+    transition: border-color 300ms;
 }
 
+#points{
+    font-weight: bold;
+    white-space: pre;
+}
+
+#all-points{
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: normal;
+    font-style: normal;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 50px;
+}
 
 .question-header{
     width: 96%;
@@ -138,7 +153,7 @@ section{
 }
 
 #test-questions{
-    margin-bottom: 300px;
+    margin-bottom: 15px;
 }
 
 

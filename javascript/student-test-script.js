@@ -4,6 +4,14 @@ $(window).on("load", function () {
     loadTest();
 });
 
+function logout() {
+    $.getJSON("api/uzivatelia/odhlasenie/", function (data) {
+        if (!data.error) {
+            sessionStorage.setItem("logoutStatus", "success");
+            window.location.replace('index.html');
+        }
+    })
+}
 
 
 function teacherTest(){
@@ -47,7 +55,6 @@ function loadTest(){
             $.getJSON("api/testy/praca-s-testami.php?akcia=nacitaj-vysledky", function (testOdpovede) {
                 if (testOdpovede.kod === "API_T__PT_U_4"){
                     printTest(test.data_testu.otazky,testOdpovede);
-                    console.log(testOdpovede);
                 }
                 else if ( testOdpovede.kod ==="API_T__PT_GC")
                     printTest(test.data_testu.otazky,false);
@@ -63,6 +70,7 @@ function loadTest(){
 function printTest(otazky, odpovede){
     console.log(otazky);
     console.log(odpovede);
+    $("#points").text(" "+odpovede.suhrnnyPocetBodov.ziskaneBody);
     $.each(otazky,function (index){
         let otazka = this;
         if (!odpovede)
@@ -89,15 +97,43 @@ function createCheckAnswer(order){
     wrongButton.innerText = "Nesprávne";
     $(wrongButton).addClass("btn btn-outline-danger check-button");
     $(wrongButton).on("click",function (){
-
+        $.getJSON("api/uzivatelia/testy/evaluate-question.php?vyhodnotenie=nespravne&otazkaId="+order, function (data){
+            if (!data.error){
+                let questionDiv = $("#question-"+order);
+                let points = $("#points");
+                $(wrongButton).attr("disabled",true);
+                $(successButton).attr("disabled",false);
+                points.text(" "+(Number(points.text())-1));
+                questionDiv.removeClass("notCheckQuestionBorder");
+                questionDiv.removeClass("correctQuestionBorder");
+                questionDiv.addClass("inCorrectQuestionBorder");
+            }
+        })
     })
 
     let successButton = document.createElement("button");
     successButton.innerText = "Správne";
     $(successButton).addClass("btn btn-outline-success check-button");
     $(successButton).on("click",function (){
-
+        $.getJSON("api/uzivatelia/testy/evaluate-question.php?vyhodnotenie=spravne&otazkaId="+order, function (data){
+            if (!data.error) {
+                let questionDiv = $("#question-"+order);
+                let points = $("#points");
+                $(wrongButton).attr("disabled",false);
+                $(successButton).attr("disabled",true);
+                points.text(" "+(Number(points.text())+1));
+                questionDiv.removeClass("notCheckQuestionBorder");
+                questionDiv.removeClass("inCorrectQuestionBorder");
+                $("#question-" + order).addClass("correctQuestionBorder");
+            }
+        })
     })
+
+    if ($("#question-"+order).hasClass("inCorrectQuestionBorder"))
+        $(wrongButton).attr("disabled",true);
+    else if ($("#question-"+order).hasClass("correctQuestionBorder"))
+        $(successButton).attr("disabled",true);
+
 
     checkButtons.append(wrongButton,successButton)
 
@@ -107,24 +143,29 @@ function createCheckAnswer(order){
 
 
 function createCanvasQuestion(order,name,answerCheck,odpovede){
-    let img = createImgForCanvasQuestion(odpovede)
+    let img = createImgForCanvasQuestion(odpovede, order)
     let questionDiv = createQuestionDiv(order,name,answerCheck);
     questionDiv.append(img,createCheckAnswer(order));
 
     $("#test-questions").append(questionDiv);
 }
 
-function createImgForCanvasQuestion(odpovede){
+function createImgForCanvasQuestion(odpovede, order){
     let img  = document.createElement("img");
     let src = "";
     if (odpovede)
         src = odpovede.zadana_odpoved;
-    $(img).attr({
-        "src":src,
-        "draggable": false
-    });
-    $(img).addClass("img-answer");
-    return img;
+
+    if (~src.indexOf("inFiles-"))
+        return showImageFile(order,src)
+    else {
+        $(img).attr({
+            "src": src,
+            "draggable": false
+        });
+        $(img).addClass("img-answer");
+        return img;
+    }
 }
 
 function createShortQuestion(order,name, answerCheck, odpovede){
@@ -134,7 +175,8 @@ function createShortQuestion(order,name, answerCheck, odpovede){
 }
 
 function createMathQuestion(order,name,answerCheck,odpovede){
-    let mathField = createMathField(odpovede);
+
+    let mathField = createMathField(odpovede, order);
 
     let questionDiv = createQuestionDiv(order,name,answerCheck);
     questionDiv.append(mathField, createCheckAnswer(order));
@@ -150,15 +192,43 @@ function typeset(code) {
     return promise;
 }
 
-function createMathField(odpovede){
+function createMathField(odpovede, order){
     let div = document.createElement("div");
     let mathValue = "";
     if (odpovede)
         mathValue = odpovede.zadana_odpoved;
-    typeset(() => {
-        div.innerHTML = "$$"+mathValue+"$$";
+
+    if (~mathValue.indexOf("inFiles-")){
+        return showImageFile(order, mathValue);
+    }else {
+        typeset(() => {
+            div.innerHTML = "$$"+mathValue+"$$";
+        });
+        return div;
+    }
+
+
+}
+
+
+function showImageFile(order, type){
+    let path = "api/uzivatelia/testy/uploadedImages/"+order+"_";
+    $.ajax({
+        url: "api/uzivatelia/set-data-for-answers.php?akcia=dostan",
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            path = path + data.fileName
+        }
     });
-    return div;
+    path = path +"."+ (type.split("-"))[1];
+    let img  = document.createElement("img");
+    $(img).attr({
+        "src":path,
+        "draggable": false
+    });
+    $(img).addClass("img-answer");
+    return img;
 }
 
 
@@ -169,7 +239,7 @@ function createQuestionDiv(order,name, correct){
         $(questionDiv).addClass("inCorrectQuestionBorder")
     else if (correct === 1)
         $(questionDiv).addClass("correctQuestionBorder")
-    else(correct === -1)
+    else
         $(questionDiv).addClass("notCheckQuestionBorder")
     $(questionDiv).attr("id","question-"+order)
     questionDiv.append(createQuestionName(order,name))

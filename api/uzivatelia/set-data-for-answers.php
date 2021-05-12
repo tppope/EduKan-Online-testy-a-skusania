@@ -2,6 +2,7 @@
 header('Content-Type: application/json; charset=utf-8');
 try {
     session_start();
+    $fileName = "";
     if (isset($_GET["akcia"])){
         if ($_GET["akcia"] =='nastav'){
             $_SESSION["studentId"] = $_GET["studentId"];
@@ -12,13 +13,19 @@ try {
             unset($_SESSION["studentId"]);
             unset($_SESSION["datumZaciatkuPisania"]);
             unset($_SESSION["casZaciatkuPisania"]);
+
+        }
+        elseif ($_GET["akcia"] =='dostan'){
+            $fileName = $_SESSION["pisanyTestKluc"]."_".$_SESSION["studentId"]."_".$_SESSION["datumZaciatkuPisania"]."_".$_SESSION["casZaciatkuPisania"];
         }
     }
 
     echo json_encode(array(
         "error" => false,
         "status" => "success",
+        "fileName"=>$fileName
     ));
+
 }
 catch (Exception $exception){
     echo json_encode(array(
