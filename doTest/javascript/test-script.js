@@ -108,6 +108,7 @@ function saveCanvas(button, canvas, order){
         fetch(request)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 showSaveCanvasInfo(data.status);
             });
 

@@ -1,8 +1,31 @@
 $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
     getLoggedInUser();
+    makeConnect();
     loadTest();
 });
+
+let connectIt = false
+let makeConnection = [];
+
+function makeConnect(){
+    let i = setInterval(function (){
+        if (connectIt){
+            clearInterval(i);
+            for (let connection of makeConnection){
+                for (let i = 0; i < connection.odpovede.length; i++) {
+                    if(connection.odpovede[i]){
+                        let newJsPlumbInstance=jsPlumb.getInstance();
+                        let sourceId=`question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
+                        let targetId=`question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
+                        newJsPlumbInstance.connect({source:sourceId,target:targetId,detachable:false,anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }]});
+                    }
+                }
+            }
+        }
+    },200)
+
+}
 
 function logout() {
     $.getJSON("api/uzivatelia/odhlasenie/", function (data) {
@@ -86,6 +109,7 @@ function printTest(otazky, odpovede){
             case 5:createMathQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
         }
     })
+    connectIt = true;
 }
 
 
@@ -412,18 +436,10 @@ function createConnectQuestion(index,question,answer,odpovede){
     let questionDiv = createQuestionDiv(index,question.nazov,answer);
     questionDiv.appendChild(createConnectDiv(index,question));
 
-
-
-    let newJsPlumbInstance=jsPlumb.getInstance();
-    for (let i = 0; i < odpovede.length; i++) {
-        if(odpovede[i]){
-            let sourceId=`question-${index}-left-${odpovede[i].par_lava_strana}`;
-            let targetId=`question-${index}-right-${odpovede[i].par_prava_strana}`;
-            newJsPlumbInstance.connect({source:sourceId,target:targetId,detachable:false,anchor:"Continuous",endpoint:["Dot", { width:5, height:5 }]});
-        }
+    let connection = {
+        "index": index,
+        "odpovede": odpovede
     }
-
-
-
-
+    makeConnection.push(connection);
+    console.log(makeConnection);
 }
