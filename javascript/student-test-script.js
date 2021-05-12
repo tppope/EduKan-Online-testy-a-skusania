@@ -80,7 +80,7 @@ function printTest(otazky, odpovede){
         }
         switch (otazka.typ){
             case 1:createShortQuestion(index, otazka.nazov,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
-            //case 2:createLongQuestion(index,otazka, odpoved);break;
+            case 2:createLongQuestion(index, otazka,odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             case 3:;break;
             case 4:createCanvasQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
             case 5:createMathQuestion(index,otazka.nazov, odpovede.vyhodnotenieCeleho[index],odpovede.odpovede[index]);break;
@@ -275,20 +275,17 @@ function createShortInput(order, odpoved){
     return inputAreaDiv;
 
 }
-
-function createLongQuestion(order,otazka, odpovede){
-    let name = otazka.nazov ;
-    if(otazka.vie_student_pocet_spravnych)
-        name += " (počet správnych odpovedí: " + otazka.pocet_spravnych+")";
-
-    let questionDiv = createQuestionDiv(order,name,odpovede.vyhodnotenie);
-    $(questionDiv).append(createLongInput(order,otazka.odpovede));
+function createLongQuestion(order,otazka, answerCheck, odpovede) {
+    let questionDiv = createQuestionDiv(order, otazka.name, answerCheck);
+    $(questionDiv).append(createLongInput(order,otazka.odpovede, odpovede));
 
 }
 
-function createLongInput(order, answers){
+function createLongInput(order, answers, studentAnswers){
     let allCheckboxDiv = document.createElement("div");
     $(allCheckboxDiv).addClass("checkbox-array-div");
+
+
     for (let answer of answers) {
         let checkboxDiv = document.createElement("div");
         $(checkboxDiv).addClass("checkbox-div");
@@ -300,8 +297,8 @@ function createLongInput(order, answers){
             "class": "form-check-input checkbox-input",
             "id":"check-"+order+"-"+answer.text,
             "disabled":"disabled"
-
         });
+
         let labelCheckbox = document.createElement("label");
         $(labelCheckbox).attr({
             "for":"check-"+order+"-"+answer.text,
@@ -310,9 +307,44 @@ function createLongInput(order, answers){
         });
         $(labelCheckbox).text(answer.text);
         $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
+
+        makeColorLabel(answer.je_spravna,studentAnswers,labelCheckbox);
+
     }
 
+    studentChecked(order, studentAnswers);
 
     return allCheckboxDiv;
 
 }
+
+function studentChecked(order, studentAnswers){
+    $('name=checkboxName-'+ order+' value='+studentAnswers).attr("checked");
+}
+
+function makeColorLabel(answer,studentAnswers,labelCheckbox){
+    if(answer){
+        if(isContains(answer, studentAnswers)){
+            $(labelCheckbox).css("color", "green");
+        }
+        else
+            $(labelCheckbox).css("color", "red");
+    }
+    else{
+        if(!isContains(answer, studentAnswers)){
+            $(labelCheckbox).css("color", "green");
+        }
+        else
+            $(labelCheckbox).css("color", "red");
+    }
+}
+
+function isContains(rightAnswer, studentAnswers){
+    for (let answer of studentAnswers) {
+        if(answer.zadana_odpoved === rightAnswer)
+            return true;
+    }
+    return false;
+
+}
+
