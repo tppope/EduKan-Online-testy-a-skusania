@@ -1,128 +1,21 @@
 $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
-    getLoggedInUser();
+    getLoggedInUser()
     loadStudents();
 
     loadSSE();
 
 });
 
-
-function testPreFilka(){
-    let otazkyFilip = {
-        "kod": "API_T__LT_U_1",
-        "sprava": "Test bol úspešne načítaný.",
-        "data_testu": {
-            "nazov": "Prvy funkcny test",
-            "casovy_limit": 45,
-            "aktivny": 1,
-            "otazky": {
-                "1": {
-                    "nazov": "Ako sa vola Katkina sestra",
-                    "typ": 1,
-                    "spravne_odpovede": [
-                        "Jozef",
-                        "Maria"
-                    ]
-                },
-                "2": {
-                    "nazov": "Kto uci AS",
-                    "typ": 2,
-                    "odpovede": [
-                        {
-                            "text": "Jokay",
-                            "je_spravna": false
-                        },
-                        {
-                            "text": "Olga",
-                            "je_spravna": true
-                        },
-                        {
-                            "text": "Pancza",
-                            "je_spravna": true
-                        }
-                    ],
-                    "vie_student_pocet_spravnych": true,
-                    "pocet_spravnych": 2
-                },
-                "3": {
-                    "nazov": "Spojte správne tvrdenia",
-                    "typ": 3,
-                    "odpovede_lave": {
-                        "1": "as",
-                        "2": "os"
-                    },
-                    "odpovede_prave": {
-                        "1": "olga",
-                        "2": "jokay"
-                    },
-                    "pary": [
-                        {
-                            "lava": 1,
-                            "prava": 1
-                        },
-                        {
-                            "lava": 2,
-                            "prava": 2
-                        }
-                    ]
-                },
-                "4": {
-                    "nazov": "Nakreslite mobil",
-                    "typ": 4
-                },
-                "5": {
-                    "nazov": "Napiste Ohmov zakon",
-                    "typ": 5
-                }
-            },
-            "zoznam_pisucich_studentov": [
-                {
-                    "student_id": 3,
-                    "zostavajuci_cas": 2700,
-                    "datum_zaciatku_pisania": "2021-05-10",
-                    "cas_zaciatku_pisania": "23:53:49",
-                    "datum_konca_pisania": null,
-                    "cas_konca_pisania": null
-                },
-                {
-                    "student_id": 7,
-                    "zostavajuci_cas": 2700,
-                    "datum_zaciatku_pisania": "2021-05-11",
-                    "cas_zaciatku_pisania": "00:00:01",
-                    "datum_konca_pisania": null,
-                    "cas_konca_pisania": null
-                },
-                {
-                    "student_id": 8,
-                    "zostavajuci_cas": 2700,
-                    "datum_zaciatku_pisania": "2021-05-11",
-                    "cas_zaciatku_pisania": "09:23:13",
-                    "datum_konca_pisania": null,
-                    "cas_konca_pisania": null
-                }
-            ]
-        }
-    };
-    let request = new Request('api/uzivatelia/export/?akcia=pdf',{
-        method: 'POST',
-        body: JSON.stringify(otazkyFilip)
-    });
-    fetch(request)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        });
-}
-
-let source = null;
 function loadSSE(){
     if(typeof(EventSource) !== "undefined") {
 
-        source = new EventSource("api/uzivatelia/check-test-leaving-sse.php");
+        let source = new EventSource("api/uzivatelia/check-test-leaving-sse.php");
 
         source.addEventListener("message", function(e) {
-            notifyLeftTest(JSON.parse(e.data));
+            let data = JSON.parse(e.data);
+            printStudentTimes(data.getStudentsTime)
+            notifyLeftTest(data.leftStudents);
         },false);
 
     } else {
@@ -130,13 +23,26 @@ function loadSSE(){
     }
 }
 
+function printStudentTimes(studentsTime){
+    for (let student of studentsTime){
+        let timeTd = $("#student-time-"+student.studentId);
+        if (student.time === 'end')
+            timeTd.text("Ukončil");
+        else
+            timeTd.text(student.time)
+    }
+
+}
+
 
 function notifyLeftTest(students){
-    let notificationTab = $("#notifications");
-    if (notificationTab.css("right") !== '0px')
-        $("#notification-button").addClass("blink");
+    if (students.length !== 0) {
+        let notificationTab = $("#notifications");
+        if (notificationTab.css("right") !== '0px')
+            $("#notification-button").addClass("blink");
 
-    $("#notifications-text").append(leftInfo(students));
+        $("#notifications-text").append(leftInfo(students));
+    }
 
 }
 

@@ -11,7 +11,7 @@ function checkDoTestStatus(){
     let doTestInfo = sessionStorage.getItem("doTest");
     if (doTestInfo != null) {
         showDoTestInfo(doTestInfo);
-        sessionStorage.removeItem('logoutStatus');
+        sessionStorage.removeItem('doTest');
     }
 }
 

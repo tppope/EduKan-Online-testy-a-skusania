@@ -2,6 +2,10 @@ let qId=1;
 let qNum=1;
 let conNum=0;
 let listOfInstances=[];
+$(window).on("load", function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 
 
 function  clicked(id,pairId){

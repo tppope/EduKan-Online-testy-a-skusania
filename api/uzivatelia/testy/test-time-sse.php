@@ -1,5 +1,6 @@
 <?php
-require_once "controllers/LoginController.php";
+
+require_once __DIR__."/../controllers/TimeController.php";
 
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
@@ -15,16 +16,11 @@ if (isset($lastId) && !empty($lastId) && is_numeric($lastId)) {
     $lastId = 0;
 }
 
-$controller = new LoginController();
+$controller = new TimeController();
 
 while (true) {
     session_start();
-
-    $data = array(
-        "leftStudents"=>$controller->getLeftStudents(),
-        "getStudentsTime"=>$controller->getStudentsTime(),
-
-    );
+    $data = $controller->getTimeInSeconds();
     session_commit();
 
     echo "id: $lastId" . PHP_EOL;
@@ -36,4 +32,4 @@ while (true) {
 
     sleep(1);
 }
-?>
+

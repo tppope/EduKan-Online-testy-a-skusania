@@ -30,13 +30,14 @@ section{
 #notifications{
     display: flex;
     justify-content: flex-start;
-    position: absolute;
-    height: 100%;
+    position: fixed;
+    height: 240px;
     width: 400px;
     border: solid 3px black;
     top: 0;
     right: -360px;
     background-color: #17a2b8;
+    z-index: 5;
 
     transition: right 300ms;
 
@@ -45,7 +46,7 @@ section{
 }
 
 #notifications-text{
-    overflow: scroll;
+    overflow: auto;
     width: 350px;
 }
 
