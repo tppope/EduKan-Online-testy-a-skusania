@@ -24,7 +24,7 @@ if($file["error"] == 3){
     throw new Exception("Súbor bol iba čiastočne odoslaný. Skúste to prosím znova");
 }
 if($file["error"] == 5){
-    throw new Exception("Odosielanie bolo neúspešné");
+    throw new Exception("Odosielanie bolo neúspešné ERROR 5");
 }
 
 

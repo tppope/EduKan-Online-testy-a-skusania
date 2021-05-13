@@ -18,8 +18,8 @@ header('Content-Encoding: UTF-8');
 header("Content-Type: text/csv; charset=UTF-8");
 header("Content-Disposition: attachment; filename=test.csv");
 
-$kluc = "U1T1620690775"; ///$_SESSION['pisanyTestKluc'];
-$ucitel_id = 1; ///$_SESSION['userId'];
+$kluc = $_SESSION['pisanyTestKluc'];
+$ucitel_id = $_SESSION['userId'];
 
 $cely_test = ApiTesty_API_frontend_ucitel::nacitaj_existujuci_test($mysqli_api_testy, $kluc, $ucitel_id);
 

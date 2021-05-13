@@ -145,7 +145,7 @@ document.getElementById('send').onclick=function (){
             else{
                 sessionStorage.setItem("editTest","failed");
             }
-            window.location.replace("../teacher-homescreen.html")
+            //window.location.replace("../teacher-homescreen.html")
         });
 
 
