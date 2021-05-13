@@ -206,6 +206,15 @@ section{
     #logout-button{
         margin-right: 15px;
     }
+
+    .connect-card{
+        width: 7rem !important;
+        height: 7rem !important;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: medium;
+    }
 }
 
 @media (max-width: 576px) {
@@ -216,5 +225,53 @@ section{
     #main-header {
         height: 150px;
     }
+    .connect-card{
+        width: 6rem !important;
+        height: 6rem !important;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: medium;
+    }
 
 }
+@media (max-width: 400px) {
+    .connect-card{
+        width: 5rem !important;
+        height: 5rem !important;
+        padding: 0.5rem;
+    }
+    h4{
+        font-size: small;
+    }
+}
+
+
+.connect-card{
+    border-radius:15px;
+    border:1px solid black;
+    width: 10rem;
+    height: 10rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+.connector-wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    width: 90%;
+}
+
+.input-area-short{
+    width: 96%;
+}
+
+.checkbox-div{
+    padding: 5px;
+}
+.checkbox-array-div{
+    width: 80%;
+}
+

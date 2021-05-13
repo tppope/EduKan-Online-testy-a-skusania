@@ -7,14 +7,15 @@ $(window).on("load", function () {
 
 });
 
-let source = null;
 function loadSSE(){
     if(typeof(EventSource) !== "undefined") {
 
-        source = new EventSource("api/uzivatelia/check-test-leaving-sse.php");
+        let source = new EventSource("api/uzivatelia/check-test-leaving-sse.php");
 
         source.addEventListener("message", function(e) {
-            notifyLeftTest(JSON.parse(e.data));
+            let data = JSON.parse(e.data);
+            printStudentTimes(data.getStudentsTime)
+            notifyLeftTest(data.leftStudents);
         },false);
 
     } else {
@@ -22,13 +23,26 @@ function loadSSE(){
     }
 }
 
+function printStudentTimes(studentsTime){
+    for (let student of studentsTime){
+        let timeTd = $("#student-time-"+student.studentId);
+        if (student.time === 'end')
+            timeTd.text("Ukončil");
+        else
+            timeTd.text(student.time)
+    }
+
+}
+
 
 function notifyLeftTest(students){
-    let notificationTab = $("#notifications");
-    if (notificationTab.css("right") !== '0px')
-        $("#notification-button").addClass("blink");
+    if (students.length !== 0) {
+        let notificationTab = $("#notifications");
+        if (notificationTab.css("right") !== '0px')
+            $("#notification-button").addClass("blink");
 
-    $("#notifications-text").append(leftInfo(students));
+        $("#notifications-text").append(leftInfo(students));
+    }
 
 }
 

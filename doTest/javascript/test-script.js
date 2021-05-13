@@ -2,11 +2,34 @@ let instances=[];
 $(window).on("load", function () {
     startTest();
     $('[data-toggle="tooltip"]').tooltip();
+    loadSSE();
 });
 
 
 document.addEventListener("visibilitychange", onVisibilityChange);
 
+
+function loadSSE(){
+    if(typeof(EventSource) !== "undefined") {
+
+        let source = new EventSource("../api/uzivatelia/testy/test-time-sse.php");
+
+        source.addEventListener("message", function(e) {
+            showTime(JSON.parse(e.data));
+        },false);
+
+    } else {
+        $("#x").text("Sorry, your browser does not support server-sent events...");
+    }
+}
+
+function showTime(data){
+    if (data.time === 'end')
+        odovzdatTest();
+    else
+    $("#time-counter").text(data.time);
+
+}
 
 function onVisibilityChange(){
     if (document.hidden){
@@ -108,6 +131,7 @@ function saveCanvas(button, canvas, order){
         fetch(request)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 showSaveCanvasInfo(data.status);
             });
 
@@ -177,8 +201,12 @@ function canvasSettings(myCan, ctx){
     function mouseEvent(event) {
 
         let bounds = myCan.getBoundingClientRect();
-        mouse.x = event.pageX - bounds.left - scrollX;
-        mouse.y = event.pageY - bounds.top - scrollY;
+        let interact = event;
+        if (event.type === "touchmove")
+            interact = event.touches[0];
+
+        mouse.x = interact.pageX - bounds.left - scrollX;
+        mouse.y = interact.pageY - bounds.top - scrollY;
 
 
         mouse.x /= bounds.width;
@@ -193,8 +221,13 @@ function canvasSettings(myCan, ctx){
             mouse[mouse.buttonNames[event.which - 1]] = false; // set the button up
             ctx.beginPath();
         }else if (event.type === "touchstart") {
-            event.preventDefault();
-            mouse[mouse.buttonNames[event.whzich]] = true;
+            mouse.lastX = mouse.x;
+            mouse.lastY = mouse.y;
+            ctx.beginPath();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+            mouse[mouse.buttonNames[event.which]] = true;
         }
         else if (event.type === "touchend") {
             mouse[mouse.buttonNames[event.which]] = false; // set the button up

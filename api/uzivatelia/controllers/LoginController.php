@@ -260,6 +260,59 @@ class LoginController extends DatabaseController
         }
     }
 
+    public function getStudentsTime(){
+        if (!isset($_SESSION["pisanyTestKluc"]))
+            return array();
+
+        $key = $_SESSION["pisanyTestKluc"];
+        $statement = $this->mysqlDatabase->prepareStatement("SELECT zoznam_pisucich_studentov.student_id,zoznam_pisucich_studentov.zostavajuci_cas, zoznam_pisucich_studentov.datum_zaciatku_pisania, zoznam_pisucich_studentov.cas_zaciatku_pisania, zoznam_pisucich_studentov.datum_konca_pisania
+                                                                    FROM zoznam_pisucich_studentov
+                                                                    WHERE kluc_testu = :key");
+
+        try {
+
+            $statement->bindValue(':key', $key, PDO::PARAM_STR);
+            $statement->execute();
+            $studentsTimes = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+            return $this->createStudentsTimes($studentsTimes);
+        }
+        catch (Exception $e){
+            return array(
+                "error"=>true,
+                "status"=>"failed",
+                "message"=>$e->getMessage()
+            );
+        }
+    }
+
+    private function getTimeSeconds($datum,$cas, $zostavajuciCas){
+        return $zostavajuciCas -(time() - strtotime($datum." ".$cas));
+    }
+
+    private function createStudentsTimes($studentsTimesFromDb){
+        $studentsTimes = array();
+        foreach ($studentsTimesFromDb as $student){
+            if ($student["datum_konca_pisania"]){
+                array_push($studentsTimes,array("studentId"=>$student["student_id"],"time"=>"end"));
+            }else{
+                $seconds = $this->getTimeSeconds($student["datum_zaciatku_pisania"],$student["cas_zaciatku_pisania"],$student["zostavajuci_cas"]);
+                $timeSeconds = "end";
+                if ($seconds>0)
+                    $timeSeconds = date("i:s",$seconds);
+
+                array_push($studentsTimes,array("studentId"=>$student["student_id"],"time"=>$timeSeconds));
+
+            }
+        }
+
+        return $studentsTimes;
+
+
+
+    }
+
 
 
 
