@@ -50,7 +50,7 @@ section{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 70px;
+    margin-left: 5%;
 }
 th{
     white-space: nowrap;
@@ -99,4 +99,12 @@ th{
     height: 50px;
     width: 100px;
     cursor: pointer;
+}
+
+#libraries td{
+    text-align: center;
+
+}
+#resource-table{
+    margin-bottom: 50px;
 }
