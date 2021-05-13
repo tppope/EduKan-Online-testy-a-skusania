@@ -9,7 +9,7 @@ class TimeController extends DatabaseController
 
         $key = $_SESSION["pisanyTestKluc"];
         $studentId = $_SESSION["studentId"];
-        $statement = $this->mysqlDatabase->prepareStatement("SELECT zoznam_pisucich_studentov.datum_zaciatku_pisania, zoznam_pisucich_studentov.cas_zaciatku_pisania, zoznam_pisucich_studentov.zostavajuci_cas
+        $statement = $this->mysqlDatabase->prepareStatement("SELECT zoznam_pisucich_studentov.datum_zaciatku_pisania, zoznam_pisucich_studentov.cas_zaciatku_pisania, zoznam_pisucich_studentov.zostavajuci_cas, zoznam_pisucich_studentov.datum_konca_pisania
                                                                     FROM zoznam_pisucich_studentov
                                                                     WHERE kluc_testu = :key AND student_id = :studentId");
 
@@ -21,7 +21,7 @@ class TimeController extends DatabaseController
             $dateTime = $statement->fetch(PDO::FETCH_NUM);
 
             $seconds = $this->getTimeSeconds($dateTime[0],$dateTime[1], $dateTime[2]);
-            if ($seconds <= 0)
+            if ($seconds <= 0 || $dateTime[3])
                 return array(
                     "error"=>false,
                     "status"=>"success",

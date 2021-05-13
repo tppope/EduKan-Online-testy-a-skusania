@@ -201,8 +201,12 @@ function canvasSettings(myCan, ctx){
     function mouseEvent(event) {
 
         let bounds = myCan.getBoundingClientRect();
-        mouse.x = event.pageX - bounds.left - scrollX;
-        mouse.y = event.pageY - bounds.top - scrollY;
+        let interact = event;
+        if (event.type === "touchmove")
+            interact = event.touches[0];
+
+        mouse.x = interact.pageX - bounds.left - scrollX;
+        mouse.y = interact.pageY - bounds.top - scrollY;
 
 
         mouse.x /= bounds.width;
@@ -217,8 +221,13 @@ function canvasSettings(myCan, ctx){
             mouse[mouse.buttonNames[event.which - 1]] = false; // set the button up
             ctx.beginPath();
         }else if (event.type === "touchstart") {
-            event.preventDefault();
-            mouse[mouse.buttonNames[event.whzich]] = true;
+            mouse.lastX = mouse.x;
+            mouse.lastY = mouse.y;
+            ctx.beginPath();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+            mouse[mouse.buttonNames[event.which]] = true;
         }
         else if (event.type === "touchend") {
             mouse[mouse.buttonNames[event.which]] = false; // set the button up
