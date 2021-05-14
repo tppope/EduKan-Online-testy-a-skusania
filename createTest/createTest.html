@@ -12,10 +12,13 @@
     <script src="js/index.js"></script>
     <link rel="stylesheet" href="css/index.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-    <link rel="stylesheet" href="css/button.scss" type="text/css" >
+    <link rel="stylesheet" href="css/button.css" type="text/css" >
 
 </head>
 <body >
+<div id="editTest-failed" class="info failed">
+    <span>Test nebolo možné vytvoriť</span>
+</div>
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="position: absolute;top: 5%;">
 <div class="modal-dialog" role="document">
@@ -81,19 +84,19 @@
 <div class="navbar-wrapper" id="addQ">
     <div class="navbar">
         <a data-toggle="tooltip" title="Textová" class="navbar-link">
-            <img src="images/dopisovanie.png" style="cursor: pointer;" alt="dopisovanie" onclick="createQuestion(1,qNum++)">
+            <img src="images/dopisovanie.png" style="cursor: pointer;" alt="dopisovanie" onclick="createQuestion(1)">
         </a>
         <a data-toggle="tooltip" title="Výberová" class="navbar-link">
-            <img src="images/rating.png" style="cursor: pointer;" alt="moznost" onclick="createQuestion(2,qNum++)">
+            <img src="images/rating.png" style="cursor: pointer;" alt="moznost" onclick="createQuestion(2)">
         </a>
         <a data-toggle="tooltip" title="Párovacia" class="navbar-link">
-            <img src="images/spajanie.png" style="cursor: pointer;" alt="spajanie"  onclick="createQuestion(3,qNum++)">
+            <img src="images/spajanie.png" style="cursor: pointer;" alt="spajanie"  onclick="createQuestion(3)">
         </a>
         <a data-toggle="tooltip" title="Matematický výraz" class="navbar-link">
-            <img src="images/function.png" style="cursor: pointer;" alt="mat-fun" onclick="createQuestion(5,qNum++)">
+            <img src="images/function.png" style="cursor: pointer;" alt="mat-fun" onclick="createQuestion(5)">
         </a>
         <a data-toggle="tooltip" title="Kreslenie" class="navbar-link">
-            <img src="images/writing.png" style="cursor: pointer;" alt="kreslenie" onclick="createQuestion(4,qNum++)">
+            <img src="images/writing.png" style="cursor: pointer;" alt="kreslenie" onclick="createQuestion(4)">
         </a>
     </div>
 

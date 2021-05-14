@@ -41,3 +41,33 @@ input[type="range"]::-ms-fill-upper {
 #test{
     z-index: 0;
 }
+
+.info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    height: 30px;
+    width: 100%;
+    top: -100px;
+    transition: top 400ms;
+    text-align: center;
+    line-height: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 57;
+}
+
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+
+.failed {
+    color: #D8000C;
+    background-color: #FFD2D2;
+}

@@ -129,7 +129,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
     font-family: "Roboto", sans-serif;
     font-size: 16px;
     font-weight: bold;
@@ -142,6 +142,7 @@ body {
     line-height: normal;
     padding-left: 10px;
     padding-right: 10px;
+    z-index: 57;
 }
 
 .success {

@@ -13,18 +13,20 @@ function makeConnect() {
         if (connectIt) {
             clearInterval(i);
             for (let connection of makeConnection) {
-                for (let i = 0; i < connection.odpovede.length; i++) {
-                    if (connection.odpovede[i]) {
-                        let newJsPlumbInstance = jsPlumb.getInstance();
-                        let sourceId = `question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
-                        let targetId = `question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
-                        newJsPlumbInstance.connect({
-                            source: sourceId,
-                            target: targetId,
-                            detachable: false,
-                            anchor: "Continuous",
-                            endpoint: ["Dot", {width: 5, height: 5}]
-                        });
+                if (connection.odpovede) {
+                    for (let i = 0; i < connection.odpovede.length; i++) {
+                        if (connection.odpovede[i]) {
+                            let newJsPlumbInstance = jsPlumb.getInstance();
+                            let sourceId = `question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
+                            let targetId = `question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
+                            newJsPlumbInstance.connect({
+                                source: sourceId,
+                                target: targetId,
+                                detachable: false,
+                                anchor: "Continuous",
+                                endpoint: ["Dot", {width: 5, height: 5}]
+                            });
+                        }
                     }
                 }
             }
@@ -83,8 +85,11 @@ function loadTest() {
             $.getJSON("api/testy/praca-s-testami.php?akcia=nacitaj-vysledky", function (testOdpovede) {
                 if (testOdpovede.kod === "API_T__PT_U_4") {
                     printTest(test.data_testu.otazky, testOdpovede);
-                } else if (testOdpovede.kod === "API_T__PT_GC")
+                } else if (testOdpovede.kod === "API_T__PT_GC") {
+
+                    console.log(testOdpovede)
                     printTest(test.data_testu.otazky, false);
+                }
                 else
                     console.log(testOdpovede);
             })
@@ -97,7 +102,12 @@ function printTest(otazky, odpovede) {
     console.log(otazky);
     console.log(odpovede);
     let counter = 0;
-    $("#points").text(" " + odpovede.suhrnnyPocetBodov.ziskaneBody);
+
+    if (odpovede)
+        $("#points").text(" " + odpovede.suhrnnyPocetBodov.ziskaneBody);
+    else
+        $("#points").text(" " + 0);
+
     $.each(otazky, function (index) {
         let otazka = this;
         if (!odpovede)
@@ -197,27 +207,33 @@ function createCheckAnswer(order) {
 function createCanvasQuestion(order, name, answerCheck, odpovede) {
     let img = createImgForCanvasQuestion(odpovede, order)
     let questionDiv = createQuestionDiv(order, name, answerCheck);
-    questionDiv.append(img, createCheckAnswer(order));
+    questionDiv.append(img);
+
+    if (odpovede)
+        questionDiv.append(createCheckAnswer(order));
 
     $("#test-questions").append(questionDiv);
 }
 
 function createImgForCanvasQuestion(odpovede, order) {
     let img = document.createElement("img");
-    let src = "";
-    if (odpovede)
-        src = odpovede.zadana_odpoved;
+    if (odpovede) {
+        let src = odpovede.zadana_odpoved;
 
-    if (~src.indexOf("inFiles-"))
-        return showImageFile(order, src)
-    else {
-        $(img).attr({
-            "src": src,
-            "draggable": false
-        });
-        $(img).addClass("img-answer");
-        return img;
+        if (~src.indexOf("inFiles-"))
+            return showImageFile(order, src)
+        else {
+            $(img).attr({
+                "src": src,
+                "draggable": false
+            });
+            $(img).addClass("img-answer");
+            return img;
+        }
     }
+
+    return $("<div class='not-answer-div'>Nebola zodpovedaná</div>").get(0);
+
 }
 
 function createShortQuestion(order, name, answerCheck, odpovede) {
@@ -231,7 +247,9 @@ function createMathQuestion(order, name, answerCheck, odpovede) {
     let mathField = createMathField(odpovede, order);
 
     let questionDiv = createQuestionDiv(order, name, answerCheck);
-    questionDiv.append(mathField, createCheckAnswer(order));
+    questionDiv.append(mathField);
+    if (odpovede)
+        questionDiv.append(createCheckAnswer(order));
 
     $("#test-questions").append(questionDiv);
 }
@@ -246,18 +264,19 @@ function typeset(code) {
 
 function createMathField(odpovede, order) {
     let div = document.createElement("div");
-    let mathValue = "";
-    if (odpovede)
-        mathValue = odpovede.zadana_odpoved;
+    if (odpovede) {
+        let mathValue = odpovede.zadana_odpoved;
 
-    if (~mathValue.indexOf("inFiles-")) {
-        return showImageFile(order, mathValue);
-    } else {
-        typeset(() => {
-            div.innerHTML = "$$" + mathValue + "$$";
-        });
-        return div;
+        if (~mathValue.indexOf("inFiles-")) {
+            return showImageFile(order, mathValue);
+        } else {
+            typeset(() => {
+                div.innerHTML = "$$" + mathValue + "$$";
+            });
+            return div;
+        }
     }
+    return $("<div class='not-answer-div'>Nebola zodpovedaná</div>").get(0);
 
 
 }
@@ -312,7 +331,7 @@ function createShortInput(order, odpoved) {
     let inputAreaDiv = document.createElement("div");
     let inputArea = document.createElement("input");
 
-    let value = "";
+    let value = "Nebola zodpovedaná";
     if (odpoved)
         value = odpoved.zadana_odpoved;
 
@@ -458,5 +477,4 @@ function createConnectQuestion(index, question, answer, odpovede) {
         "odpovede": odpovede
     }
     makeConnection.push(connection);
-    console.log(makeConnection);
 }

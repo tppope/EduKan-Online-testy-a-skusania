@@ -61,6 +61,7 @@ body {
     line-height: normal;
     padding-left: 10px;
     padding-right: 10px;
+    z-index: 57;
 }
 
 .success {

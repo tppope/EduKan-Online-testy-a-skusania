@@ -297,7 +297,6 @@ function sendMathQuestion(mathField, order){
 
 function createMathField(order){
     let mfe = new MathfieldElement();
-    mfe.value = '\\frac{\\pi}{2}';
     $(mfe).addClass("math-input-content-"+order);
     $(mfe).attr("virtual-keyboard-mode", "onfocus");
     return mfe;

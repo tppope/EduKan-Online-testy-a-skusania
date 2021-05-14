@@ -9,7 +9,7 @@ $(window).on("load", function () {
 
 
 function  clicked(id,pairId){
-    const items=document.getElementsByClassName('item');
+    let items=document.getElementsByClassName('item');
     for(let i=0;i<items.length;i++){
         items[i].setAttribute('class','item');
     }
@@ -24,8 +24,8 @@ function showQ(id,pId){
     }
 }
 function store(value,id){
-    const pId=`q`+id.toString();
-    const p=document.createElement('p');
+    let pId=`q`+id.toString();
+    let p=document.createElement('p');
     if(value===""){
         value="ZADAJTE TEXT OTÁZKY"
         p.setAttribute('style',`font-size:large;margin:1rem;color:#e24c4b`);
@@ -57,15 +57,15 @@ function createQuestion(typ,number){
 
 
 
-    const qDiv=document.createElement('div');
-    const test= document.getElementById('test');
-    const question =document.createElement('textarea');
-    const pDiv=document.createElement('div');
-    const questionNum=document.createElement('h1');
-    const button=document.createElement('button');
-    const moznostDiv=document.createElement('div');
-    const rmButton=removeBtn();
-    const header=document.createElement('div');
+    let qDiv=document.createElement('div');
+    let test= document.getElementById('test');
+    let question =document.createElement('textarea');
+    let pDiv=document.createElement('div');
+    let questionNum=document.createElement('h1');
+    let button=document.createElement('button');
+    let moznostDiv=document.createElement('div');
+    let rmButton=removeBtn();
+    let header=document.createElement('div');
 
 
     moznostDiv.setAttribute('id',`moznostDiv-${qId}`);
@@ -80,7 +80,7 @@ function createQuestion(typ,number){
     button.setAttribute('onmouseleave',"this.setAttribute('style','max-width:12rem;max-height:3rem;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;cursor:pointer')");
        // button.setAttribute('onclick',`skutocne(this.parentElement.parentElement.remove());`);
 
-    questionNum.innerText=qId.toString();
+    questionNum.innerText=qNum.toString();
     questionNum.setAttribute('id',`number-${qId}`);
     questionNum.setAttribute('class',`poradovnik`);
     questionNum.setAttribute('style',`font-size: 2.5rem; font-weight: bold`);
@@ -115,7 +115,7 @@ function createQuestion(typ,number){
 
     button.setAttribute('onclick',`addChoice(${qId},${typ})`)
 
-    const h3=document.createElement('h3',);
+    let h3=document.createElement('h3',);
 
 
 
@@ -130,14 +130,14 @@ function createQuestion(typ,number){
         question.value="Spojte správne tvrdenia";
         store(question.value,qId);
 
-        const lavyDiv=document.createElement('div');
-        const pravyDiv=document.createElement('div');
-        const parentDiv=document.createElement('div');
-        const btnL=document.createElement('button');
-        const btnP=document.createElement('button');
-        const p=document.createElement('p');
-        const coverL=document.createElement('div');
-        const coverP=document.createElement('div');
+        let lavyDiv=document.createElement('div');
+        let pravyDiv=document.createElement('div');
+        let parentDiv=document.createElement('div');
+        let btnL=document.createElement('button');
+        let btnP=document.createElement('button');
+        let p=document.createElement('p');
+        let coverL=document.createElement('div');
+        let coverP=document.createElement('div');
         listOfInstances.push(jsPlumb.getInstance());
         p.setAttribute('style','padding-top:1.5em;font-size:1rem;margin-top:1rem;margin-bottom:3rem');
 
@@ -188,9 +188,9 @@ function createQuestion(typ,number){
 
     if(typ===2){
         qDiv.appendChild(button);
-        const vieOtazkyDiv=document.createElement('button');
-        const vieOtazky=document.createElement('img');
-        const popis=document.createElement('p');
+        let vieOtazkyDiv=document.createElement('button');
+        let vieOtazky=document.createElement('img');
+        let popis=document.createElement('p');
 
         popis.innerText='spravné ukázané';
         popis.setAttribute('style','padding-top:1.5em;font-size:1rem;margin:auto');
@@ -232,6 +232,7 @@ function createQuestion(typ,number){
     }
 
 
+    qNum=qNum+1;
     qId=qId+1;
 
 
@@ -258,7 +259,7 @@ function viePocet(node){
 }
 
 function removeBtn(){
-    const button=document.createElement('img');
+    let button=document.createElement('img');
     button.setAttribute('src','images/trash.png');
     button.setAttribute('onmouseover',"this.src='images/thrash-active.png'");
     button.setAttribute('onmouseout',"this.src='images/trash.png'");
@@ -280,14 +281,14 @@ function removeBtn(){
 
 
 function addCard(node,id,typ,instance){
-    const moznostDiv=node.parentElement.parentElement.parentElement.children[5];
-    const left=moznostDiv.children[0];
-    const right=moznostDiv.children[1];
-    const button=removeBtn();
-    const cover=document.createElement('div');
-    const input=document.createElement('textarea');
-    const dot=document.createElement('div');
-    const removeDiv=document.createElement('div');
+    let moznostDiv=node.parentElement.parentElement.parentElement.children[5];
+    let left=moznostDiv.children[0];
+    let right=moznostDiv.children[1];
+    let button=removeBtn();
+    let cover=document.createElement('div');
+    let input=document.createElement('textarea');
+    let dot=document.createElement('div');
+    let removeDiv=document.createElement('div');
 
     cover.setAttribute('id',`connect-${conNum++}`)
     cover.setAttribute('style',`z-index:1;border:1px solid black;border-radius:25px;width:2rem;margin:1rem`)
@@ -345,19 +346,19 @@ function createTarget(id,instance){
 
 
 function addChoice(id,typ){
-    const moznostDiv=document.getElementById(`moznostDiv-${id}`)
+    let moznostDiv=document.getElementById(`moznostDiv-${id}`)
     moznostDiv.setAttribute('class',`${id}-options row `)
     moznostDiv.setAttribute('style',`display:flex;margin-top:2rem`)
-    const moznostInternyDiv=document.createElement('div');
+    let moznostInternyDiv=document.createElement('div');
     moznostInternyDiv.setAttribute('style','display:flex');
 
-    const x=document.createElement('div');
+    let x=document.createElement('div');
     x.setAttribute('class','opt col');
     x.setAttribute('style','margin:1rem;');
     x.appendChild(removeBtn());
 
 
-    const moznost=document.createElement('input');
+    let moznost=document.createElement('input');
     moznost.required=true;
     moznost.setAttribute('type','text');
     moznost.setAttribute('class',`${id}-option`);
@@ -370,7 +371,7 @@ function addChoice(id,typ){
     if(typ===2){
         moznost.setAttribute('style','border:  dashed #e24c4b');
         x.setAttribute('class','opt nespravna');
-        const checkbox=document.createElement('img');
+        let checkbox=document.createElement('img');
         checkbox.setAttribute('src','images/cancel.png');
         checkbox.setAttribute('alt','wrong');
         checkbox.setAttribute('style','max-width:1rem;margin-left:0.5rem;vertical-align: middle;horizontal-align:left')
@@ -410,7 +411,7 @@ function changeIDs(oldID,newID){
 
 
     document.getElementById(`moznostDiv-${oldID}`).setAttribute('id',`moznostDiv-${newID}`);
-    const typ=document.getElementById(oldID).classList[1].split('type-')[1];
+    let typ=document.getElementById(oldID).classList[1].split('type-')[1];
     document.getElementById(`adder-${oldID}`).setAttribute('id',`adder-${newID}`);
     document.getElementById(`adder-${newID}`).setAttribute('onclick',`addChoice(${newID},${typ})`);
 
@@ -430,8 +431,8 @@ function changeIDs(oldID,newID){
 }
 
 function poradovnik(id) {
-    const otazky = document.getElementsByClassName('question');
-    const cisla = document.getElementsByClassName('poradovnik');
+    let otazky = document.getElementsByClassName('question');
+    let cisla = document.getElementsByClassName('poradovnik');
     let poradie=1;
 
     let splitId=id.split('remover-')
@@ -439,22 +440,20 @@ function poradovnik(id) {
     if(otazky.length===0){
         document.getElementById('test-footer').hidden=true;
         qId=1;
+        qNum=1;
     }else{
-        for(let i=Number(splitId[1]);i< otazky.length+1;i++){
+        for(let otazka of otazky){
 
-           // changeIDs(i+1,i);
+            if(poradie!==otazka.id){
+                cisla[poradie-1].innerText=poradie.toString();
+
+                qNum=poradie+1;
+
+            }
+            poradie=poradie+1;
         }
     }
-    for(let otazka of otazky){
 
-       if(poradie!==otazka.id){
-           cisla[poradie-1].innerText=poradie.toString();
-
-           qId=poradie+1;
-
-       }
-        poradie=poradie+1;
-    }
 
 
 }

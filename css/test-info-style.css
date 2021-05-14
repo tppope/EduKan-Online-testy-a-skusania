@@ -275,6 +275,7 @@ section{
         font-size: 14px;
     }
     #notifications{
+        height: 150px;
         width: 300px;
         right: -270px;
     }

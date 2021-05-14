@@ -14,7 +14,7 @@ document.getElementById('send').onclick=function (){
     test.nazov=document.getElementById('meno-testu').value;
     test.casovy_limit=Number(document.getElementById('cas-num').value);
     let otazky= {};
-    const q=document.getElementsByClassName('question');
+    let q=document.getElementsByClassName('question');
 
     for(let i=0;i<q.length;i++){
         let q1Id=q[i].id;
@@ -44,11 +44,16 @@ document.getElementById('send').onclick=function (){
             otazky[Number(i+1)].typ=5;
         }
 
-        const qOpt=document.getElementsByClassName(q1Id+"-option");
+        let qOpt=document.getElementsByClassName(q1Id+"-option");
         if(q[i].classList.contains("type-1")===true) {
 
             let spravne_odpovede = [];
             for (let j = 0; j < qOpt.length; j++) {
+
+                if(spravne_odpovede.indexOf(qOpt[j].value.toLowerCase())!==-1){
+                    document.getElementById('error-msg').innerText=`dve možnosti v otázke číslo ${i+1} nesmú byť identické`;
+                    return null;
+                }
                 spravne_odpovede[j] = qOpt[j].value;
             }
 
@@ -62,12 +67,20 @@ document.getElementById('send').onclick=function (){
         }
         else if(q[i].classList.contains("type-2")===true) {
             let odpovede=[];
+            let kontrola=[];
             for (let j = 0; j < qOpt.length; j++) {
                 let spravnost=false;
                 if(qOpt[j].parentElement.classList.contains('spravna')===true){
                     spravnost=true;
                 }
-                odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
+
+                if(kontrola.indexOf(qOpt[j].value.toLowerCase())!==-1){
+                    document.getElementById('error-msg').innerText=`dve možnosti v otázke číslo ${i+1} nesmú byť identické`;
+                    return null;
+                }
+                kontrola[j]=qOpt[j].value.toLowerCase();
+                odpovede[j] = {text: qOpt[j].value.toLowerCase() , je_spravna: spravnost};
+
 
                 if(odpovede.length===0){
                     document.getElementById('error-msg').innerText=`otázka číslo ${i+1} nemá zadanú žiadnu odpoveď`;
@@ -87,7 +100,9 @@ document.getElementById('send').onclick=function (){
         }
 
         else if(q[i].classList.contains("type-3")===true) {
-            const moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
+            let moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
+
+            console.log(moznostDiv);
 
             let odpovede_lave={};
             let odpovede_prave= {};
@@ -104,12 +119,12 @@ document.getElementById('send').onclick=function (){
             otazky[i+1].odpovede_lave=odpovede_lave;
             otazky[i+1].odpovede_prave=odpovede_prave;
 
-            const conn=listOfInstances[instance].getConnections();
+            let conn=listOfInstances[instance].getConnections();
             if(conn.length===0){
                 document.getElementById('error-msg').innerText=`v otázke číslo ${i+1} musíte mať vytvorené aspoň jedno spojenie`;
                 return null;
             }
-            instance=instance++;
+            instance=instance +1;
             let pary=[];
             for(let j=0;j<conn.length;j++){
                 let dvojice={lava:odpovede_laveObj.indexOf(conn[j].sourceId)+1, prava:odpovede_praveObj.indexOf(conn[j].targetId)+1};
@@ -125,7 +140,7 @@ document.getElementById('send').onclick=function (){
     test.otazky=otazky
 
 
-    console.log(JSON.stringify(test));
+    console.log(test);
 
 
 
@@ -141,12 +156,18 @@ document.getElementById('send').onclick=function (){
             console.log(data);
             if (data.kod === "API_T__NT_U_1"){
                 sessionStorage.setItem("editTest","success");
+                window.location.replace("../teacher-homescreen.html")
             }
             else{
-                sessionStorage.setItem("editTest","failed");
+                showEditTestInfo("failed");
             }
-            window.location.replace("../teacher-homescreen.html")
         });
+}
 
-
+function showEditTestInfo(editTestInfo){
+    let editTestDiv = $("#editTest-" + editTestInfo);
+    editTestDiv.css("top", 0);
+    setTimeout(function () {
+        editTestDiv.css("top", "-100px");
+    }, 3000)
 }
