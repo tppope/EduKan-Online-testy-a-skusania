@@ -50,6 +50,7 @@ section{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-left: 5%;
 }
 th{
     white-space: nowrap;
@@ -66,6 +67,11 @@ th{
 #back-button:hover {
     left: 0;
 }
+@media (max-width: 768px) {
+    #section-header{
+        padding-top: 50px;
+    }
+}
 
 @media (max-width: 576px) {
     #edukan {
@@ -75,6 +81,10 @@ th{
     #main-header {
         height: 150px;
     }
+    .section-h2 {
+        font-size: 30px !important;
+    }
+
 }
 
 #back-button {
@@ -94,4 +104,12 @@ th{
     height: 50px;
     width: 100px;
     cursor: pointer;
+}
+ 
+#libraries td{
+    text-align: center;
+
+}
+#resource-table{
+    margin-bottom: 50px;
 }

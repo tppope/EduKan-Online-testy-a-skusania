@@ -2,13 +2,12 @@ let qId=1;
 let qNum=1;
 let conNum=0;
 let listOfInstances=[];
+let listOfInstancesObj={};
 $(window).on("load", function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
-
-
-function  clicked(id,pairId){
+function clicked(id,pairId){
     let items=document.getElementsByClassName('item');
     for(let i=0;i<items.length;i++){
         items[i].setAttribute('class','item');
@@ -17,12 +16,14 @@ function  clicked(id,pairId){
     document.getElementById(id).setAttribute('class','item active');
 
 }
+
 function showQ(id,pId){
     document.getElementById(id).style.display='block';
     if(document.getElementById(pId)!=null){
         document.getElementById(pId).remove();
     }
 }
+
 function store(value,id){
     let pId=`q`+id.toString();
     let p=document.createElement('p');
@@ -138,7 +139,9 @@ function createQuestion(typ,number){
         let p=document.createElement('p');
         let coverL=document.createElement('div');
         let coverP=document.createElement('div');
-        listOfInstances.push(jsPlumb.getInstance());
+        let newJsPlumbInstance = jsPlumb.getInstance();
+        listOfInstances.push(newJsPlumbInstance);
+        listOfInstancesObj[qId]=newJsPlumbInstance;
         p.setAttribute('style','padding-top:1.5em;font-size:1rem;margin-top:1rem;margin-bottom:3rem');
 
 
@@ -172,6 +175,7 @@ function createQuestion(typ,number){
         p.innerHTML="<img src='images/info.png' alt='info' style='max-height:1.5rem;margin-right: 0.5em'>Dvojicu vytvoríte ťahom ľavej karty smerom k pravej.";
         qDiv.appendChild(parentDiv);
         moznostDiv.setAttribute('style','display:flex;justify-content:space-between;margin-top:2rem');
+        moznostDiv.setAttribute('class',`${qId}-option`);
         moznostDiv.appendChild(coverL);
         moznostDiv.appendChild(coverP);
         //coverL.setAttribute('style','display:grid');

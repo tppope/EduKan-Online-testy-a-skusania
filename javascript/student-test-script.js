@@ -372,7 +372,7 @@ function createLongInput(order, answers, studentAnswers) {
             "name": "checkboxName-" + order,
             "type": "checkbox",
             "class": "form-check-input checkbox-input",
-            "id": "check-" + order + "-" + answer.text,
+            "id": "check-" + order + "-" + (answer.text).replace(" ","-"),
             "disabled": "disabled"
         });
 
@@ -397,7 +397,7 @@ function createLongInput(order, answers, studentAnswers) {
 
 function studentChecked(order, studentAnswers) {
     for (let answer of studentAnswers) {
-        $("#check-" + order + "-" + answer.zadana_odpoved).attr("checked", "true");
+        $("#check-" + order + "-" + (answer.zadana_odpoved).replace(" ","-")).attr("checked", "true");
     }
 }
 
@@ -409,7 +409,7 @@ function makeColorLabel(answer, studentAnswers, labelCheckbox) {
             $(labelCheckbox).css("color", "red");
     } else {
         if (!isContains(answer.text, studentAnswers)) {
-            $(labelCheckbox).css("color", "green");
+            $(labelCheckbox).css("color", "grey");
         } else
             $(labelCheckbox).css("color", "red");
     }

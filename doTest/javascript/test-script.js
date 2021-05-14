@@ -514,15 +514,20 @@ function checkConnectQuestion(){
 
         for(let j=0;j<instances[i].getAllConnections().length;j++){
             let dvojice={};
-            dvojice={lava:Number(instances[i].getAllConnections()[j].sourceId.substr(16,2)),prava:Number(instances[i].getAllConnections()[j].targetId.substr(17,2))};
+            let pravaIndex = instances[i].getAllConnections()[j].targetId.indexOf("right");
+            let lavaIndex = instances[i].getAllConnections()[j].sourceId.indexOf("left");
+            dvojice={lava:Number(instances[i].getAllConnections()[j].sourceId.substr(lavaIndex+5)),prava:Number(instances[i].getAllConnections()[j].targetId.substr(pravaIndex+6))};
             pary.push(dvojice);
-            let q=Number(instances[i].getAllConnections()[0].sourceId.substr(9,1));
+
+            let questionidIndex = instances[i].getAllConnections()[j].sourceId.split("-");
+            let q=Number(questionidIndex[1]);
 
             object={akcia:"odoslat-odpoved",otazka_id:q,typ_odpovede: "parovacia"};
 
         }
 
         object.odpoved=pary;
+        console.log(pary);
         if(object.otazka_id){
             fetch("../api/testy/vypracovanie-testu.php", {
                 method: 'POST',
@@ -608,7 +613,7 @@ function createLongInput(order, answers){
             "name":"checkboxName-" + order,
             "type":"checkbox",
             "class": "form-check-input checkbox-input",
-            "id":"check-"+order+"-"+answer
+            "id":"check-"+order+"-"+(answer).replace(" ","-")
 
         });
         $(inputCheckbox).on("change", function(){
@@ -616,7 +621,7 @@ function createLongInput(order, answers){
         });
         let labelCheckbox = document.createElement("label");
         $(labelCheckbox).attr({
-            "for":"check-"+order+"-"+answer,
+            "for":"check-"+order+"-"+(answer).replace(" ","-"),
             "class": "form-check-label checkbox-label",
 
         });

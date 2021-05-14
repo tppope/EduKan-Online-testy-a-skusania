@@ -1,7 +1,6 @@
 
 document.getElementById('send').onclick=function (){
     let test={};
-    let instance=0;
     if(document.getElementById('meno-testu').value===""){
         document.getElementById('error-msg').innerText="názov testu nemôže byť prázdny";
         return null;
@@ -48,12 +47,14 @@ document.getElementById('send').onclick=function (){
         if(q[i].classList.contains("type-1")===true) {
 
             let spravne_odpovede = [];
+            let kontrola = [];
             for (let j = 0; j < qOpt.length; j++) {
 
-                if(spravne_odpovede.indexOf(qOpt[j].value.toLowerCase())!==-1){
+                if(kontrola.indexOf(qOpt[j].value.toLowerCase())!==-1){
                     document.getElementById('error-msg').innerText=`dve možnosti v otázke číslo ${i+1} nesmú byť identické`;
                     return null;
                 }
+                kontrola[j] = qOpt[j].value.toLowerCase();
                 spravne_odpovede[j] = qOpt[j].value;
             }
 
@@ -79,7 +80,7 @@ document.getElementById('send').onclick=function (){
                     return null;
                 }
                 kontrola[j]=qOpt[j].value.toLowerCase();
-                odpovede[j] = {text: qOpt[j].value.toLowerCase() , je_spravna: spravnost};
+                odpovede[j] = {text: qOpt[j].value , je_spravna: spravnost};
 
 
                 if(odpovede.length===0){
@@ -100,7 +101,8 @@ document.getElementById('send').onclick=function (){
         }
 
         else if(q[i].classList.contains("type-3")===true) {
-            let moznostDiv=document.getElementById(`moznostDiv-${i+1}`);
+
+            let moznostDiv = qOpt[0]
 
             console.log(moznostDiv);
 
@@ -119,12 +121,13 @@ document.getElementById('send').onclick=function (){
             otazky[i+1].odpovede_lave=odpovede_lave;
             otazky[i+1].odpovede_prave=odpovede_prave;
 
-            let conn=listOfInstances[instance].getConnections();
+            let plumbObj = listOfInstancesObj[q1Id];
+            let conn=plumbObj.getConnections();
             if(conn.length===0){
                 document.getElementById('error-msg').innerText=`v otázke číslo ${i+1} musíte mať vytvorené aspoň jedno spojenie`;
                 return null;
             }
-            instance=instance +1;
+
             let pary=[];
             for(let j=0;j<conn.length;j++){
                 let dvojice={lava:odpovede_laveObj.indexOf(conn[j].sourceId)+1, prava:odpovede_praveObj.indexOf(conn[j].targetId)+1};

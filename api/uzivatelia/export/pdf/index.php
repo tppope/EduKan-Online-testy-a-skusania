@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__."/tcpdf/TCPDF-main/tcpdf.php";
 require_once __DIR__."/../../controllers/LoginController.php";
 
@@ -37,16 +36,21 @@ class MYPDF extends TCPDF {
         // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'I', 8);
+        $this->SetFont('Dejavu Sans', 'I', 8);
         // Page number
         $this->Cell(0, 10, 'Strana '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
         $this->SetY(-10);
-        $this->Cell(0, 12, 'Vytvorili: Tomáš Popík, Juraj Zozulák, Martin Smetanka, Katarína Stasová, Filip Poljak Škobla ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 12, 'Vytvorili: Tomáš Popík, Juraj Zozuľák, Martin Smetanka, Katarína Stasová, Filip Poljak Škobla ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
+
+
 /// PDF
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf->SetFont('Dejavu Sans','',12);
+
+
 
 $pdf->AddPage("","","",true);
 $htmlTestName = '<header>
@@ -95,7 +99,7 @@ foreach ($cely_test['data_testu']['zoznam_pisucich_studentov'] as $student) {
          }
 
          $htmlStudentName.='<div class="'.$classOtazka.'">
-                    <h3>'." ".$cislo_otazky.'. '.$nazov_otazky.'.</h3>
+                    <h3>'." ".$cislo_otazky.'. '.$nazov_otazky.'</h3>
                 
             ';
          if($typ_otazky == 1){
@@ -184,7 +188,13 @@ foreach ($cely_test['data_testu']['zoznam_pisucich_studentov'] as $student) {
                      $htmlStudentName .= '<div align="center"><img class="img-content" src="../../testy/uploadedImages/' . $path . '" alt="Math_obrazok" />  </div>';
 
                  } else {
-                     $htmlStudentName .= '<div align="center">' . $spravne_zadane_odpovede_5 . '</div>';
+                     $img = file_get_contents("https://latex.codecogs.com/gif.latex?".$spravne_zadane_odpovede_5);
+                     $path = "images/latex_".$key . "_" . $kluc . "_" . $student_id . "_" . $datum_zaciatku_pisania . "_" . $cas_zaciatku_pisania . ".gif";
+                     file_put_contents($path,$img);
+                     $htmlStudentName .= '<div class="latex" align="center"><img src="'.$path.'"alt="Math_obrazok" width="10em" height="3em" /></div>';
+                     $htmlStudentName.='<div align="center"><span style="font-weight: bold">RAW formát: </span>'.$spravne_zadane_odpovede_5.'</div>';
+
+
                  }
              }
              else{
@@ -223,6 +233,7 @@ foreach ($cely_test['data_testu']['zoznam_pisucich_studentov'] as $student) {
                }
               
             </style>
+              
           ';
     ///$pdf->writeHTMLCell(0, 0, '', '', $htmlStudentName, 0, 1, 0, true, 'L', true);
     ///$pdf->Write($h=0, "", $link='', $fill=0, $align='C', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
@@ -231,7 +242,7 @@ foreach ($cely_test['data_testu']['zoznam_pisucich_studentov'] as $student) {
 
 /// OUTPUT
 ob_end_clean();
-$pdf->Output("$kluc.pdf","D" );
+$pdf->Output("$kluc.pdf" );
 
 
 
