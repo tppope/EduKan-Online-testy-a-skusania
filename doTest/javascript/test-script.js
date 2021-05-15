@@ -608,6 +608,7 @@ function createLongQuestion(order,otazka){
 function createLongInput(order, answers){
     let allCheckboxDiv = document.createElement("div");
     $(allCheckboxDiv).addClass("checkbox-array-div");
+    let i=1;
     for (let answer of answers) {
         let checkboxDiv = document.createElement("div");
         $(checkboxDiv).addClass("checkbox-div");
@@ -617,7 +618,7 @@ function createLongInput(order, answers){
             "name":"checkboxName-" + order,
             "type":"checkbox",
             "class": "form-check-input checkbox-input",
-            "id":"check-"+order+"-"+(answer).replace(" ","-")
+            "id":"check-"+order+"-"+i,
 
         });
         $(inputCheckbox).on("change", function(){
@@ -625,12 +626,13 @@ function createLongInput(order, answers){
         });
         let labelCheckbox = document.createElement("label");
         $(labelCheckbox).attr({
-            "for":"check-"+order+"-"+(answer).replace(" ","-"),
+            "for":"check-"+order+"-"+i,
             "class": "form-check-label checkbox-label",
 
         });
         $(labelCheckbox).text(answer);
         $(allCheckboxDiv).append($(checkboxDiv).append(inputCheckbox,labelCheckbox));
+        i = i+1;
     }
     return allCheckboxDiv;
 }

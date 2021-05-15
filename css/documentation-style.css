@@ -50,13 +50,17 @@ section{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 5%;
 }
 th{
     white-space: nowrap;
     text-align: center;
 }
-
+#doc-ul{
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+}
 #task-tbody td{
     text-align: center;
 }
@@ -66,6 +70,14 @@ th{
 
 #back-button:hover {
     left: 0;
+}
+a{
+    color: black;
+    transition: all 100ms;
+}
+a:hover{
+    font-weight: bold;
+    text-decoration: none;
 }
 @media (max-width: 768px) {
     #section-header{

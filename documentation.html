@@ -2,317 +2,484 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>EduKan - online testy a skúšania</title>
+    <title>EduKan - online testy a skúšania</title>
 
-  <link rel="icon" href="resources/favicon/edukan-favicon.png" type="image/png" sizes="any">
+    <link rel="icon" href="resources/favicon/edukan-favicon.png" type="image/png" sizes="any">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
 
-  <link rel="stylesheet" href="css/documentation-style.css">
+    <link rel="stylesheet" href="css/documentation-style.css">
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-          integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-          crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-          crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-          crossorigin="anonymous"></script>
-  <script src="javascript/documentation-script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="javascript/documentation-script.js"></script>
 
 
 </head>
 <body>
 <header id="main-header">
-  <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
+    <img id="edukan" draggable="false" src="resources/pictures/educan/edukan.png" width="550" alt="tukan">
 
 </header>
 
 <section>
-  <div onclick="window.location = 'index.html'" id="back-button">
-    Späť
-    <img id="left-arrow" src="resources/pictures/left-arrow.svg" alt="leftarrow">
-  </div>
+    <div onclick="window.location = 'index.html'" id="back-button">
+        Späť
+        <img id="left-arrow" src="resources/pictures/left-arrow.svg" alt="leftarrow">
+    </div>
 
-  <header id="section-header" class="section-content">
-    <h2 class="section-h2">
-      Rozdelenie úloh
-    </h2>
-  </header>
 
-  <div id="tasks" class="section-content table-responsive">
-    <table class="table table-light">
-      <thead class="bg-info text-white">
-      <tr>
-        <th>
-          Úloha
-        </th>
-        <th>
-          Martin Smetanka
-        </th>
-        <th>
-          Katarína Stasová
-        </th>
-        <th>
-          Juraj Zozuľak
-        </th>
-        <th>
-          Tomáš Popík
-        </th>
-        <th>
-          Filip Poljak Škobla
-        </th>
-      </tr>
-      </thead>
-      <tbody id="task-tbody">
-      <tr>
-        <th>
-          Prihlasovanie a registrácia
-        </th>
-        <td></td>
-        <td>
-          <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend">
-        </td>
-        <td></td>
-        <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend"></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Otázky s výberom odpovedí
-        </th>
-        <td>          <img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg" width="40" alt="made-question" data-toggle="tooltip" data-placement="top" title="Vytvorenie otázky učiteľom">
-        </td>
-        <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend"></td>
-        <td> <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Otázky s textovými odpoveďami
-        </th>
-        <td>          <img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg" width="40" alt="made-question" data-toggle="tooltip" data-placement="top" title="Vytvorenie otázky učiteľom">
-        </td>
-        <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend"></td>
-        <td> <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Otázky s kreslením
-        </th>
-        <td>          <img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg" width="40" alt="made-question" data-toggle="tooltip" data-placement="top" title="Vytvorenie otázky učiteľom">
-        </td>
-        <td></td>
-        <td></td>
-        <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-          <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Otázky s matematickým výrazom
-        </th>
-        <td>          <img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg" width="40" alt="made-question" data-toggle="tooltip" data-placement="top" title="Vytvorenie otázky učiteľom">
-        </td>
-        <td></td>
-        <td></td>
-        <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-          <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Párovacie otázky
-        </th>
-        <td>
-          <img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg" width="40" alt="made-question" data-toggle="tooltip" data-placement="top" title="Vytvorenie otázky učiteľom">
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-        <td></td>
-        <td>
-          <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Export do pdf
-        </th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><img class="export-documentation" draggable="false" src="resources/pictures/test/pdf.svg" width="40" alt="export" data-toggle="tooltip" data-placement="top" title="Export"></td>
-      </tr>
-      <tr>
-        <th>
-          Export do csv
-        </th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>      <img class="export-documentation" draggable="false" src="resources/pictures/test/csv.svg" width="40" alt="export" data-toggle="tooltip" data-placement="top" title="Export"></td>
-      </tr>
-      <tr>
-        <th>
-          Docker balíček
-        </th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><img class="docker" draggable="false" src="resources/pictures/documentation/whale.svg" width="40" alt="docker" data-toggle="tooltip" data-placement="top" title="Docker"></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Pohľad učiteľa
-        </th>
-        <td>
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-        <td></td>
-        <td></td>
-        <td>
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Pohľad študenta
-        </th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Zadefinovanie viacerých testov
-        </th>
-        <td>
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-        <td></td>
-        <td>
-        </td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Čas a ukončenie testu
-        </th>
-        <td></td>
-        <td>          <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40" alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
-        <td></td>
-        <td></td>
-        <td>
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-      </tr>
+    <header id="section-header" class="section-content">
+        <h2 class="section-h2">
+            Technická dokumentácia
+        </h2>
+    </header>
+    <ul id="doc-ul" class="section-content">
+      <li>Aplikáciu je možné rozchodiť jednoducho nainštalovaním si aplikácie <strong><a href="https://www.docker.com/products/docker-desktop">docker</a></strong>.</li>
+      <li>Následne v priečinku projektu spustiť v konzole príkaz <strong>docker-compose up --build -d</strong>.</li>
+      <li>Aplikácia bude bežať na portoch:
+        <ul>
+          <li>8000 - <strong>Nginx server</strong></li>
+          <li>8080 - <strong>Phpmyadmin</strong></li>
+          <li>3306 - <strong>Mysql server</strong></li>
+        </ul>
+      </li>
+      <li>Adresa aplikácie bude <strong>localhost:8000</strong></li>
+    </ul>
 
-      <tr>
-        <th>
-          info o zbiehaní
-        </th>
-        <td></td>
-        <td></td>
-        <td>
-        </td>
-        <td>
-          <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg" width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
-        </td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Rozdelenie databázy
-        </th>
-        <td></td>
-        <td></td>
-        <td>
-          <img class="database" draggable="false" src="resources/pictures/documentation/archive.svg" width="40" alt="database" data-toggle="tooltip" data-placement="top" title="Databáza">
-        </td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Dokumentácia
-        </th>
-        <td></td>
-        <td><img class="documentation" draggable="false" src="resources/pictures/documentation/check-list.svg" width="40" alt="documentation" data-toggle="tooltip" data-placement="top" title="Dokumentácia"></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>
-          Testovanie
-        </th>
-        <td></td>
-        <td>
-          <img class="testing" draggable="false" src="resources/pictures/documentation/analyze.svg" width="40" alt="testing" data-toggle="tooltip" data-placement="top" title="Testovanie">
-        </td>
-        <td></td>
-        <td>
-          <img class="testing" draggable="false" src="resources/pictures/documentation/analyze.svg" width="40" alt="testing" data-toggle="tooltip" data-placement="top" title="Testovanie">
-        </td>
-        <td>
-          <img class="testing" draggable="false" src="resources/pictures/documentation/analyze.svg" width="40" alt="testing" data-toggle="tooltip" data-placement="top" title="Testovanie">
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <header id="resource" class="section-content">
-    <h2 class="section-h2">
-      Zdroje
-    </h2>
-  </header>
+    <header id="tasks-header" class="section-content">
+        <h2 class="section-h2">
+            Rozdelenie úloh
+        </h2>
+    </header>
 
-  <div id="resource-table" class="section-content table-responsive">
-    <table class="table table-light">
-      <thead class="bg-info text-white">
-      <tr>
-        <th>
-          Použité knižnice
-        </th>
-      </tr>
-      </thead>
-      <tbody id="libraries">
-      <tr>
-        <td>https://tcpdf.org/docs/</td>
-      </tr>
-      <tr>
-        <td>https://getbootstrap.com/</td>
-      </tr>
-      <tr>
-        <td>https://jsplumbtoolkit.com/</td>
-      </tr>
-      <tr>
-        <td>http://mathlive.io/</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <div id="tasks" class="section-content table-responsive">
+        <table class="table table-light">
+            <thead class="bg-info text-white">
+            <tr>
+                <th>
+                    Úloha
+                </th>
+                <th>
+                    Martin Smetanka
+                </th>
+                <th>
+                    Katarína Stasová
+                </th>
+                <th>
+                    Juraj Zozuľak
+                </th>
+                <th>
+                    Tomáš Popík
+                </th>
+                <th>
+                    Filip Poljak Škobla
+                </th>
+            </tr>
+            </thead>
+            <tbody id="task-tbody">
+            <tr>
+                <th>
+                    Prihlasovanie a registrácia
+                </th>
+                <td></td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend">
+                </td>
+                <td></td>
+                <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Otázky s výberom odpovedí
+                </th>
+                <td><img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg"
+                         width="40" alt="made-question" data-toggle="tooltip" data-placement="top"
+                         title="Vytvorenie otázky učiteľom">
+                </td>
+                <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend"></td>
+                <td><img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Otázky s textovými odpoveďami
+                </th>
+                <td><img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg"
+                         width="40" alt="made-question" data-toggle="tooltip" data-placement="top"
+                         title="Vytvorenie otázky učiteľom">
+                </td>
+                <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend"></td>
+                <td><img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Otázky s kreslením
+                </th>
+                <td><img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg"
+                         width="40" alt="made-question" data-toggle="tooltip" data-placement="top"
+                         title="Vytvorenie otázky učiteľom">
+                </td>
+                <td></td>
+                <td></td>
+                <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Otázky s matematickým výrazom
+                </th>
+                <td><img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg"
+                         width="40" alt="made-question" data-toggle="tooltip" data-placement="top"
+                         title="Vytvorenie otázky učiteľom">
+                </td>
+                <td></td>
+                <td></td>
+                <td><img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Párovacie otázky
+                </th>
+                <td>
+                    <img class="made-question" draggable="false" src="resources/pictures/documentation/test.svg"
+                         width="40" alt="made-question" data-toggle="tooltip" data-placement="top"
+                         title="Vytvorenie otázky učiteľom">
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Export do pdf
+                </th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><img class="export-documentation" draggable="false" src="resources/pictures/test/pdf.svg" width="40"
+                         alt="export" data-toggle="tooltip" data-placement="top" title="Export"></td>
+            </tr>
+            <tr>
+                <th>
+                    Export do csv
+                </th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><img class="export-documentation" draggable="false" src="resources/pictures/test/csv.svg" width="40"
+                         alt="export" data-toggle="tooltip" data-placement="top" title="Export"></td>
+            </tr>
+            <tr>
+                <th>
+                    Docker balíček
+                </th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><img class="docker" draggable="false" src="resources/pictures/documentation/whale.svg" width="40"
+                         alt="docker" data-toggle="tooltip" data-placement="top" title="Docker"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Pohľad učiteľa
+                </th>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Vyhodnocovanie testu učiteľom
+                </th>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Orientácia učiteľa v aplikácii
+                </th>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Vypracovanie testu študentom
+                </th>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Zadefinovanie viacerých testov
+                </th>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Aktivácia a deaktivácia testov
+                </th>
+                <td></td>
+                <td></td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Čas a ukončenie testu
+                </th>
+                <td></td>
+                <td><img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Info o zbiehaní
+                </th>
+                <td></td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td></td>
+                <td>
+                    <img class="backend" draggable="false" src="resources/pictures/documentation/build.svg" width="40"
+                         alt="backend" data-toggle="tooltip" data-placement="top" title="Backend"></td>
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Rozdelenie databázy
+                </th>
+                <td></td>
+                <td></td>
+                <td>
+                    <img class="database" draggable="false" src="resources/pictures/documentation/archive.svg"
+                         width="40" alt="database" data-toggle="tooltip" data-placement="top" title="Databáza">
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Dokumentácia
+                </th>
+                <td></td>
+                <td><img class="documentation" draggable="false" src="resources/pictures/documentation/check-list.svg"
+                         width="40" alt="documentation" data-toggle="tooltip" data-placement="top" title="Dokumentácia">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Testovanie
+                </th>
+                <td></td>
+                <td>
+                    <img class="testing" draggable="false" src="resources/pictures/documentation/analyze.svg" width="40"
+                         alt="testing" data-toggle="tooltip" data-placement="top" title="Testovanie">
+                </td>
+                <td></td>
+                <td>
+                    <img class="testing" draggable="false" src="resources/pictures/documentation/analyze.svg" width="40"
+                         alt="testing" data-toggle="tooltip" data-placement="top" title="Testovanie">
+                </td>
+                <td>
+                    <img class="testing" draggable="false" src="resources/pictures/documentation/analyze.svg" width="40"
+                         alt="testing" data-toggle="tooltip" data-placement="top" title="Testovanie">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Bonus: Responzivita a ovládanie dotykom
+                </th>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+                <td>
+                    <img class="frontend" draggable="false" src="resources/pictures/documentation/web-design.svg"
+                         width="40" alt="frontend" data-toggle="tooltip" data-placement="top" title="Frontend">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <header id="resource" class="section-content">
+        <h2 class="section-h2">
+            Zdroje
+        </h2>
+    </header>
+
+    <div id="resource-table" class="section-content table-responsive">
+        <table class="table table-light">
+            <thead class="bg-info text-white">
+            <tr>
+                <th>
+                    Knižnice
+                </th>
+                <th>
+                    Použitie
+                </th>
+            </tr>
+            </thead>
+            <tbody id="libraries">
+            <tr>
+                <td><a href="https://tcpdf.org/docs/">https://tcpdf.org/docs</a></td>
+                <td>Export PDF</td>
+            </tr>
+            <tr>
+                <td><a href="https://getbootstrap.com/">https://getbootstrap.com</a></td>
+                <td>Grafický dizajn</td>
+            </tr>
+            <tr>
+                <td><a href="https://jsplumbtoolkit.com/">https://jsplumbtoolkit.com</a></td>
+                <td>Realizácia párovacích otázok</td>
+            </tr>
+            <tr>
+                <td><a href="http://mathlive.io/">http://mathlive.io</a></td>
+                <td>Realizácia otázok s matematickým výrazom</td>
+            </tr>
+            <tr>
+                <td><a href="https://jquery.com">https://jquery.com</a></td>
+                <td>Zjednodušenie javascriptového kódu</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </section>
 </body>

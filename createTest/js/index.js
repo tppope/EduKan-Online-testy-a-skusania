@@ -196,7 +196,7 @@ function createQuestion(typ,number){
         let vieOtazky=document.createElement('img');
         let popis=document.createElement('p');
 
-        popis.innerText='spravné ukázané';
+        popis.innerText='počet správnych ukázané';
         popis.setAttribute('style','padding-top:1.5em;font-size:1rem;margin:auto');
 
         vieOtazky.setAttribute('id',`know-${qId}`);
@@ -248,7 +248,7 @@ function viePocet(node){
         node.children[0].alt='nevie spravne';
         node.children[0].setAttribute('class','nevie-spravne');
         node. setAttribute('class','btn btn-dark');
-        node.parentElement.children[5].innerText='správne skryté';
+        node.parentElement.children[5].innerText='počet správnych skryté';
 
     }
 
@@ -257,7 +257,7 @@ function viePocet(node){
         node.children[0].alt='vie spravne';
         node.children[0].setAttribute('class','vie-spravne');
         node. setAttribute('class','btn btn-outline-dark');
-        node.parentElement.children[5].innerText='správne ukázane';
+        node.parentElement.children[5].innerText='počet správnych ukázané';
 
     }
 }

@@ -12,27 +12,30 @@ function makeConnect() {
     let i = setInterval(function () {
         if (connectIt) {
             clearInterval(i);
-            for (let connection of makeConnection) {
-                if (connection.odpovede) {
-                    for (let i = 0; i < connection.odpovede.length; i++) {
-                        if (connection.odpovede[i]) {
-                            let newJsPlumbInstance = jsPlumb.getInstance();
-                            let sourceId = `question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
-                            let targetId = `question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
-                            newJsPlumbInstance.connect({
-                                source: sourceId,
-                                target: targetId,
-                                detachable: false,
-                                anchor: "Continuous",
-                                endpoint: ["Dot", {width: 5, height: 5}]
-                            });
-                        }
-                    }
+            setTimeout(nowMakeConnect, 1000);
+        }
+    }, 300)
+}
+
+function nowMakeConnect(){
+    for (let connection of makeConnection) {
+        if (connection.odpovede) {
+            for (let i = 0; i < connection.odpovede.length; i++) {
+                if (connection.odpovede[i]) {
+                    let newJsPlumbInstance = jsPlumb.getInstance();
+                    let sourceId = `question-${connection.index}-left-${connection.odpovede[i].par_lava_strana}`;
+                    let targetId = `question-${connection.index}-right-${connection.odpovede[i].par_prava_strana}`;
+                    newJsPlumbInstance.connect({
+                        source: sourceId,
+                        target: targetId,
+                        detachable: false,
+                        anchor: "Continuous",
+                        endpoint: ["Dot", {width: 5, height: 5}]
+                    });
                 }
             }
         }
-    }, 300)
-
+    }
 }
 
 function logout() {
@@ -370,7 +373,7 @@ function createLongQuestion(order, otazka, answerCheck, odpovede) {
     $(questionDiv).append(createLongInput(order, otazka.odpovede, odpovede));
 
     if (odpovede)
-        studentChecked(order, odpovede);
+        studentChecked(order,otazka.odpovede, odpovede);
 
 }
 
@@ -379,6 +382,7 @@ function createLongInput(order, answers, studentAnswers) {
     $(allCheckboxDiv).addClass("checkbox-array-div");
 
 
+    let i =1;
     for (let answer of answers) {
         let checkboxDiv = document.createElement("div");
         $(checkboxDiv).addClass("checkbox-div");
@@ -388,13 +392,13 @@ function createLongInput(order, answers, studentAnswers) {
             "name": "checkboxName-" + order,
             "type": "checkbox",
             "class": "form-check-input checkbox-input",
-            "id": "check-" + order + "-" + (answer.text).replace(" ","-"),
+            "id": "check-" + order + "-" + i,
             "disabled": "disabled"
         });
 
         let labelCheckbox = document.createElement("label");
         $(labelCheckbox).attr({
-            "for": "check-" + order + "-" + answer.text,
+            "for": "check-" + order + "-" + i,
             "class": "form-check-label checkbox-label",
 
         });
@@ -403,6 +407,7 @@ function createLongInput(order, answers, studentAnswers) {
 
         if (studentAnswers)
             makeColorLabel(answer, studentAnswers, labelCheckbox);
+        i = i+1;
 
     }
 
@@ -411,9 +416,12 @@ function createLongInput(order, answers, studentAnswers) {
 
 }
 
-function studentChecked(order, studentAnswers) {
+function studentChecked(order, studentAnswers, studentInputAnswers) {
+    let i =1;
     for (let answer of studentAnswers) {
-        $("#check-" + order + "-" + (answer.zadana_odpoved).replace(" ","-")).attr("checked", "true");
+        if (isContains(answer.text, studentInputAnswers))
+            $("#check-" + order + "-" + i).attr("checked", "true");
+        i = i +1;
     }
 }
 
@@ -437,7 +445,6 @@ function isContains(rightAnswer, studentAnswers) {
             return true;
     }
     return false;
-
 }
 
 function createCard(id, card_phrase) {

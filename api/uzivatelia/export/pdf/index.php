@@ -191,8 +191,13 @@ foreach ($cely_test['data_testu']['zoznam_pisucich_studentov'] as $student) {
                      $img = file_get_contents("https://latex.codecogs.com/gif.latex?".$spravne_zadane_odpovede_5);
                      $path = "images/latex_".$key . "_" . $kluc . "_" . $student_id . "_" . $datum_zaciatku_pisania . "_" . $cas_zaciatku_pisania . ".gif";
                      file_put_contents($path,$img);
-                     $htmlStudentName .= '<div class="latex" align="center"><img src="'.$path.'"alt="Math_obrazok" width="10em" height="3em" /></div>';
-                     $htmlStudentName.='<div align="center"><span style="font-weight: bold">RAW formát: </span>'.$spravne_zadane_odpovede_5.'</div>';
+                     if (getimagesize($path)===false){
+                         $htmlStudentName.='<div align="center">Zadaná odpoveď nie je platný Latex výraz</div>';
+                     }
+                     else{
+                         $htmlStudentName .= '<div class="latex" align="center"><img src="'.$path.'"alt="Math_obrazok" /></div>';
+                     }
+                     $htmlStudentName.='<div align="center"><strong>RAW formát: </strong>'.$spravne_zadane_odpovede_5.'</div>';
 
 
                  }
