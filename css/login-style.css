@@ -61,7 +61,7 @@ body {
     color: black;
 }
 section{
-    margin-bottom: 130px;
+    margin-bottom: 150px;
 }
 
 .section-h2 {
@@ -176,6 +176,7 @@ footer {
 }
 
 #doc-link{
+    text-align: center;
     color: black;
     transition: all 200ms;
 }
