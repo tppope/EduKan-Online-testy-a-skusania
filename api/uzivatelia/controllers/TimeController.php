@@ -21,7 +21,14 @@ class TimeController extends DatabaseController
             $dateTime = $statement->fetch(PDO::FETCH_NUM);
 
             $seconds = $this->getTimeSeconds($dateTime[0],$dateTime[1], $dateTime[2]);
-            if ($seconds <= 0 || $dateTime[3])
+            if($dateTime[3]){
+                return array(
+                    "error"=>false,
+                    "status"=>"success",
+                    "time"=>"alreadyEnd"
+                );
+            }
+            else if ($seconds <= 0)
                 return array(
                     "error"=>false,
                     "status"=>"success",

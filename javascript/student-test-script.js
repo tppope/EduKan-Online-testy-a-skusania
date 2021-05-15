@@ -117,7 +117,7 @@ function printTest(otazky, odpovede) {
             }
         switch (otazka.typ) {
             case 1:
-                createShortQuestion(index, otazka.nazov, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
+                createShortQuestion(index, otazka, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
                 break;
             case 2:
                 createLongQuestion(index, otazka, odpovede.vyhodnotenieCeleho[index], odpovede.odpovede[index]);
@@ -236,10 +236,26 @@ function createImgForCanvasQuestion(odpovede, order) {
 
 }
 
-function createShortQuestion(order, name, answerCheck, odpovede) {
-    questionDiv = createQuestionDiv(order, name, answerCheck);
-    $(questionDiv).append(createShortInput(order, odpovede));
+function createShortQuestion(order, otazka, answerCheck, odpovede) {
+    questionDiv = createQuestionDiv(order, otazka.nazov, answerCheck);
+    $(questionDiv).append(createShortInput(order, odpovede),showShorAnswers(otazka.spravne_odpovede));
+}
 
+function showShorAnswers(odpovede){
+    let div = document.createElement("div");
+    $(div).css({
+        "width": "94%",
+        "margin-top": "10px"
+    })
+    let str = "<strong>Možné odpovede:</strong> ";
+    if (odpovede.length !== 0) {
+        str = str + odpovede[0];
+        for (let i = 1; i < odpovede.length; i++) {
+            str = str + ", "+odpovede[i];
+        }
+    }
+    $(div).html(str);
+    return div;
 }
 
 function createMathQuestion(order, name, answerCheck, odpovede) {

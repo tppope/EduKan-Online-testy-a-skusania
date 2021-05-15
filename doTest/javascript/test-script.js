@@ -26,6 +26,10 @@ function loadSSE(){
 function showTime(data){
     if (data.time === 'end')
         odovzdatTest();
+    else if (data.time === 'alreadyEnd'){
+        sessionStorage.setItem("alreadyEnd","failed");
+        window.location.replace("../index.html");
+    }
     else
     $("#time-counter").text(data.time);
 

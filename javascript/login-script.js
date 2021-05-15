@@ -4,8 +4,18 @@ $(window).on("load", function () {
     $("#reg-button").hide();
     checkRegStatus();
     checkLogoutStatus();
-    checkDoTestStatus()
+    checkDoTestStatus();
+    checkAlreadyEnd()
 })
+
+function checkAlreadyEnd(){
+    let alreadyEndInfo = sessionStorage.getItem("alreadyEnd");
+    if (alreadyEndInfo != null) {
+        showAlreadyEnd(alreadyEndInfo);
+        sessionStorage.removeItem('doTest');
+    }
+}
+
 
 function checkDoTestStatus(){
     let doTestInfo = sessionStorage.getItem("doTest");
@@ -38,6 +48,14 @@ function showRegInfo(regInfo) {
     regDiv.css("top", 0);
     setTimeout(function () {
         regDiv.css("top", "-100px");
+    }, 3000)
+}
+
+function showAlreadyEnd(alreadyEndInfo) {
+    let alreadyEndDiv = $("#alreadyEnd-" + alreadyEndInfo);
+    alreadyEndDiv.css("top", 0);
+    setTimeout(function () {
+        alreadyEndDiv.css("top", "-100px");
     }, 3000)
 }
 

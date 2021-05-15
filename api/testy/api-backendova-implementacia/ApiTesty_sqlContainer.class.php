@@ -703,7 +703,8 @@ class ApiTesty_sqlContainer {
 				switch ($otazka["typ"]) {
 					case 1:
 						$zadana = $odpovede_studenta[$otazka_id]["zadana_odpoved"];
-						$vyhodnotenie = in_array($zadana, $otazka["spravne_odpovede"]) ? 1 : 0;
+						$search_array = array_combine(array_map('strtolower', $otazka["spravne_odpovede"]), $otazka["spravne_odpovede"]);
+						$vyhodnotenie = $search_array[strtolower($zadana)] ? 1 : 0;
 
 						$vysledky_obodovane[$otazka_id] = $vyhodnotenie;
 
